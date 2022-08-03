@@ -31,6 +31,10 @@ echo "Disk space in use currently: ${spc1} KB"
 
 runcmd sudo apt update
 echo "-----------------------------------------------------------------------"
+# ensure basic pkgs are installed!
+runcmd sudo apt install -y \
+gcc make perl
+
 # packages typically required for kernel build
 runcmd sudo apt install -y \
 bison build-essential flex libncurses5-dev ncurses-dev \
@@ -42,11 +46,12 @@ echo "-----------------------------------------------------------------------"
 #sudo apt install -y bc bpfcc-tools build-essential \
 
 runcmd sudo apt install -y \
-bsdextrautils clang cppcheck cscope curl exuberant-ctags \
+bc bpfcc-tools bsdextrautils \
+clang cppcheck cscope curl exuberant-ctags \
 fakeroot flawfinder \
 git gnome-system-monitor gnuplot hwloc indent \
 libnuma-dev linux-headers-$(uname -r) linux-tools-$(uname -r) \
-net-tools numactl openjdk-18-jre  \
+man-db net-tools numactl openjdk-18-jre  \
 perf-tools-unstable psmisc python3-distutils  \
 rt-tests smem sparse stress sysfsutils \
 tldr-py trace-cmd tree tuna virt-what
