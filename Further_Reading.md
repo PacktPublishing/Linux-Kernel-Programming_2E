@@ -119,8 +119,6 @@ Code browsers
 ## Chapter 2, Building the Linux Kernel From Source - Further Reading
 
 - **[Official Kernel Documentation](https://www.kernel.org/doc/html/latest/index.html)** : the modern Linux kernel documentation is very well written and presented here
-	- ["2. How the development process works"](https://www.kernel.org/doc/html/latest/process/2.Process.html#how-the-development-process-works)
-	- [The Linux kernel build system - kbuild - infrastructure](https://www.kernel.org/doc/Documentation/kbuild/)
 
 - Git
     - [Firstly, A Gentle Introduction to Version Control](http://chronicle.com/blogs/profhacker/a-gentle-introduction-to-version-control/23064)
@@ -134,14 +132,23 @@ Code browsers
     - [Getting Git Right, Atlassian.com](https://www.atlassian.com/git/) 
     - [... and many more](https://www.google.com/search?q=learning+to+use+git)
 
-- [Linux Kernel Release Model, Greg Kroah-Hartman, Feb 2018](http://kroah.com/log/blog/2018/02/05/linux-kernel-release-model/)
-- [Civil Infrastructure Platform Announces New Super Long Term Support Kernel that Advances Automation, Machine Learning and Artificial Intelligence, LF, Feb 2019](https://www.linuxfoundation.org/press-release/2019/02/civil-infrastructure-platform-announces-new-super-long-term-support-kernel-that-advances-automation-machine-learning-and-artificial-intelligence/)
-- [LTSI Project update - Long Term Support Initiative – slide deck, Open Source Summit Japan, June 2018](https://events19.linuxfoundation.org/wpcontent/uploads/2017/11/Using-Linux-for-Long-Term-Community-Status-and-the-Way-We-Go-OSS-Tsugikazu-Shibata.pdf)
+- The Kernel Development Process
+	- ["2. How the development process works"](https://www.kernel.org/doc/html/latest/process/2.Process.html#how-the-development-process-works)
+    - [Linux Kernel Release Model, Greg Kroah-Hartman, Feb 2018](http://kroah.com/log/blog/2018/02/05/linux-kernel-release-model/)
 
+- Submitting Patches to the Linux kernel
+	- ["Submitting patches: the essential guide to getting your code into the kernel"](https://www.kernel.org/doc/html/latest/process/submitting-patches.html#submitting-patches-the-essential-guide-to-getting-your-code-into-the-kernel)
     - [Working with the kernel development community](https://www.kernel.org/doc/html/latest/process/index.html#working-with-the-kernel-development-community)
-    - Blog artcile: ['Kernel Patch Submission tutorial', Saurabh Singh Sengar](https://saurabhsengarblog.wordpress.com/2015/11/26/kernel-patch-submission-tutorial/)
     - [Working with linux-next](https://www.kernel.org/doc/man-pages/linux-next.html)
+    - [TPP - The Perfect Patch by Andrew Morton! (Older, May 2013)](https://lore.kernel.org/lkml/5114385ce1897015ad96f59f0fd46014d5f07786.1369312746.git.PuZZleDucK@gmail.com/)
+    - Blog artcile: ['Kernel Patch Submission tutorial', Saurabh Singh Sengar](https://saurabhsengarblog.wordpress.com/2015/11/26/kernel-patch-submission-tutorial/)
 
+
+- The CIP Project
+    - [Civil Infrastructure Platform Announces New Super Long Term Support Kernel that Advances Automation, Machine Learning and Artificial Intelligence, LF, Feb 2019](https://www.linuxfoundation.org/press-release/2019/02/civil-infrastructure-platform-announces-new-super-long-term-support-kernel-that-advances-automation-machine-learning-and-artificial-intelligence/)
+    - [LTSI Project update - Long Term Support Initiative – slide deck, Open Source Summit Japan, June 2018](https://events19.linuxfoundation.org/wpcontent/uploads/2017/11/Using-Linux-for-Long-Term-Community-Status-and-the-Way-We-Go-OSS-Tsugikazu-Shibata.pdf)
+
+- [The Linux kernel build system - kbuild - infrastructure](https://www.kernel.org/doc/Documentation/kbuild/)
 - [Linux kernel versions with detailed notes on new features, kernelnewbies](https://kernelnewbies.org/LinuxVersions)
 - Fun: [Occurences of words in the Linux kernel source code over time](https://www.vidarholen.net/contents/wordcount/#hack*,workaround*,todo,fixme)
 
