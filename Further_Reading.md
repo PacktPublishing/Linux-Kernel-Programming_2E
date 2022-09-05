@@ -8,15 +8,16 @@ Here, we present, in a chapter-wise format, additional online as well as book re
 
 For your convenience, below are chapter-wise links to the *Further Reading* notes:
 
-- [**Generic online and book resources : miscellaneous, very useful**](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#generic-online-and-book-resources--miscellaneous-very-useful)
+- [**Generic online and book resources : miscellaneous, very useful**](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#generic-online-and-book-resources--miscellaneous-very-useful)
 
  - [Chapter 1, Kernel workspace setup](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-1-kernel-development-workspace-setup---further-reading)
- - [Chapter 2, Building the Kernel From Source, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source---further-reading)
- - [Chapter 3, Building the 5.0 Linux kernel from Source, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-3-building-the-linux-kernel-from-source---further-reading)
- - [Chapter 4, Writing your first Kernel Module - the LKM Framework, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-4-writing-your-first-kernel-module-lkms-part-1---further-reading)
- - [Chapter 5, Writing your first Kernel Module - the LKM Framework, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-5-writing-your-first-kernel-module-lkms-part-2---further-reading)
- - [Chapter 6, Kernel Internals Essentials - Processes and Threads](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-6-kernel-internals-essentials---processes-and-threads---further-reading)
- - [Chapter 7, Memory Management Internals Essentials](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-7-memory-management-internals-essentials---further-reading)
+ - [Chapter 2, Building the Kernel From Source, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source---further-reading)
+ - [Chapter 3, Building the 5.0 Linux kernel from Source, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-3-building-the-linux-kernel-from-source---further-reading)
+ - [Chapter 4, Writing your first Kernel Module - the LKM Framework, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-4-writing-your-first-kernel-module-lkms-part-1---further-reading)
+ - [Chapter 5, Writing your first Kernel Module - the LKM Framework, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-5-writing-your-first-kernel-module-lkms-part-2---further-reading)
+ - [Chapter 6, Kernel Internals Essentials - Processes and Threads](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-6-kernel-internals-essentials---processes-and-threads---further-reading)
+ - [Chapter 7, Memory Management Internals Essentials](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-7-memory-management-internals-essentials---further-reading)
+
  - [Chapter 8, Kernel Memory Allocation for Module Authors, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-8-kernel-memory-allocation-for-module-authors-part-1---further-reading)
  - [Chapter 9, Kernel Memory Allocation for Module Authors, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-9-kernel-memory-allocation-for-module-authors-part-2---further-reading)
  - [Chapter 10, The CPU Scheduler, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-10-the-cpu-scheduler-part-1---further-reading)
