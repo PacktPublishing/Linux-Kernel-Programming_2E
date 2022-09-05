@@ -10,7 +10,7 @@ For your convenience, below are chapter-wise links to the *Further Reading* note
 
 - [**Generic online and book resources : miscellaneous, very useful**](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#generic-online-and-book-resources--miscellaneous-very-useful)
 
- - [Chapter 1, Kernel workspace setup](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-1-kernel-development-workspace-setup---further-reading)
+ - [Chapter 1, Kernel workspace setup](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-1-kernel-development-workspace-setup---further-reading)
  - [Chapter 2, Building the Kernel From Source, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source---further-reading)
  - [Chapter 3, Building the 5.0 Linux kernel from Source, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-3-building-the-linux-kernel-from-source---further-reading)
  - [Chapter 4, Writing your first Kernel Module - the LKM Framework, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#chapter-4-writing-your-first-kernel-module-lkms-part-1---further-reading)
@@ -104,21 +104,25 @@ Some useful tooling, drivers, and so on, created by myself:
 - Scripts, tools, utils, code : [usefulsnips](https://github.com/kaiwan/usefulsnips)
 - [SEALS](https://github.com/kaiwan/seals) : Simple Embedded Arm Linux System
 - [device-memory-readwrite](https://github.com/kaiwan/device-memory-readwrite) : Read/write pretty much any memory location (RAM or hardware IO memory) on a device or PC
-<br>
 
-Emulating a Raspberry Pi:
-  - [Emulating a Raspberry Pi on Linux](http://embedonix.com/articles/linux/emulating-raspberry-pi-on-linux/)
-  - [qemu-rpi-kernel, GitHub](https://github.com/dhruvvyas90/qemu-rpi-kernel/wiki)
+Miscellaneous:
 
-Code browsers
-  - [Ctags Tutorial](https://courses.cs.washington.edu/courses/cse451/10au/tutorials/tutorial_ctags.html)
-  - [The Vim/Cscope tutorial](http://cscope.sourceforge.net/cscope_vim_tutorial.html)
+- Emulating a Raspberry Pi:
+    - [Emulating a Raspberry Pi on Linux](http://embedonix.com/articles/linux/emulating-raspberry-pi-on-linux/)
+    - [qemu-rpi-kernel, GitHub](https://github.com/dhruvvyas90/qemu-rpi-kernel/wiki)
 
+- Code browsers
+    - [Ctags Tutorial](https://courses.cs.washington.edu/courses/cse451/10au/tutorials/tutorial_ctags.html)
+    - [The Vim/Cscope tutorial](http://cscope.sourceforge.net/cscope_vim_tutorial.html)
+
+- [Ubuntu releases](https://wiki.ubuntu.com/Releases)
 <br>
 
 ## Chapter 2, Building the Linux Kernel From Source - Further Reading
 
 - **[Official Kernel Documentation](https://www.kernel.org/doc/html/latest/index.html)** : the modern Linux kernel documentation is very well written and presented here
+	- ["2. How the development process works"](https://www.kernel.org/doc/html/latest/process/2.Process.html#how-the-development-process-works)
+	- [The Linux kernel build system - kbuild - infrastructure](https://www.kernel.org/doc/Documentation/kbuild/)
 
 - Git
     - [Firstly, A Gentle Introduction to Version Control](http://chronicle.com/blogs/profhacker/a-gentle-introduction-to-version-control/23064)
@@ -132,23 +136,14 @@ Code browsers
     - [Getting Git Right, Atlassian.com](https://www.atlassian.com/git/) 
     - [... and many more](https://www.google.com/search?q=learning+to+use+git)
 
-- The Kernel Development Process
-	- ["2. How the development process works"](https://www.kernel.org/doc/html/latest/process/2.Process.html#how-the-development-process-works)
-    - [Linux Kernel Release Model, Greg Kroah-Hartman, Feb 2018](http://kroah.com/log/blog/2018/02/05/linux-kernel-release-model/)
+- [Linux Kernel Release Model, Greg Kroah-Hartman, Feb 2018](http://kroah.com/log/blog/2018/02/05/linux-kernel-release-model/)
+- [Civil Infrastructure Platform Announces New Super Long Term Support Kernel that Advances Automation, Machine Learning and Artificial Intelligence, LF, Feb 2019](https://www.linuxfoundation.org/press-release/2019/02/civil-infrastructure-platform-announces-new-super-long-term-support-kernel-that-advances-automation-machine-learning-and-artificial-intelligence/)
+- [LTSI Project update - Long Term Support Initiative – slide deck, Open Source Summit Japan, June 2018](https://events19.linuxfoundation.org/wpcontent/uploads/2017/11/Using-Linux-for-Long-Term-Community-Status-and-the-Way-We-Go-OSS-Tsugikazu-Shibata.pdf)
 
-- Submitting Patches to the Linux kernel
-	- ["Submitting patches: the essential guide to getting your code into the kernel"](https://www.kernel.org/doc/html/latest/process/submitting-patches.html#submitting-patches-the-essential-guide-to-getting-your-code-into-the-kernel)
     - [Working with the kernel development community](https://www.kernel.org/doc/html/latest/process/index.html#working-with-the-kernel-development-community)
-    - [Working with linux-next](https://www.kernel.org/doc/man-pages/linux-next.html)
-    - [TPP - The Perfect Patch by Andrew Morton! (Older, May 2013)](https://lore.kernel.org/lkml/5114385ce1897015ad96f59f0fd46014d5f07786.1369312746.git.PuZZleDucK@gmail.com/)
     - Blog artcile: ['Kernel Patch Submission tutorial', Saurabh Singh Sengar](https://saurabhsengarblog.wordpress.com/2015/11/26/kernel-patch-submission-tutorial/)
+    - [Working with linux-next](https://www.kernel.org/doc/man-pages/linux-next.html)
 
-
-- The CIP Project
-    - [Civil Infrastructure Platform Announces New Super Long Term Support Kernel that Advances Automation, Machine Learning and Artificial Intelligence, LF, Feb 2019](https://www.linuxfoundation.org/press-release/2019/02/civil-infrastructure-platform-announces-new-super-long-term-support-kernel-that-advances-automation-machine-learning-and-artificial-intelligence/)
-    - [LTSI Project update - Long Term Support Initiative – slide deck, Open Source Summit Japan, June 2018](https://events19.linuxfoundation.org/wpcontent/uploads/2017/11/Using-Linux-for-Long-Term-Community-Status-and-the-Way-We-Go-OSS-Tsugikazu-Shibata.pdf)
-
-- [The Linux kernel build system - kbuild - infrastructure](https://www.kernel.org/doc/Documentation/kbuild/)
 - [Linux kernel versions with detailed notes on new features, kernelnewbies](https://kernelnewbies.org/LinuxVersions)
 - Fun: [Occurences of words in the Linux kernel source code over time](https://www.vidarholen.net/contents/wordcount/#hack*,workaround*,todo,fixme)
 
@@ -466,7 +461,7 @@ Articles/668126/)
 	- Detailed paper (PDF): [*Mars Pathfinder: Priority Inversion Problem*, R.M. Pathan](http://www.cse.chalmers.se/edu/year/2015/course/EDA222/Documents/Misc/Report_MarsPathFinder.pdf)
 	- More recently (May 2015), with respect to the NASA Curiosity Rover: [*13 engineering truths proved by NASA's Curiosity Rover*, EDN](https://www.edn.com/electronics-blogs/now-hear-this/4439386/13-engineering-truths-proved-by-NASA-s-CuriosityRover?mc=NL_EDN_EDT_EDN_funfriday_20150508&cid=NL_EDN_EDT_EDN_funfriday_20150508&elq=75871e4437784010b51f12e4c3be00a2&elqCampaignId=22919&elqaid=25798&elqat=1&elqTrackId=8e848e14bf3e41b58e660c804b335b07)
 
- - OSFY magazine: ['How to Avoid Priority Inversion and Enable Priority Inheritance in Linux Kernel Programming', Thangaraju & Warade, Apr 2019](https://opensourceforu.com/2019/04/how-to-avoid-priority-inversion-and-enable-priority-inheritance-in-linux-kernel-programming/)
+ - OSFY magazine: ['How to Avoid Priority Inversion and Enable Priority Inheritance in Linux Kernel Programming', Thangaraju & Warade, Apr 2019](https://opensourceforu.com/2019/04/how-to-avoid-priority-inversion-and-enable-priority-inheritance-in-Linux-Kernel-Programming/)
  - Spinlock internal implementation
     - ['Peeking Under the Hood', John Sloan, Chip Overclock blog, May 2012](https://coverclock.blogspot.com/2012/05/peeking-under-hood.html)
     - ['spin_lock implementation in ARM linux', linuxforthenew blog, Apr 2013](http://linuxforthenew.blogspot.com/2013/04/spinlock-implementation-in-arm-linux.html)
@@ -476,7 +471,7 @@ Articles/668126/)
 
 ## Chapter 13, Kernel Synchronization, Part 2 - Further Reading
 
-- Deeper details on the LKMM: [Explanation of the Linux-Kernel Memory Model](https://github.com/aparri/memory-model/blob/master/Documentation/explanation.txt)
+- Deeper details on the LKMM: [Explanation of the Linux-Kernel Memory Model](https://github.com/aparri/memory-model/ blob/master/Documentation/explanation. txt)
 - Reference Counting API: [kernsec: a summary](https://kernsec.org/wiki/index.php/Kernel_ Protections/refcount_ t)
 
 - An extremely detailed take on concurrency topics, both hardware and software-wise: [Is Parallel Programming Hard, And, If So, What Can You Do About It?, Paul E.McKenney, December 2019](https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.2019.12.22a.pdf)
