@@ -1,0 +1,23 @@
+--- linux-5.10.140/init/Kconfig.orig	2022-09-05 12:51:34.779253264 +0530
++++ linux-5.10.140/init/Kconfig	2022-09-05 13:05:27.939286085 +0530
+@@ -172,6 +172,20 @@
+ 
+ 	  which is done within the script "scripts/setlocalversion".)
+ 
++config LKP_OPTION1
++       bool "Test case for LKP 2e book/Ch 2: creating a new menu item in kernel config"
++       default n
++       help
++          This option is merely a dummy or 'test' one; it's simply to have readers
++          of this book - 'Linux Kernel Programming', 2nd Ed, Kaiwan NB, Packt -
++          try out the creation of a few menu items within the kernel config.
++
++          Within the 'make menuconfig', you can experiment: set this option to
++          'y' (on), save and exit, and see the effect this has by doing:
++          grep "CONFIG_LKP_OPTION1" .config
++
++          If unsure, say N
++
+ config BUILD_SALT
+ 	string "Build ID Salt"
+ 	default ""
