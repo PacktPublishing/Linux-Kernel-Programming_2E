@@ -1,7 +1,7 @@
 # Further Reading
-*For the book "Linux Kernel Programming", Kaiwan N Billimoria, Packt (Mar 2021).*
+*For the book "Linux Kernel Programming", 2nd Ed, Kaiwan N Billimoria, Packt (2023).*
 
-*Book GitHub repo*: https://github.com/PacktPublishing/Linux-Kernel-Programming
+*Book GitHub repo*: https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
 
 Here, we present, in a chapter-wise format, additional online as well as book references. We feel that these will help you, the reader, in digging deeper into topics, or gaining additional views/information, or both. We definitely recommend you browse through the provided references. Also, you will find that some resources are repeated across chapters; we leave it this way so that you can gain all required resources in one place (and chapter-wise).
 (Obviously, these reference articles/blogs/etc are provided "as-is"; we cannot vouch for their correctness or validity).
@@ -49,6 +49,8 @@ A few excellent books that come to mind (specific books on the Linux kernel and 
 - The Practice of Programming, Brian Kernighan and Rob Pike
 - The Pragmatic Programmer: From Journeyman to Master, Hunt and Thomas
 - The Joy of Linux, Hall and Proffitt
+- Linux Kernel Debugging, Kaiwan N Billimoria
+- Linux Kernel Programming, Part 2 - Writing character device drivers: Learn to work with user-kernel interfaces, handle peripheral I/O & hardware interrupts, Kaiwan N Billimoria
 - Hands-On System Programming with Linux, Kaiwan N Billimoria
 - Unix Network Programming, W. Richard Stevens
 - Unix Systems Programming: Communication, Concurrency and Threads, Robbins and Robbins
@@ -67,7 +69,7 @@ and why-nots of using Linux on an embedded system, hardware and software design 
 "Is there a really practical hands-on tip, an almost guaranteed way to become a kernel hacker? Of course, keep reading this book! Ha ha, yes, besides, do partake in the [simply awesome Eudyptula Challenge](http://www.eudyptula-challenge.org/). Hang on, it's - very unfortuantely, and as of this writing - closed down.
 Fear not, [here's a site with all the challenges](https://github.com/agelastic/eudyptula) posted (and the solutions, don't cheat!); do check it out and try the challenges."
 
-
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 <br>
 
@@ -118,6 +120,8 @@ Miscellaneous:
 - [Ubuntu releases](https://wiki.ubuntu.com/Releases)
 <br>
 
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
+
 ## Chapter 2, Building the Linux Kernel From Source - Further Reading
 
 - **[Official Kernel Documentation](https://www.kernel.org/doc/html/latest/index.html)** : the modern Linux kernel documentation is very well written and presented here
@@ -163,6 +167,8 @@ Miscellaneous:
 
 <br>
 
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
+
 ## Chapter 3, Building the Linux Kernel From Source - Further Reading
 
 - Initramfs (initrd):
@@ -193,8 +199,9 @@ Miscellaneous:
 
 - New Linux kernel: ['Linux 5.6 Is Looking Like It Will Be Spectacular With A Long List Of Features', Phoronix, 26Jan2020](https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.6-Spectacular)
 
-
 <br>
+
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 ## Chapter 4, Writing your first Kernel Module-LKMs Part 1 - Further Reading
 
@@ -212,8 +219,9 @@ Miscellaneous:
 - Blog article: [A Standalone Linux Kernel Module, Levinzon, Medium, May 2020](https://medium.com/@eitan.levinzon/a-standalone-linux-kernel-module-df54283d4803)
 - [BusyBox: The Swiss Army Knife of Embedded Linux](https://www.busybox.net/)
 
-
 <br>
+
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 ## Chapter 5, Writing your first Kernel Module-LKMs Part 2 - Further Reading
 
@@ -265,6 +273,8 @@ Miscellaneous:
 
 <br>
 
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
+
 ## Chapter 6, Kernel Internals Essentials - Processes and Threads - Further Reading
 - Book: [Hands-On System Programming with Linux", Kaiwan N Billimoria, Packt](https://www.packtpub.com/networking-and-servers/hands-system-programming-linux). Prerequisites to this chapter (essential reading, really):
 	- Ch 1 : Linux System Architecture
@@ -291,8 +301,9 @@ Miscellaneous:
     - [Lockdown as a security module, Jonathan Corbet, LWN, June 2019](https://lwn.net/Articles/791863/)
     - [Running an eBPF program may require lifting the kernel lockdown, Gehrcke, September 2019](https://gehrcke.de/2019/09/running-an-ebpf-program-may-require-liftingthe-kernel-lockdown/)
 
-
 <br>
+
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 ## Chapter 7, Memory Management Internals Essentials - Further Reading
 - Books on Linux kernel memory management internals:
@@ -317,6 +328,8 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 <br>
 
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
+
 ## Chapter 8, Kernel Memory Allocation for Module Authors, Part 1 - Further Reading
 
 - Book: ['Hands-On System Programming with Linux', Kaiwan N Billimoria, Packt](https://www.packtpub.com/networking-and-servers/hands-system-programming-linux). Prerequisites to this chapter (essential reading, really):
@@ -337,8 +350,9 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 - ["GNUPLOT 4.2 - A Brief Manual and Tutorial", Duke University](https://people.duke.edu/~hpgavin/gnuplot.html)
 - ['Object-oriented design patterns in the kernel, part 1', Neil Brown, LWN, June 2011](https://lwn.net/Articles/444910/)
 
-
 <br>
+
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 ## Chapter 9, Kernel Memory Allocation for Module Authors, Part 2 - Further Reading
 
@@ -373,8 +387,9 @@ Articles/668126/)
 
 - [StackOverflow: How to mmap a Linux kernel buffer to userspace?](https://stackoverflow.com/a/10770582/779269)
 
-
 <br>
+
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 ## Chapter 10, The CPU Scheduler, Part 1 - Further Reading
 
@@ -393,11 +408,11 @@ Articles/668126/)
 - [Linux kernel preemption and the latency-throughput tradeoff, Dec 2019](https://www.codeblueprint.co.uk/2019/12/23/linuxpreemption-latency-throughput.html)
 - An excellent detailed code-level article on how, specifically, the context switching switch_to() code path has evolved on the x86[_64] arch: [Evolution of the x86 context switch in Linux, Maizure, September 2018](https://www.maizure.org/projects/evolution_x86_context_switch_linux/)
 
-
 <br>
 
-## Chapter 11, The CPU Scheduler, Part 2 - Further Reading
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
+## Chapter 11, The CPU Scheduler, Part 2 - Further Reading
 
 - Ftrace
     - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
@@ -439,8 +454,9 @@ Articles/668126/)
     - [On Amazon (Anniversary Edition)](https://www.amazon.com/Mythical-Man-Month-Anniversary-Software-Engineering-ebook/dp/B00B8USS14/ref=sr_1_1?crid=3R2CNHTX5LYIC&keywords=mythical+man+month&qid=1562226712&s=digital-text&sprefix=mythical+%2Cdigital-text%2C376&sr=1-1)
     - [Quotes](https://en.wikiquote.org/wiki/Fred_Brooks)
 
-
 <br>
+
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 ## Chapter 12, Kernel Synchronization, Part 1 - Further Reading
 
@@ -466,8 +482,9 @@ Articles/668126/)
     - ['Peeking Under the Hood', John Sloan, Chip Overclock blog, May 2012](https://coverclock.blogspot.com/2012/05/peeking-under-hood.html)
     - ['spin_lock implementation in ARM linux', linuxforthenew blog, Apr 2013](http://linuxforthenew.blogspot.com/2013/04/spinlock-implementation-in-arm-linux.html)
 
-
 <br>
+
+[\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 ## Chapter 13, Kernel Synchronization, Part 2 - Further Reading
 
