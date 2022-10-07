@@ -122,7 +122,7 @@ Miscellaneous:
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
-## Chapter 2, Building the Linux Kernel From Source - Further Reading
+## Chapter 2, Building the Linux Kernel From Source, Part 1 - Further Reading
 
 - **[Official Kernel Documentation](https://www.kernel.org/doc/html/latest/index.html)** : the modern Linux kernel documentation is very well written and presented here
 	- ["2. How the development process works"](https://www.kernel.org/doc/html/latest/process/2.Process.html#how-the-development-process-works)
@@ -146,7 +146,9 @@ Miscellaneous:
 
     - [Working with the kernel development community](https://www.kernel.org/doc/html/latest/process/index.html#working-with-the-kernel-development-community)
     - Blog artcile: ['Kernel Patch Submission tutorial', Saurabh Singh Sengar](https://saurabhsengarblog.wordpress.com/2015/11/26/kernel-patch-submission-tutorial/)
-    - [Working with linux-next](https://www.kernel.org/doc/man-pages/linux-next.html)
+    - Working with the bleeding-edge, the linux-next tree:
+        - [Working with linux-next](https://www.kernel.org/doc/man-pages/linux-next.html)
+        - [How to contribute (was Re: Kernelnewbies Digest, Vol 77, Issue 7](https://lists.kernelnewbies.org/pipermail/kernelnewbies/2017-April/017765.html)
 
 - [Linux kernel versions with detailed notes on new features, kernelnewbies](https://kernelnewbies.org/LinuxVersions)
 - Fun: [Occurences of words in the Linux kernel source code over time](https://www.vidarholen.net/contents/wordcount/#hack*,workaround*,todo,fixme)
@@ -169,7 +171,7 @@ Miscellaneous:
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
-## Chapter 3, Building the Linux Kernel From Source - Further Reading
+## Chapter 3, Building the Linux Kernel From Source, Part 2 - Further Reading
 
 - Initramfs (initrd):
     - [Opening and modifying the initrd](http://www.alexonlinux.com/opening-and-modifying-the-initrd)
