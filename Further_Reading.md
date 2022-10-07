@@ -11,8 +11,8 @@ For your convenience, below are chapter-wise links to the *Further Reading* note
 - [**Generic online and book resources : miscellaneous, very useful**](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#generic-online-and-book-resources--miscellaneous-very-useful)
 
  - [Chapter 1, Kernel workspace setup](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-1-kernel-development-workspace-setup---further-reading)
- - [Chapter 2, Building the Kernel From Source, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source---further-reading)
- - [Chapter 3, Building the 5.0 Linux kernel from Source, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-3-building-the-linux-kernel-from-source---further-reading)
+ - [Chapter 2, Building the Kernel From Source, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source-part-1---further-reading) 
+ - [Chapter 3, Building the 5.0 Linux kernel from Source, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-3-building-the-linux-kernel-from-source-part-2---further-reading)
  - [Chapter 4, Writing your first Kernel Module - the LKM Framework, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-4-writing-your-first-kernel-module-lkms-part-1---further-reading)
  - [Chapter 5, Writing your first Kernel Module - the LKM Framework, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-5-writing-your-first-kernel-module-lkms-part-2---further-reading)
  - [Chapter 6, Kernel Internals Essentials - Processes and Threads](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-6-kernel-internals-essentials---processes-and-threads---further-reading)
