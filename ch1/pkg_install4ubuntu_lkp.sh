@@ -33,12 +33,13 @@ runcmd sudo apt update
 echo "-----------------------------------------------------------------------"
 # ensure basic pkgs are installed!
 runcmd sudo apt install -y \
-gcc make perl
+	gcc make perl
 
 # packages typically required for kernel build
 runcmd sudo apt install -y \
-	bison build-essential flex libncurses5-dev ncurses-dev \
-	libelf-dev libssl-dev tar util-linux xz-utils zstd
+	asciidoc binutils-dev bison build-essential flex libncurses5-dev ncurses-dev \
+	libelf-dev libssl-dev pahole tar util-linux xz-utils zstd
+
 echo "-----------------------------------------------------------------------"
 
 # other packages...
