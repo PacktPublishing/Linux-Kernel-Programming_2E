@@ -38,7 +38,7 @@ gcc make perl
 # packages typically required for kernel build
 runcmd sudo apt install -y \
 	bison build-essential flex libncurses5-dev ncurses-dev \
-	libelf-dev libssl-dev tar util-linux xz-utils
+	libelf-dev libssl-dev tar util-linux xz-utils zstd
 echo "-----------------------------------------------------------------------"
 
 # other packages...
