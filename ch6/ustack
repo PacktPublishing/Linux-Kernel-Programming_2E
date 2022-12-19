@@ -1,5 +1,6 @@
 #!/bin/bash
 # ref: http://poormansprofiler.org/
+set -euo pipefail
 name=$(basename $0)
 [ $# -ne 1 ] && {
   echo "Usage: ${name} PID(show-user-stack(s)-of-this-process)"
