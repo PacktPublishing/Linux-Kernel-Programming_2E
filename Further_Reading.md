@@ -56,8 +56,7 @@ A few excellent books that come to mind (specific books on the Linux kernel and 
 - Unix Systems Programming: Communication, Concurrency and Threads, Robbins and Robbins
 - [Secure Programming for Linux and Unix HOWTO, David Wheeler](https://www.tldp.org/HOWTO/pdf/Secure-Programs-HOWTO.pdf)
 
-- In general an excellent in-depth technical article: [SO YOU WANT TO BUILD AN EMBEDDED LINUX SYSTEM?, Jay Carlson, Oct 2020](https://jaycarlson.net/embedded-linux/) ; it covers an introduction to the whys
-and why-nots of using Linux on an embedded system, hardware and software design workflow, as well as a pretty detailed rundown on 10 CPUs/boards that run embedded Linux (with benchmarks)
+- In general an excellent in-depth technical article: [SO YOU WANT TO BUILD AN EMBEDDED LINUX SYSTEM?, Jay Carlson, Oct 2020](https://jaycarlson.net/embedded-linux/) ; it covers an introduction to the whys and why-nots of using Linux on an embedded system, hardware and software design workflow, as well as a pretty detailed rundown on 10 CPUs/boards that run embedded Linux (with benchmarks)
 - Julia Evans' blog and zines:
     - ['You can be a kernel hacker!', Julia Evans](https://jvns.ca/blog/2014/09/18/you-can-be-a-kernel-hacker/)
     - [Blog](https://jvns.ca/)
@@ -65,7 +64,7 @@ and why-nots of using Linux on an embedded system, hardware and software design 
 
 - [Lowlevel programming University, gurugio](https://github.com/gurugio/lowlevelprogramming-university)
 
-- *Tip (reprodcued from Chapter 5)*: 
+- *Tip (reprodcued from Chapter 5)*:
 "Is there a really practical hands-on tip, an almost guaranteed way to become a kernel hacker? Of course, keep reading this book! Ha ha, yes, besides, do partake in the [simply awesome Eudyptula Challenge](http://www.eudyptula-challenge.org/). Hang on, it's - very unfortuantely, and as of this writing - closed down.
 Fear not, [here's a site with all the challenges](https://github.com/agelastic/eudyptula) posted (and the solutions, don't cheat!); do check it out and try the challenges."
 
@@ -127,6 +126,7 @@ Miscellaneous:
 - **[Official Kernel Documentation](https://www.kernel.org/doc/html/latest/index.html)** : the modern Linux kernel documentation is very well written and presented here
 	- ["2. How the development process works"](https://www.kernel.org/doc/html/latest/process/2.Process.html#how-the-development-process-works)
 	- [The Linux kernel build system - kbuild - infrastructure](https://www.kernel.org/doc/Documentation/kbuild/)
+	- [Kernel Sysctl Explorer - content from official docs in a searchable web page](https://sysctl-explorer.net/)
 
 - Git
     - [Firstly, A Gentle Introduction to Version Control](http://chronicle.com/blogs/profhacker/a-gentle-introduction-to-version-control/23064)
@@ -298,6 +298,7 @@ Miscellaneous:
     - [How io_uring and eBPF Will Revolutionize Programming in Linux, Glauber Costa, April 2020](https://thenewstack.io/how-io_uring-and-ebpf-will-revolutionizeprogramming-in-linux/)
     - [BPF Performance Tools, by Brendan Gregg – official repo](https://github.com/brendangregg/bpf-perf-tools-book)
 
+- [Flame Graphs](https://www.brendangregg.com/flamegraphs.html)
 - Kernel lockdown:
     - [Linux Kernel Finally Gets Its Lockdown, J Wallen, October 2019](https://thenewstack.io/linux-kernel-finally-gets-its-lockdown/)
     - [Lockdown as a security module, Jonathan Corbet, LWN, June 2019](https://lwn.net/Articles/791863/)
