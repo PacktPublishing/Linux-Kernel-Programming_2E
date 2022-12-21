@@ -49,16 +49,23 @@ static inline void disp_idle_thread(void)
 
 static int showthrds(void)
 {
-	struct task_struct *g = NULL, *t = NULL; /* 'g' : process ptr; 't': thread ptr */
+	struct task_struct *p = NULL, *t = NULL; /* 'p' : process ptr; 't': thread ptr */
 	int nr_thrds = 1, total = 1;    /* total init to 1 for the idle thread */
+	/* Not using dynamic allocation here as we haven't covered it yet... :-/
+	 * Careful - don't overflow the small stack!
+	 */
 #define BUFMAX		256
 #define TMPMAX		128
-	char buf[BUFMAX], tmp[TMPMAX];
+	char buf[BUFMAX], tmp1[TMPMAX], tmp2[TMPMAX], tmp3[TMPMAX];
 	const char hdr[] =
 "------------------------------------------------------------------------------------------\n"
 "    TGID     PID         current           stack-start         Thread Name     MT? # thrds\n"
 "------------------------------------------------------------------------------------------\n";
 
+	memset(buf, 0, sizeof(buf));
+	memset(tmp1, 0, sizeof(tmp1));
+	memset(tmp2, 0, sizeof(tmp2));
+	memset(tmp3, 0, sizeof(tmp3));
 	pr_info("%s", hdr);
 	disp_idle_thread();
 
@@ -71,42 +78,31 @@ static int showthrds(void)
 	 *  [...]
 	 *  read_unlock(&tasklist_lock);
 	 * BUT, this lock - tasklist_lock - isn't exported and thus unavailable to modules.
-	 * So, using an RCU read lock is indicated here (this has been added later to this code).
+	 * So, using an RCU read lock is indicated here...
 	 * FYI: a) Ch 12 and Ch 13 cover the details on kernel synchronization.
 	 *      b) Read Copy Update (RCU) is a complex synchronization mechanism; it's
 	 * conceptually explained really well in this blog article:
 	 *  https://reberhardt.com/blog/2020/11/18/my-first-kernel-module.html
 	 */
 	rcu_read_lock();
-	do_each_thread(g, t) {     /* 'g' : process ptr; 't': thread ptr */
-	//	task_lock(t);
+	do_each_thread(p, t) {     /* 'g' : process ptr; 't': thread ptr */
 		get_task_struct(t); // take a reference to the task struct
 
-		snprintf(buf, BUFMAX-1, "%8d %8d ", g->tgid, t->pid);
-
-		/* task_struct addr and kernel-mode stack addr */
-		snprintf(tmp, TMPMAX-1, "  0x%px", t);
-		/*
-		 * To concatenate the temp string to our buffer, we could go with the
-		 * strncat() here; flawfinder, though, points out this is potentially
-		 * dangerous; so we simply use another snprintf() to achieve the same.
-		 * Why not use strlcat() instead? Here, it runs into trouble - being
-		 * called in an atomic context, which isn't ok (due to the
-		 * might_sleep() within it's code)...
+		/* Grab the following fields from the task struct:
+		 * tgid, pid, task_struct addr, kernel-mode stack addr
 		 */
-		snprintf(buf, BUFMAX-1, "%s%s  0x%px", buf, tmp, t->stack);
+		snprintf(tmp1, TMPMAX-1, "%8d %8d  0x%px 0x%px",
+				p->tgid, t->pid, t, t->stack);
 
-		if (!g->mm) {	// kernel thread
 		/* One might question why we don't use the get_task_comm() to obtain
 		 * the task's name here; the short reason: it causes a deadlock! We
-		 * shall explore this (and how to avoid it) in some detail in Ch 17 -
+		 * shall explore this (and how to avoid it) in some detail in Ch 13 -
 		 * Kernel Synchronization Part 2. For now, we just do it the simple way
 		 */
-			snprintf(tmp, TMPMAX-1, " [%16s]", t->comm);
-		} else {
-			snprintf(tmp, TMPMAX-1, "  %16s ", t->comm);
-		}
-		snprintf(buf, BUFMAX-1, "%s%s", buf, tmp);
+		if (!p->mm)	// kernel thread?
+			snprintf(tmp2, TMPMAX-1, " [%16s]", t->comm);
+		else
+			snprintf(tmp2, TMPMAX-1, "  %16s ", t->comm);
 
 		/* Is this the "main" thread of a multithreaded process?
 		 * We check by seeing if (a) it's a userspace thread,
@@ -115,22 +111,22 @@ static int showthrds(void)
 		 * If so, display the number of threads in the overall process
 		 * to the right..
 		 */
-		nr_thrds = get_nr_threads(g);
-		if (g->mm && (g->tgid == t->pid) && (nr_thrds > 1)) {
-			snprintf(tmp, TMPMAX-1, " %3d", nr_thrds);
-			snprintf(buf, BUFMAX-1, "%s%s", buf, tmp);
-		}
+		nr_thrds = get_nr_threads(p);
+		if (p->mm && (p->tgid == t->pid) && (nr_thrds > 1))
+			snprintf(tmp3, TMPMAX-1, " %3d", nr_thrds);
 
-		snprintf(buf, BUFMAX-1, "%s\n", buf);
+		// Concatenate the bunch and emit a printk!
+		snprintf(buf, BUFMAX-1, "%s%s%s\n", tmp1, tmp2, tmp3);
 		pr_info("%s", buf);
 
 		total++;
 		memset(buf, 0, sizeof(buf));
-		memset(tmp, 0, sizeof(tmp));
+		memset(tmp1, 0, sizeof(tmp1));
+		memset(tmp2, 0, sizeof(tmp2));
+		memset(tmp3, 0, sizeof(tmp3));
 
 		put_task_struct(t); // release reference to the task struct
-//		task_unlock(t);
-	} while_each_thread(g, t);
+	} while_each_thread(p, t);
 	rcu_read_unlock();
 
 	return total;
