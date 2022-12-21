@@ -56,13 +56,12 @@ static int showthrds(void)
 	 */
 #define BUFMAX		256
 #define TMPMAX		128
-	char buf[BUFMAX], tmp1[TMPMAX], tmp2[TMPMAX], tmp3[TMPMAX];
+	char tmp1[TMPMAX], tmp2[TMPMAX], tmp3[TMPMAX];
 	const char hdr[] =
 "------------------------------------------------------------------------------------------\n"
 "    TGID     PID         current           stack-start         Thread Name     MT? # thrds\n"
 "------------------------------------------------------------------------------------------\n";
 
-	memset(buf, 0, sizeof(buf));
 	memset(tmp1, 0, sizeof(tmp1));
 	memset(tmp2, 0, sizeof(tmp2));
 	memset(tmp3, 0, sizeof(tmp3));
@@ -115,12 +114,9 @@ static int showthrds(void)
 		if (p->mm && (p->tgid == t->pid) && (nr_thrds > 1))
 			snprintf(tmp3, TMPMAX-1, " %3d", nr_thrds);
 
-		// Concatenate the bunch and emit a printk!
-		snprintf(buf, BUFMAX-1, "%s%s%s\n", tmp1, tmp2, tmp3);
-		pr_info("%s", buf);
+		pr_info("%s%s%s\n", tmp1, tmp2, tmp3);
 
 		total++;
-		memset(buf, 0, sizeof(buf));
 		memset(tmp1, 0, sizeof(tmp1));
 		memset(tmp2, 0, sizeof(tmp2));
 		memset(tmp3, 0, sizeof(tmp3));
