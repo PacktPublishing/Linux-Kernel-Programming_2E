@@ -84,7 +84,7 @@ static int showthrds(void)
 	 *  https://reberhardt.com/blog/2020/11/18/my-first-kernel-module.html
 	 */
 	rcu_read_lock();
-	do_each_thread(p, t) {     /* 'g' : process ptr; 't': thread ptr */
+	do_each_thread(p, t) {     /* 'p' : process ptr; 't': thread ptr */
 		get_task_struct(t); // take a reference to the task struct
 
 		/* Grab the following fields from the task struct:
