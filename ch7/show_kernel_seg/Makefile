@@ -108,7 +108,7 @@ all:
 	@${CC} --version|head -n1
 	@echo
 	make -C $(KDIR) M=$(PWD) modules
-	$(shell [ "${MYDEBUG}" != "y" ] && ${STRIP} --strip-debug ./${FNAME_C}.ko)
+	$(shell [ "${MYDEBUG}" != "y" ] && ${STRIP} --strip-debug ./${FNAME_C}.ko 2>/dev/null)
 install:
 	@echo
 	@echo "--- installing ---"
