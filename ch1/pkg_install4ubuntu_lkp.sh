@@ -55,7 +55,7 @@ runcmd sudo apt install -y \
 	man-db net-tools numactl openjdk-18-jre  \
 	perf-tools-unstable psmisc python3-distutils  \
 	rt-tests smem sparse stress sysfsutils \
-	tldr-py trace-cmd tree tuna virt-what
+	tldr-py trace-cmd tree tuna virt-what yad
 echo "-----------------------------------------------------------------------"
 #runcmd sudo apt install -y bc bpfcc-tools bsdmainutils clang cmake cppcheck cscope curl \
 # dwarves exuberant-ctags fakeroot flawfinder git gnome-system-monitor gnuplot \
