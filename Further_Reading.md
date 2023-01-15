@@ -117,6 +117,7 @@ Miscellaneous:
     - [The Vim/Cscope tutorial](http://cscope.sourceforge.net/cscope_vim_tutorial.html)
 
 - [Ubuntu releases](https://wiki.ubuntu.com/Releases)
+- [Ubuntu kernel mapping to mainline](https://ubuntu.com/kernel)
 <br>
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
@@ -317,6 +318,8 @@ Miscellaneous:
 - Deep detail on MM and paging on the Intel processors can be found in their excellent manuals here (Ch 4, Paging): [Intel® 64 and IA-32 Architectures
 Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide](https://software.intel.com/en-us/download/intel-64-and-ia-32-architectures-sdm-combined-volumes-3a-3b-3c-and-3d-system-programming-guide)
 	- [All Intel 64 and IA-32 architecture and programming environment manuals](https://software.intel.com/en-us/articles/intel-sdm)
+
+- [How the ARM32 kernel starts, Linus Walleij, Aug 2020](https://people.kernel.org/linusw/how-the-arm32-kernel-starts)
 
 - On vsyscall, vdso and VVAR
     - ["On vsyscalls and the vDSO"](https://lwn.net/Articles/446528/), LWN, Jon Corbet, June 2011
