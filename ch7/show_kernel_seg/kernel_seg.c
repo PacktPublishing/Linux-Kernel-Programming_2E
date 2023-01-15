@@ -43,7 +43,7 @@
 #define OURMODNAME   "show_kernel_seg"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
-MODULE_DESCRIPTION("LKP book:ch7/kernel_seg: display some kernel segment details");
+MODULE_DESCRIPTION("LKP book 2E:ch7/kernel_seg: display some kernel segment details");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.1");
 
@@ -154,7 +154,7 @@ static void show_kernelseg_info(void)
 	 */
 #if (BITS_PER_LONG == 64)
 	pr_info("|module region:      "
-		" %px - %px     | [%zd MB]\n",
+		" %px - %px     | [%4zd MB]\n",
 		SHOW_DELTA_M((void *)MODULES_VADDR, (void *)MODULES_END));
 #endif
 
