@@ -2,11 +2,11 @@
  * ch7/kernel_seg/kernel_seg.c
  ***************************************************************
  * This program is part of the source code released for the book
- *  "Linux Kernel Programming"
+ *  "Linux Kernel Programming" 2E
  *  (c) Author: Kaiwan N Billimoria
  *  Publisher:  Packt
  *  GitHub repository:
- *  https://github.com/PacktPublishing/Linux-Kernel-Programming
+ *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
  *
  * From: Ch 7: Kernel and Memory Management Internals Essentials
  ****************************************************************
@@ -14,9 +14,9 @@
  * A kernel module to show us some relevant details wrt the layout of the
  * kernel segment, IOW, the kernel VAS (Virtual Address Space). In effect,
  * this shows a simple memory map of the kernel. Works on both 32 and 64-bit
- * systems of differing architectures (note: only lightly tested on ARM and
- * x86 32 and 64-bit systems).
- * Optionally also displays key info of the user VAS if the module parameter
+ * systems of differing architectures (note: only lightly tested on Aarch32,
+ * Aarch64, x86-32 and x86_64 systems).
+ * Optional: displays key info of the user VAS if the module parameter
  * show_uservas is set to 1.
  *
  * Useful! With show_uservas=1 we literally 'see' the full memory map of the
