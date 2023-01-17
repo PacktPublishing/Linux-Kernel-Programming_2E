@@ -37,8 +37,8 @@
 #include <linux/version.h>
 #include <asm/pgtable.h>
 #include <asm/fixmap.h>
-//#include "../../klib_llkd.h"
-#include "convenient.h"
+#include "../../klib_llkd.h"
+#include "../../convenient.h"
 
 #define OURMODNAME   "show_kernel_seg"
 
@@ -52,7 +52,7 @@ static int show_uservas;
 module_param(show_uservas, int, 0660);
 MODULE_PARM_DESC(show_uservas, "Show some user space VAS details; 0 = no (default), 1 = show");
 
-#define ELLPS "|                           [ . . . ]                         |\n"
+#define ELLPS "|                         [ . . . ]                           |\n"
 
 extern void llkd_minsysinfo(void);	// it's in our klib_llkd 'library'
 
@@ -74,7 +74,7 @@ static void show_userspace_info(void)
 		" %px - %px     | [ %4zd bytes]\n"
 		"|          arguments "
 		" %px - %px     | [ %4zd bytes]\n"
-		"|        stack start  %px\n"
+		"|        stack start  %px                        |\n"
 		"|       heap segment "
 		" %px - %px     | [ %4zd KB]\n"
 		"|static data segment "
@@ -93,9 +93,9 @@ static void show_userspace_info(void)
 
 	pr_info(
 #if (BITS_PER_LONG == 64)
-		       "Above: TASK_SIZE         = %zu size of userland  [  %zu GB]\n"
+		       "Above: TASK_SIZE         = %zu size of userland     [  %zu GB]\n"
 #else			// 32-bit
-		       "Above: TASK_SIZE         = %lu size of userland  [  %ld MB]\n"
+		       "Above: TASK_SIZE         = %lu size of userland     [  %ld MB]\n"
 #endif
 		       " # userspace memory regions (VMAs) = %d\n",
 #if (BITS_PER_LONG == 64)
@@ -135,7 +135,7 @@ static void show_kernelseg_info(void)
 	if (VA_BITS > 48 && PAGE_SIZE == (64*1024)) // typically 52 bits and 64K pages
 		pr_info("*** >= ARMv8.2 with LPA? (details not supported here) ***\n");
 #endif
-	pr_info("\nSome Kernel Details [by decreasing address]\n"
+	pr_info("Some Kernel Details [by decreasing address]\n"
 		"+-------------------------------------------------------------+\n");
 
 	/* ARM-32 vector table */
@@ -205,7 +205,7 @@ static void show_kernelseg_info(void)
 		"|                  ^^^^^^^^^^^                      |\n",
 		"|                  PAGE_OFFSET                      |\n",
 #else
-		"|                        ^^^^^^^^^^^                          |\n"
+		"|                     ^^^^^^^^^^^^^^^^                        |\n"
 		"|                        PAGE_OFFSET                          |\n",
 #endif
 		SHOW_DELTA_M((void *)PAGE_OFFSET, (void *)(PAGE_OFFSET + ram_size)));
