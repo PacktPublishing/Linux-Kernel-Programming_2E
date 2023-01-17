@@ -67,7 +67,7 @@ static int show_prcs_in_tasklist(void)
 		n = snprintf(tmp, 128, "%-16s|%8d|%8d|%7u|%7u\n", p->comm, p->tgid, p->pid,
 			     /* (old way to disp credentials): p->uid, p->euid -or-
 			      *	current_uid().val, current_euid().val
-				  * better way using kernel helper __kuid_val():
+				  * better way using kernel accessor __kuid_val():
 			      */
 			     __kuid_val(p->cred->uid), __kuid_val(p->cred->euid)
 		    );
