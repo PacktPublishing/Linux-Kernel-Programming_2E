@@ -71,16 +71,30 @@ static void show_userspace_info(void)
 	pr_info("+------------ Above is kernel-seg; below, user VAS  ----------+\n"
 		ELLPS
 		"|Process environment "
-		" %px - %px     | [ %4zd bytes]\n"
+#if (BITS_PER_LONG == 64)
+		" %px - %px     | [ %4zu bytes]\n"
+		" %px - %px     | [ %4zu bytes]\n"
 		"|          arguments "
-		" %px - %px     | [ %4zd bytes]\n"
+		" %px - %px     | [ %4zu bytes]\n"
 		"|        stack start  %px                        |\n"
 		"|       heap segment "
-		" %px - %px     | [ %4zd KB]\n"
+		" %px - %px     | [ %4zu KB]\n"
 		"|static data segment "
-		" %px - %px     | [ %4zd bytes]\n"
+		" %px - %px     | [ %4zu bytes]\n"
 		"|       text segment "
-		" %px - %px     | [ %4zd KB]\n"
+		" %px - %px     | [ %4zu KB]\n"
+#else // 32-bit
+		" %px - %px                     | [ %4zu bytes]\n"
+		"|          arguments "
+		" %px - %px                     | [ %4zu bytes]\n"
+		"|        stack start  %px                                |\n"
+		"|       heap segment "
+		" %px - %px                     | [ %4zu KB]\n"
+		"|static data segment "
+		" %px - %px                     | [ %4zu bytes]\n"
+		"|       text segment "
+		" %px - %px                     | [ %4zu KB]\n"
+#endif
 		ELLPS
 		"+-------------------------------------------------------------+\n",
 		SHOW_DELTA_b((void *)current->mm->env_start, (void *)current->mm->env_end),
@@ -95,7 +109,7 @@ static void show_userspace_info(void)
 #if (BITS_PER_LONG == 64)
 		       "Above: TASK_SIZE         = %zu size of userland     [  %zu GB]\n"
 #else			// 32-bit
-		       "Above: TASK_SIZE         = %lu size of userland     [  %ld MB]\n"
+		       "Above: TASK_SIZE         = %lu size of userland          [  %lu MB]\n"
 #endif
 		       " # userspace memory regions (VMAs) = %d\n",
 #if (BITS_PER_LONG == 64)
@@ -116,7 +130,7 @@ static void show_userspace_info(void)
  * Display kernel segment details as applicable to the architecture we're
  * currently running upon.
  * Format (for most of the details):
- *  |<name of region>:   start_addr - end_addr        | [ size in KB/MB/GB]
+ *  |<name of region>:   start_addr - end_addr        | [ size in KB/MB/GB/TB]
  *
  * f.e. on an x86_64 VM w/ 2047 MB RAM
  *  |lowmem region:   0xffffa0dfc0000000 - 0xffffa0e03fff0000 | [ 2047 MB = 1 GB]
@@ -142,7 +156,8 @@ static void show_kernelseg_info(void)
 #if defined(CONFIG_ARM)
 	/* On ARM, the definition of VECTORS_BASE turns up only in kernels >= 4.11 */
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 11, 0)
-	pr_info("|vector table:       "
+	pr_info(ELLPS
+		"|vector table:       "
 		" %px - %px                     | [%4zu KB]\n",
 		SHOW_DELTA_K((void *)VECTORS_BASE, (void *)(VECTORS_BASE + PAGE_SIZE)));
 #endif
@@ -212,6 +227,14 @@ static void show_kernelseg_info(void)
 	);
 
 	/* lowmem region (RAM direct-mapping) */
+/*
+	pr_debug(" PO=%lx=%lu; PAGE_OFFSET + ram_size = %lx = %lu\n"
+		"0xc0000000 + ram_size(%lu=0x%lx) = 0x%lx\n",
+		(unsigned long)(PAGE_OFFSET), (unsigned long)(PAGE_OFFSET),
+		(unsigned long)(PAGE_OFFSET) + ram_size,
+		(unsigned long)(PAGE_OFFSET) + ram_size,
+		ram_size, ram_size, 0xc0000000 + ram_size);
+*/
 	pr_info("|lowmem region:      "
 #if (BITS_PER_LONG == 32)
 		" %px - %px                     | [%5zu MB]\n"
@@ -222,7 +245,7 @@ static void show_kernelseg_info(void)
 		"|                     ^^^^^^^^^^^^^^^^                        |\n"
 		"|                        PAGE_OFFSET                          |\n",
 #endif
-		SHOW_DELTA_M((void *)PAGE_OFFSET, (void *)(PAGE_OFFSET + ram_size)));
+		SHOW_DELTA_M((void *)PAGE_OFFSET, (void *)(PAGE_OFFSET) + ram_size));
 
 	/* (possible) highmem region;  may be present on some 32-bit systems */
 #if defined(CONFIG_HIGHMEM) && (BITS_PER_LONG==32)
