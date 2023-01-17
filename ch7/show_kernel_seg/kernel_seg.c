@@ -40,12 +40,10 @@
 #include "../../klib_llkd.h"
 #include "../../convenient.h"
 
-#define OURMODNAME   "show_kernel_seg"
-
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("LKP book 2E:ch7/kernel_seg: display some kernel segment details");
 MODULE_LICENSE("Dual MIT/GPL");
-MODULE_VERSION("0.1");
+MODULE_VERSION("0.2");
 
 /* Module parameters */
 static int show_uservas;
@@ -280,7 +278,7 @@ static void show_kernelseg_info(void)
 
 static int __init kernel_seg_init(void)
 {
-	pr_info("%s: inserted\n", OURMODNAME);
+	pr_info("%s: inserted\n", KBUILD_MODNAME);
 
 	/* Display some minimal system info
 	 * Note: this function is within our kernel 'library' here:
@@ -294,7 +292,7 @@ static int __init kernel_seg_init(void)
 		show_userspace_info();
 	else {
 		pr_info("+-------------------------------------------------------------+\n");
-		pr_info("%s: skipping show userspace...\n", OURMODNAME);
+		pr_info("%s: skipping show userspace...\n", KBUILD_MODNAME);
 	}
 
 	return 0;		/* success */
@@ -302,7 +300,7 @@ static int __init kernel_seg_init(void)
 
 static void __exit kernel_seg_exit(void)
 {
-	pr_info("%s: removed\n", OURMODNAME);
+	pr_info("%s: removed\n", KBUILD_MODNAME);
 }
 
 module_init(kernel_seg_init);
