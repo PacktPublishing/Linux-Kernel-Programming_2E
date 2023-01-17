@@ -62,8 +62,9 @@ extern void llkd_minsysinfo(void);	// it's in our klib_llkd 'library'
  * Format (for most of the details):
  *  |<name of region>:   start_addr - end_addr        | [ size in KB/MB/GB]
  *
- * f.e. on an x86_64 VM w/ 2047 MB RAM
- *  | text segment  0x0000563022f3ed90 - 0x0000563022f1c000 | [   142736 bytes]
+ * f.e. on an x86_64 VM with ~ 2981 MB RAM
+ *  |       text segment  000055dca340b000 - 000055dca3425285     | [       104 KB]
+ *
  * We order it by descending address (here, uva's).
  */
 static void show_userspace_info(void)
@@ -106,9 +107,9 @@ static void show_userspace_info(void)
 
 	pr_info(
 #if (BITS_PER_LONG == 64)
-		       "Kernel and User VAS size (TASK_SIZE) = %zu bytes    [  %zu GB]\n"
+		       "Kernel and User VAS size (TASK_SIZE) each = %zu bytes [  %zu GB]\n"
 #else	// 32-bit
-		       "Kernel and User VAS size (TASK_SIZE) = %zu bytes         [  %zu GB]\n"
+		       "Size of User VAS size (TASK_SIZE) = %10lu bytes            [  %lu GB]\n"
 #endif
 		       " # userspace memory regions (VMAs) = %d\n",
 #if (BITS_PER_LONG == 64)
@@ -131,8 +132,9 @@ static void show_userspace_info(void)
  * Format (for most of the details):
  *  |<name of region>:   start_addr - end_addr        | [ size in KB/MB/GB/TB]
  *
- * f.e. on an x86_64 VM w/ 2047 MB RAM
- *  |lowmem region:   0xffffa0dfc0000000 - 0xffffa0e03fff0000 | [ 2047 MB = 1 GB]
+ * f.e. on an x86_64 VM with ~ 2981 MB RAM
+ *  |lowmem region:       ffff956dc0000000 - ffff956e7a58d000     | [     2981 MB]
+ *
  * We try to order it by descending address (here, kva's) but this doesn't
  * always work out as ordering of regions differs by arch.
  */
@@ -162,7 +164,7 @@ static void show_kernelseg_info(void)
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 11, 0)
 	pr_info(ELLPS
 		"|vector table:       "
-		" %px - %px                     | [%4zu KB]\n",
+		" %px - %px                     | [%5zu KB]\n",
 		SHOW_DELTA_K((void *)VECTORS_BASE, (void *)(VECTORS_BASE + PAGE_SIZE)));
 #endif
 #endif
@@ -171,7 +173,7 @@ static void show_kernelseg_info(void)
 	pr_info(ELLPS
 		"|fixmap region:      "
 #if defined(CONFIG_ARM)
-		" %px - %px                     | [%4zu MB]\n",
+		" %px - %px                     | [%5zu MB]\n",
 		SHOW_DELTA_M((void *)FIXADDR_START, (void *)FIXADDR_END)
 #else
 #if defined(CONFIG_ARM64) || defined(CONFIG_X86)
@@ -254,7 +256,7 @@ static void show_kernelseg_info(void)
 	/* (possible) highmem region;  may be present on some 32-bit systems */
 #if defined(CONFIG_HIGHMEM) && (BITS_PER_LONG==32)
 	pr_info("|HIGHMEM region:     "
-		" %px - %px                     | [%3zu MB]\n",
+		" %px - %px                     | [%5zu MB]\n",
 		SHOW_DELTA_M((void *)PKMAP_BASE, (void *)((PKMAP_BASE) + (LAST_PKMAP * PAGE_SIZE))));
 #endif
 
@@ -270,7 +272,7 @@ static void show_kernelseg_info(void)
 
 #if (BITS_PER_LONG == 32)	/* modules region: see the comment above reg this */
 	pr_info("|module region:      "
-		" %px - %px                     | [%3zu MB]\n",
+		" %px - %px                     | [%5zu MB]\n",
 		SHOW_DELTA_M((void *)MODULES_VADDR, (void *)MODULES_END));
 #endif
 	pr_info(ELLPS);
