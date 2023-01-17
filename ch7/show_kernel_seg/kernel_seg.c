@@ -73,7 +73,6 @@ static void show_userspace_info(void)
 		"|Process environment "
 #if (BITS_PER_LONG == 64)
 		" %px - %px     | [ %4zu bytes]\n"
-		" %px - %px     | [ %4zu bytes]\n"
 		"|          arguments "
 		" %px - %px     | [ %4zu bytes]\n"
 		"|        stack start  %px                        |\n"
@@ -142,14 +141,14 @@ static void show_kernelseg_info(void)
 	unsigned long ram_size;
 
 	ram_size = totalram_pages() * PAGE_SIZE;
-	pr_info("PAGE_SIZE = %lu, total RAM = %lu MB\n", PAGE_SIZE, ram_size/(1024*1024));
+	pr_info("PAGE_SIZE = %lu, total RAM ~= %lu MB\n", PAGE_SIZE, ram_size/(1024*1024));
 
 #if defined(CONFIG_ARM64)
 	pr_info("VA_BITS (CONFIG_ARM64_VA_BITS) = %d\n", VA_BITS);
 	if (VA_BITS > 48 && PAGE_SIZE == (64*1024)) // typically 52 bits and 64K pages
-		pr_info("*** >= ARMv8.2 with LPA? (details not supported here) ***\n");
+		pr_info("*** >= ARMv8.2 with LPA? (YMMV, not supported here) ***\n");
 #endif
-	pr_info("Some Kernel Details [by decreasing address]\n"
+	pr_info("Some Kernel Details [by decreasing address; values are approximate]\n"
 		"+-------------------------------------------------------------+\n");
 
 	/* ARM-32 vector table */
