@@ -107,11 +107,11 @@ static void show_userspace_info(void)
 
 	pr_info(
 #if (BITS_PER_LONG == 64)
-		       "Kernel and User VAS size (TASK_SIZE) each = %zu bytes [  %zu GB]\n"
+			"Kernel, User VAS (TASK_SIZE) size each = %15zu bytes  [  %zu GB]\n"
 #else	// 32-bit
-		       "Size of User VAS size (TASK_SIZE) = %10lu bytes            [  %lu GB]\n"
+	       "Size of User VAS size (TASK_SIZE) = %10lu bytes            [  %lu GB]\n"
 #endif
-		       " # userspace memory regions (VMAs) = %d\n",
+	       " # userspace memory regions (VMAs) = %d\n",
 #if (BITS_PER_LONG == 64)
 				TASK_SIZE, (TASK_SIZE >> 30),
 #else	// 32-bit
