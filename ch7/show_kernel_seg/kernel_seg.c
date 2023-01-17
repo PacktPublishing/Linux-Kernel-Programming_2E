@@ -140,9 +140,9 @@ static void show_kernelseg_info(void)
 {
 	unsigned long ram_size;
 
-#if (BITS_PER_LONG == 64)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 0, 0)
 	ram_size = totalram_pages() * PAGE_SIZE;
-#else // 32-bit; actually, totalram_pages() undefined on the BeagleBone only..
+#else // totalram_pages() undefined on the BeagleBone running an older 4.19 kernel..
 	ram_size = totalram_pages * PAGE_SIZE;
 #endif
 	pr_info("PAGE_SIZE = %lu, total RAM ~= %lu MB (%lu bytes)\n",
