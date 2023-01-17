@@ -37,8 +37,8 @@
 #include <linux/version.h>
 #include <asm/pgtable.h>
 #include <asm/fixmap.h>
-#include "../../klib_llkd.h"
-#include "../../convenient.h"
+//#include "../../klib_llkd.h"
+#include "convenient.h"
 
 #define OURMODNAME   "show_kernel_seg"
 
@@ -128,24 +128,18 @@ static void show_kernelseg_info(void)
 	unsigned long ram_size;
 
 	ram_size = totalram_pages() * PAGE_SIZE;
-	pr_info(
-		"PAGE_SIZE = %lu\n"
-		"PAGE_OFFSET = %px\n"
-		"total RAM = %lu MB\n"
-		,
-		PAGE_SIZE, (void *)PAGE_OFFSET,
-		ram_size/(1024*1024)
-		);
+	pr_info("PAGE_SIZE = %lu, total RAM = %lu MB\n", PAGE_SIZE, ram_size/(1024*1024));
 
-	pr_info("\nSome Kernel Details [by decreasing address]\n"
-		"+-------------------------------------------------------------+\n");
 #if defined(CONFIG_ARM64)
 	pr_info("VA_BITS (CONFIG_ARM64_VA_BITS) = %d\n", VA_BITS);
 	if (VA_BITS > 48 && PAGE_SIZE == (64*1024)) // typically 52 bits and 64K pages
-		pr_info("*** >= ARMv8.2 with LPA? (details not supported here)\n");
+		pr_info("*** >= ARMv8.2 with LPA? (details not supported here) ***\n");
 #endif
+	pr_info("\nSome Kernel Details [by decreasing address]\n"
+		"+-------------------------------------------------------------+\n");
 
-#if defined(CONFIG_ARM) // || defined(CONFIG_ARM64)
+	/* ARM-32 vector table */
+#if defined(CONFIG_ARM)
 	/* On ARM, the definition of VECTORS_BASE turns up only in kernels >= 4.11 */
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 11, 0)
 	pr_info("|vector table:       "
@@ -175,24 +169,25 @@ static void show_kernelseg_info(void)
 	 */
 #if (BITS_PER_LONG == 64)
 	pr_info("|module region:      "
-		" %px - %px     | [%4zd MB]\n",
+		" %px - %px     | [%5zd MB]\n",
 		SHOW_DELTA_M((void *)MODULES_VADDR, (void *)MODULES_END));
 #endif
 
-#ifdef CONFIG_KASAN		// KASAN region: Kernel Address SANitizer
+#ifdef CONFIG_KASAN		/* KASAN region: Kernel Address SANitizer */
 	pr_info("|KASAN shadow:       "
-		" %px - %px     | [%2zd MB = %2zd GB = %2zd TB]\n",
+		" %px - %px     | [%7zd MB = %5zd GB = %3zd TB]\n",
 		SHOW_DELTA_MGT((void *)KASAN_SHADOW_START, (void *)KASAN_SHADOW_END));
 #endif
 
-	// sparsemem vmemmap: TODO: no size macro for X86_64?
+	/* sparsemem vmemmap */
 #if defined(CONFIG_SPARSEMEM_VMEMMAP) && defined(CONFIG_ARM64) // || defined(CONFIG_X86))
 	pr_info(ELLPS
-		"|vmemmap region:      "
-		" %px - %px     | [%5zd MB]\n",
-		SHOW_DELTA_M((void *)VMEMMAP_START, (void *)VMEMMAP_START + VMEMMAP_SIZE));
+		"|vmemmap region:     "
+		" %px - %px     | [%7zd MB = %5zd GB = %3zd TB]\n",
+		SHOW_DELTA_MGT((void *)VMEMMAP_START, (void *)VMEMMAP_START + VMEMMAP_SIZE));
 #endif
 #if defined(CONFIG_X86) && (BITS_PER_LONG==64)
+	// TODO: no size macro for X86_64?
 	pr_info(ELLPS
 		"|vmemmap region start %px                        |\n",
 		(void *)VMEMMAP_START);
@@ -200,22 +195,23 @@ static void show_kernelseg_info(void)
 
 	/* vmalloc region */
 	pr_info("|vmalloc region:     "
-		" %px - %px     | [%4zd MB = %2zd GB = %2zd TB]\n",
+		" %px - %px     | [%9zd MB = %6zd GB = %3zd TB]\n",
 		SHOW_DELTA_MGT((void *)VMALLOC_START, (void *)VMALLOC_END));
 
 	/* lowmem region (RAM direct-mapping) */
 	pr_info("|lowmem region:      "
 		" %px - %px     | [%5zu MB]\n"
 #if (BITS_PER_LONG == 32)
-		"|           (above:PAGE_OFFSET)                     |\n",
+		"|                  ^^^^^^^^^^^                      |\n",
+		"|                  PAGE_OFFSET                      |\n",
 #else
-		"|                       ^^^^^^^^^^^                           |\n"
-		"|                       PAGE_OFFSET                           |\n",
+		"|                        ^^^^^^^^^^^                          |\n"
+		"|                        PAGE_OFFSET                          |\n",
 #endif
 		SHOW_DELTA_M((void *)PAGE_OFFSET, (void *)(PAGE_OFFSET + ram_size)));
 
 	/* (possible) highmem region;  may be present on some 32-bit systems */
-#ifdef CONFIG_HIGHMEM
+#if defined(CONFIG_HIGHMEM) && (BITS_PER_LONG==32)
 	pr_info("|HIGHMEM region:     "
 		" %px - %px | [%4zd MB]\n",
 		SHOW_DELTA_M((void *)PKMAP_BASE, (void *)((PKMAP_BASE) + (LAST_PKMAP * PAGE_SIZE))));
