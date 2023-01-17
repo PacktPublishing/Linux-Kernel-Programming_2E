@@ -140,7 +140,11 @@ static void show_kernelseg_info(void)
 {
 	unsigned long ram_size;
 
+#if (BITS_PER_LONG == 64)
 	ram_size = totalram_pages() * PAGE_SIZE;
+#else // 32-bit; actually, totalram_pages() undefined on the BeagleBone only..
+	ram_size = totalram_pages * PAGE_SIZE;
+#endif
 	pr_info("PAGE_SIZE = %lu, total RAM ~= %lu MB (%lu bytes)\n",
 			PAGE_SIZE, ram_size/(1024*1024), ram_size);
 
@@ -250,23 +254,23 @@ static void show_kernelseg_info(void)
 	/* (possible) highmem region;  may be present on some 32-bit systems */
 #if defined(CONFIG_HIGHMEM) && (BITS_PER_LONG==32)
 	pr_info("|HIGHMEM region:     "
-		" %px - %px                  | [%4zu MB]\n",
+		" %px - %px                     | [%3zu MB]\n",
 		SHOW_DELTA_M((void *)PKMAP_BASE, (void *)((PKMAP_BASE) + (LAST_PKMAP * PAGE_SIZE))));
 #endif
 
 	/*
-	 * Symbols for kernel:
+	 * Symbols for the kernel image itself:
 	 *   text begin/end (_text/_etext)
 	 *   init begin/end (__init_begin, __init_end)
 	 *   data begin/end (_sdata, _edata)
 	 *   bss begin/end (__bss_start, __bss_stop)
-	 * are only defined *within* (in-tree) and aren't available for modules;
-	 * thus we don't attempt to print them.
+	 * are only defined *within* the kernel (in-tree) and aren't available for
+	 * modules; thus we don't attempt to print them.
 	 */
 
 #if (BITS_PER_LONG == 32)	/* modules region: see the comment above reg this */
 	pr_info("|module region:      "
-		" %px - %px                     | [%5zu MB]\n",
+		" %px - %px                     | [%3zu MB]\n",
 		SHOW_DELTA_M((void *)MODULES_VADDR, (void *)MODULES_END));
 #endif
 	pr_info(ELLPS);
@@ -281,7 +285,7 @@ static int __init kernel_seg_init(void)
 	 *  ../../llkd_klib.c
 	 * Hence, we must arrange to link it in (see the Makefile)
 	 */
-	//llkd_minsysinfo();
+	llkd_minsysinfo();
 	show_kernelseg_info();
 
 	if (show_uservas)
