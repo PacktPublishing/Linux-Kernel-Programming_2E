@@ -119,7 +119,7 @@ static void show_userspace_info(void)
 		       current->mm->map_count);
 
 #ifdef DEBUG
-	pr_info(" Above statistics are wrt 'current' thread (see below):\n");
+	pr_info("[DEBUG] Above statistics are wrt 'current' thread (see below):\n");
 	PRINT_CTX();		/* show which process is the one in context */
 #endif
 }
@@ -141,7 +141,8 @@ static void show_kernelseg_info(void)
 	unsigned long ram_size;
 
 	ram_size = totalram_pages() * PAGE_SIZE;
-	pr_info("PAGE_SIZE = %lu, total RAM ~= %lu MB\n", PAGE_SIZE, ram_size/(1024*1024));
+	pr_info("PAGE_SIZE = %lu, total RAM ~= %lu MB (%lu bytes)\n",
+			PAGE_SIZE, ram_size/(1024*1024), ram_size);
 
 #if defined(CONFIG_ARM64)
 	pr_info("VA_BITS (CONFIG_ARM64_VA_BITS) = %d\n", VA_BITS);
@@ -191,7 +192,7 @@ static void show_kernelseg_info(void)
 #ifdef CONFIG_KASAN		/* KASAN region: Kernel Address SANitizer */
 	pr_info("|KASAN shadow:       "
 #if (BITS_PER_LONG == 64)
-		" %px - %px     | [%7zu MB = %5zu GB = %3zu TB]\n",
+		" %px - %px     | [%7zu MB = %5zu GB ~= %2zu TB]\n",
 		SHOW_DELTA_MGT((void *)KASAN_SHADOW_START, (void *)KASAN_SHADOW_END)
 #else  // 32-bit w/ KASAN enabled
 		" %px - %px                     | [%7zu MB = %5zu GB]\n",
@@ -204,7 +205,7 @@ static void show_kernelseg_info(void)
 #if defined(CONFIG_SPARSEMEM_VMEMMAP) && defined(CONFIG_ARM64) // || defined(CONFIG_X86))
 	pr_info(ELLPS
 		"|vmemmap region:     "
-		" %px - %px     | [%7zu MB = %5zu GB = %3zu TB]\n",
+		" %px - %px     | [%7zu MB = %5zu GB ~= %2zu TB]\n",
 		SHOW_DELTA_MGT((void *)VMEMMAP_START, (void *)VMEMMAP_START + VMEMMAP_SIZE));
 #endif
 #if defined(CONFIG_X86) && (BITS_PER_LONG==64)
@@ -217,7 +218,7 @@ static void show_kernelseg_info(void)
 	/* vmalloc region */
 	pr_info("|vmalloc region:     "
 #if (BITS_PER_LONG == 64)
-		" %px - %px     | [%9zu MB = %6zu GB = %3zu TB]\n",
+		" %px - %px     | [%9zu MB = %6zu GB ~= %2zu TB]\n",
 		SHOW_DELTA_MGT((void *)VMALLOC_START, (void *)VMALLOC_END)
 #else  // 32-bit
 		" %px - %px                     | [%5zu MB]\n",
