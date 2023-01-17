@@ -126,12 +126,16 @@
 #define SHOW_DELTA_K(low, hi) (low), (hi), (((hi) - (low)) >> 10)
 #define SHOW_DELTA_M(low, hi) (low), (hi), (((hi) - (low)) >> 20)
 #define SHOW_DELTA_G(low, hi) (low), (hi), (((hi) - (low)) >> 30)
-//#define SHOW_DELTA_MG(low, hi) (low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30)
-#define SHOW_DELTA_MG(low, hi) do { \
+/*#define SHOW_DELTA_MG(low, hi) do { \
 	(low), (hi), (((hi) - (low)) >> 20), \
 	(((hi) - (low)) >> 30) \
-} while(0);
+} while(0);*/
+#define SHOW_DELTA_MG(low, hi) (low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30)
+#if (BITS_PER_LONG == 64)
 #define SHOW_DELTA_MGT(low, hi) (low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30), (((hi) - (low)) >> 40)
+#else // 32-bit
+#define SHOW_DELTA_MGT(low, hi) (low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30)
+#endif
 
 #ifdef __KERNEL__
 /*------------------------ PRINT_CTX ---------------------------------*/
