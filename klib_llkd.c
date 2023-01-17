@@ -90,7 +90,7 @@ void llkd_minsysinfo(void)
  * page), printing the virt and physical address (& PFN- page frame number).
  * This way, we can see if the memory really is *physically* contiguous or not.
  */
-void show_phy_pages(const void *kaddr, size_t len, bool contiguity_check)
+void show_phy_pages(void *kaddr, size_t len, bool contiguity_check)
 {
 	void *vaddr = kaddr;
 #if(BITS_PER_LONG == 64)

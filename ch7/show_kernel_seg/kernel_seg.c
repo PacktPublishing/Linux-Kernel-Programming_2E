@@ -37,8 +37,8 @@
 #include <linux/version.h>
 #include <asm/pgtable.h>
 #include <asm/fixmap.h>
-//#include "../../klib_llkd.h"
-#include "convenient.h"
+#include "../../klib_llkd.h"
+#include "../../convenient.h"
 
 #define OURMODNAME   "show_kernel_seg"
 
@@ -129,12 +129,11 @@ static void show_kernelseg_info(void)
 
 	ram_size = totalram_pages() * PAGE_SIZE;
 	pr_info(
-		"PAGE_SIZE = %d\n"
+		"PAGE_SIZE = %lu\n"
 		"PAGE_OFFSET = %px\n"
-		"PAGE_END = %px\n"
 		"total RAM = %lu MB\n"
 		,
-		PAGE_SIZE, (void *)PAGE_OFFSET, (void *)PAGE_END,
+		PAGE_SIZE, (void *)PAGE_OFFSET,
 		ram_size/(1024*1024)
 		);
 
@@ -155,16 +154,16 @@ static void show_kernelseg_info(void)
 #endif
 #endif
 
-	// VMEMMAP ??
-
 	/* kernel fixmap region */
 	pr_info(ELLPS
 		"|fixmap region:      "
 		" %px - %px     | [%4zd MB]\n",
 #if defined(CONFIG_ARM)
 		SHOW_DELTA_M((void *)FIXADDR_START, (void *)FIXADDR_END)
-#else defined(CONFIG_ARM64) || defined(CONFIG_X86)
-		SHOW_DELTA_M((void *)FIXADDR_START, (void *)(FIXADDR_START+FIXADDR_SIZE))
+#else
+#if defined(CONFIG_ARM64) || defined(CONFIG_X86)
+		SHOW_DELTA_M((void *)FIXADDR_START, (void *)(FIXADDR_START + FIXADDR_SIZE))
+#endif
 #endif
 	);
 
@@ -186,6 +185,19 @@ static void show_kernelseg_info(void)
 		SHOW_DELTA_MGT((void *)KASAN_SHADOW_START, (void *)KASAN_SHADOW_END));
 #endif
 
+	// sparsemem vmemmap: TODO: no size macro for X86_64?
+#if defined(CONFIG_SPARSEMEM_VMEMMAP) && defined(CONFIG_ARM64) // || defined(CONFIG_X86))
+	pr_info(ELLPS
+		"|vmemmap region:      "
+		" %px - %px     | [%5zd MB]\n",
+		SHOW_DELTA_M((void *)VMEMMAP_START, (void *)VMEMMAP_START + VMEMMAP_SIZE));
+#endif
+#if defined(CONFIG_X86) && (BITS_PER_LONG==64)
+	pr_info(ELLPS
+		"|vmemmap region:start: %px                       |\n",
+		(void *)VMEMMAP_START);
+#endif
+
 	/* vmalloc region */
 	pr_info("|vmalloc region:     "
 		" %px - %px     | [%4zd MB = %2zd GB = %2zd TB]\n",
@@ -193,11 +205,11 @@ static void show_kernelseg_info(void)
 
 	/* lowmem region (RAM direct-mapping) */
 	pr_info("|lowmem region:      "
-		" %px - %px     | [%4zd MB = %2zd GB]\n"
+		" %px - %px     | [%5zu MB]\n"
 #if (BITS_PER_LONG == 32)
 		"|           (above:PAGE_OFFSET)                     |\n",
 #else
-		"|                     (above:PAGE_OFFSET)                        |\n",
+		"|                (above:PAGE_OFFSET)                          |\n",
 #endif
 		SHOW_DELTA_M((void *)PAGE_OFFSET, (void *)(PAGE_OFFSET + ram_size)));
 

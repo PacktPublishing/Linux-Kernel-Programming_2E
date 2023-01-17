@@ -25,7 +25,7 @@
 
 void llkd_minsysinfo(void);
 u64 powerof(int base, int exponent);
-void show_phy_pages(const void *kaddr, size_t len, bool contiguity_check);
+void show_phy_pages(void *kaddr, size_t len, bool contiguity_check);
 void show_sizeof(void);
 
 #endif
