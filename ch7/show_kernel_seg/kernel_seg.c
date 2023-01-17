@@ -68,7 +68,7 @@ extern void llkd_minsysinfo(void);	// it's in our klib_llkd 'library'
  */
 static void show_userspace_info(void)
 {
-	pr_info("+------------ Above is kernel-seg; below, user VAS  ----------+\n"
+	pr_info("+------- Above this line: kernel VAS; below: user VAS --------+\n"
 		ELLPS
 		"|Process environment "
 #if (BITS_PER_LONG == 64)
@@ -77,22 +77,22 @@ static void show_userspace_info(void)
 		" %px - %px     | [ %4zu bytes]\n"
 		"|        stack start  %px                        |\n"
 		"|       heap segment "
-		" %px - %px     | [ %4zu KB]\n"
+		" %px - %px     | [ %9zu KB]\n"
 		"|static data segment "
 		" %px - %px     | [ %4zu bytes]\n"
 		"|       text segment "
-		" %px - %px     | [ %4zu KB]\n"
+		" %px - %px     | [ %9zu KB]\n"
 #else // 32-bit
 		" %px - %px                     | [ %4zu bytes]\n"
 		"|          arguments "
 		" %px - %px                     | [ %4zu bytes]\n"
 		"|        stack start  %px                                |\n"
 		"|       heap segment "
-		" %px - %px                     | [ %4zu KB]\n"
+		" %px - %px                     | [ %9zu KB]\n"
 		"|static data segment "
 		" %px - %px                     | [ %4zu bytes]\n"
 		"|       text segment "
-		" %px - %px                     | [ %4zu KB]\n"
+		" %px - %px                     | [ %9zu KB]\n"
 #endif
 		ELLPS
 		"+-------------------------------------------------------------+\n",
@@ -106,14 +106,14 @@ static void show_userspace_info(void)
 
 	pr_info(
 #if (BITS_PER_LONG == 64)
-		       "Above: TASK_SIZE         = %zu size of userland     [  %zu GB]\n"
-#else			// 32-bit
-		       "Above: TASK_SIZE         = %lu size of userland          [  %lu MB]\n"
+		       "Kernel and User VAS size (TASK_SIZE) = %zu bytes    [  %zu GB]\n"
+#else	// 32-bit
+		       "Kernel and User VAS size (TASK_SIZE) = %zu bytes         [  %zu GB]\n"
 #endif
 		       " # userspace memory regions (VMAs) = %d\n",
 #if (BITS_PER_LONG == 64)
 				TASK_SIZE, (TASK_SIZE >> 30),
-#else			// 32-bit
+#else	// 32-bit
 				TASK_SIZE, (TASK_SIZE >> 20),
 #endif
 		       current->mm->map_count);
@@ -175,7 +175,7 @@ static void show_kernelseg_info(void)
 		SHOW_DELTA_M((void *)FIXADDR_START, (void *)FIXADDR_END)
 #else
 #if defined(CONFIG_ARM64) || defined(CONFIG_X86)
-		" %px - %px     | [%4zu MB]\n",
+		" %px - %px     | [%9zu MB]\n",
 		SHOW_DELTA_M((void *)FIXADDR_START, (void *)(FIXADDR_START + FIXADDR_SIZE))
 #endif
 #endif
@@ -189,17 +189,17 @@ static void show_kernelseg_info(void)
 	 */
 #if (BITS_PER_LONG == 64)
 	pr_info("|module region:      "
-		" %px - %px     | [%5zu MB]\n",
+		" %px - %px     | [%9zu MB]\n",
 		SHOW_DELTA_M((void *)MODULES_VADDR, (void *)MODULES_END));
 #endif
 
 #ifdef CONFIG_KASAN		/* KASAN region: Kernel Address SANitizer */
 	pr_info("|KASAN shadow:       "
 #if (BITS_PER_LONG == 64)
-		" %px - %px     | [%7zu MB = %5zu GB ~= %2zu TB]\n",
+		" %px - %px     | [%9zu MB = %6zu GB ~= %3zu TB]\n",
 		SHOW_DELTA_MGT((void *)KASAN_SHADOW_START, (void *)KASAN_SHADOW_END)
 #else  // 32-bit w/ KASAN enabled
-		" %px - %px                     | [%7zu MB = %5zu GB]\n",
+		" %px - %px                     | [%9zu MB = %6zu GB]\n",
 		SHOW_DELTA_MG((void *)KASAN_SHADOW_START, (void *)KASAN_SHADOW_END)
 #endif
 	);
@@ -209,7 +209,7 @@ static void show_kernelseg_info(void)
 #if defined(CONFIG_SPARSEMEM_VMEMMAP) && defined(CONFIG_ARM64) // || defined(CONFIG_X86))
 	pr_info(ELLPS
 		"|vmemmap region:     "
-		" %px - %px     | [%7zu MB = %5zu GB ~= %2zu TB]\n",
+		" %px - %px     | [%9zu MB = %6zu GB ~= %3zu TB]\n",
 		SHOW_DELTA_MGT((void *)VMEMMAP_START, (void *)VMEMMAP_START + VMEMMAP_SIZE));
 #endif
 #if defined(CONFIG_X86) && (BITS_PER_LONG==64)
@@ -222,7 +222,7 @@ static void show_kernelseg_info(void)
 	/* vmalloc region */
 	pr_info("|vmalloc region:     "
 #if (BITS_PER_LONG == 64)
-		" %px - %px     | [%9zu MB = %6zu GB ~= %2zu TB]\n",
+		" %px - %px     | [%9zu MB = %6zu GB ~= %3zu TB]\n",
 		SHOW_DELTA_MGT((void *)VMALLOC_START, (void *)VMALLOC_END)
 #else  // 32-bit
 		" %px - %px                     | [%5zu MB]\n",
@@ -245,7 +245,7 @@ static void show_kernelseg_info(void)
 		"|                     ^^^^^^^^                                |\n"
 		"|                    PAGE_OFFSET                              |\n",
 #else
-		" %px - %px     | [%5zu MB]\n"
+		" %px - %px     | [%9zu MB]\n"
 		"|                     ^^^^^^^^^^^^^^^^                        |\n"
 		"|                        PAGE_OFFSET                          |\n",
 #endif
