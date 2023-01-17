@@ -194,7 +194,7 @@ static void show_kernelseg_info(void)
 #endif
 #if defined(CONFIG_X86) && (BITS_PER_LONG==64)
 	pr_info(ELLPS
-		"|vmemmap region:start: %px                       |\n",
+		"|vmemmap region start %px                        |\n",
 		(void *)VMEMMAP_START);
 #endif
 
@@ -209,7 +209,8 @@ static void show_kernelseg_info(void)
 #if (BITS_PER_LONG == 32)
 		"|           (above:PAGE_OFFSET)                     |\n",
 #else
-		"|                (above:PAGE_OFFSET)                          |\n",
+		"|                       ^^^^^^^^^^^                           |\n"
+		"|                       PAGE_OFFSET                           |\n",
 #endif
 		SHOW_DELTA_M((void *)PAGE_OFFSET, (void *)(PAGE_OFFSET + ram_size)));
 
