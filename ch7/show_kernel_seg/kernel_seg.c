@@ -198,7 +198,7 @@ static void show_kernelseg_info(void)
 #if (BITS_PER_LONG == 64)
 		" %px - %px     | [%9zu MB = %6zu GB ~= %3zu TB]\n",
 		SHOW_DELTA_MGT((void *)KASAN_SHADOW_START, (void *)KASAN_SHADOW_END)
-#else  // 32-bit w/ KASAN enabled
+#else  // 32-bit with KASAN enabled
 		" %px - %px                     | [%9zu MB = %6zu GB]\n",
 		SHOW_DELTA_MG((void *)KASAN_SHADOW_START, (void *)KASAN_SHADOW_END)
 #endif
