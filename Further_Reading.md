@@ -332,6 +332,10 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 	- [KSM (Kernel Samepage Merging)](https://www.kernel.org/doc/html/latest/admin-guide/mm/ksm.html)
 - ['Virtual Memory and Linux', PDF, Matt Porter, Alan Ott](https://elinux.org/images/b/b0/Introduction_to_Memory_Management_in_Linux.pdf)
 
+- Linux (physical) memory models
+    - [Official kernel doc: Physical Memory Model](https://docs.kernel.org/mm/memory-model.html#physical-memory-model)
+    - [Memory: the flat, the discontiguous, and the sparse, LWN, M Rapoport, May 2019](https://lwn.net/Articles/789304/)
+
 <br>
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
