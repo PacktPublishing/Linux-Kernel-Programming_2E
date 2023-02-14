@@ -2,16 +2,18 @@
 # ASLR_check.sh
 # ***************************************************************
 # * This program is part of the source code released for the book
-# *  "Linux Kernel Programming"
+# *  "Linux Kernel Programming 2E"
 # *  (c) Author: Kaiwan N Billimoria
 # *  Publisher:  Packt
 # *  GitHub repository:
-# *  https://github.com/PacktPublishing/Linux-Kernel-Programming
+# *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
 # *
-# * From: Ch 6 : Kernel and Memory Management Internals Essentials
+# * From: Ch 7 : Memory Management Internals Essentials
 # ****************************************************************
 # * Brief Description:
 # [K]ASLR = [Kernel] Address Space Layout Randomization
+# Shows the current state of [K]ASLR; allows you to pass a parameter
+# to change the state of (user-mode) ASLR.
 #
 # * For details, please refer the book, Ch 6.
 # ****************************************************************
@@ -58,7 +60,7 @@ disp_aslr_by_value()
 {
 case "$1" in
  0) tput bold ; fg_red
-	echo " => (usermode) ASLR is curently OFF"
+	echo " => (usermode) ASLR is currently OFF"
 	;;
  1) tput bold ; fg_yellow; echo " => (usermode) ASLR ON: mmap(2)-based allocations, stack, vDSO page,"
     echo " shlib, shmem locations are randomized on startup"
