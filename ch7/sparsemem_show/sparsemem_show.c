@@ -23,7 +23,8 @@
 #include <linux/mmzone.h>
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
-MODULE_DESCRIPTION("LKP2E:ch7/sparsemem_show: display minimal info reg the kernel phy mem model");
+MODULE_DESCRIPTION
+    ("LKP2E:ch7/sparsemem_show: display minimal info reg the kernel physical memory model");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.1");
 
