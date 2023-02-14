@@ -13,6 +13,10 @@
  * This kernel (module) code is meant to serve as a 'library' of sorts. Other
  * kernel modules in our codebase might wish to link into it and use it's code.
  *
+ * SECURITY NOTE
+ * Here we do use the %px printk format specifier in order to see the actual
+ * address; this is a security info-leak! Do NOT do this in production.
+ *
  * For details, please refer the book.
  */
 #include "klib_llkd.h"
@@ -87,14 +91,15 @@ void llkd_minsysinfo(void)
  * @contiguity_check: if True, check for physical contiguity of pages
  *
  * 'Walk' the virtually contiguous 'array' of pages one by one (i.e. page by
- * page), printing the virt and physical address (& PFN- page frame number).
- * This way, we can see if the memory really is *physically* contiguous or not.
+ * page), printing the virtual and physical address as well as the PFN- page
+ * frame number. This way, we can see if the memory really is *physically*
+ * contiguous or not.
  */
 void show_phy_pages(void *kaddr, size_t len, bool contiguity_check)
 {
 	void *vaddr = kaddr;
 #if(BITS_PER_LONG == 64)
-	const char *hdr = "-pg#-  -------va-------     --------pa--------   --PFN--\n";
+	const char *hdr = "-pg#-  --------va--------   --------pa--------   ---PFN---\n";
 #else             // 32-bit
 	const char *hdr = "-pg#-  ----va----   --------pa--------   -PFN-\n";
 #endif
@@ -112,8 +117,8 @@ void show_phy_pages(void *kaddr, size_t len, bool contiguity_check)
 	 */
 #endif
 
-	pr_info("%s(): start kaddr %px, len %zu, contiguity_check is %s\n",
-		       __func__, vaddr, len, contiguity_check?"on":"off");
+	pr_info(" start kaddr %px, len %zu, contiguity_check is %s\n",
+		       vaddr, len, contiguity_check?"on":"off");
 	pr_info("%s", hdr);
 	if (len % PAGE_SIZE)
 		loops++;
@@ -122,21 +127,21 @@ void show_phy_pages(void *kaddr, size_t len, bool contiguity_check)
 		pfn = PHYS_PFN(pa);
 
 		if (!!contiguity_check) {
-		/* what's with the 'if !!(<cond>) ...' ??
-		 * a 'C' trick: ensures that the if condition always evaluates
-		 * to a boolean - either 0 or 1
+		/* What's with the 'if !!(<cond>) ...' ??
+		 * It's a 'C' trick ensuring that the if condition always evaluates
+		 * to a boolean - either 0 or 1. Cool, huh.
 		 */
-			if (i && pfn != prev_pfn + 1) {
+			if (i && (pfn != prev_pfn + 1)) {
 				pr_notice(" *** physical NON-contiguity detected (i=%d) ***\n", i);
 				break;
 			}
 		}
 
 		/* Below we show the actual virt addr and not a hashed value by
-		 * using the 0x%[ll]x format specifier instead of the %pK as we
+		 * using the 0x%px format specifier instead of the %pK as we
 		 * should for security */
 		/* if(!(i%100)) */
-		pr_info("%05d  0x%px   %pa   %ld\n",
+		pr_info("%05d  0x%px   %pa   %9ld\n",
 			i, vaddr+(i*PAGE_SIZE), &pa, pfn);
 		if (!!contiguity_check)
 			prev_pfn = pfn;
