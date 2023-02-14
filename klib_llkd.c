@@ -101,7 +101,7 @@ void show_phy_pages(void *kaddr, size_t len, bool contiguity_check)
 #if(BITS_PER_LONG == 64)
 	const char *hdr = "-pg#-  --------va--------   --------pa--------   ---PFN---\n";
 #else             // 32-bit
-	const char *hdr = "-pg#-  ----va----   --------pa--------   -PFN-\n";
+	const char *hdr = "-pg#-  ----va----   ----pa----   --PFN--\n";
 #endif
 	phys_addr_t pa;
 	int loops = len/PAGE_SIZE, i;
@@ -141,7 +141,11 @@ void show_phy_pages(void *kaddr, size_t len, bool contiguity_check)
 		 * using the 0x%px format specifier instead of the %pK as we
 		 * should for security */
 		/* if(!(i%100)) */
+#if(BITS_PER_LONG == 64)
 		pr_info("%05d  0x%px   %pa   %9ld\n",
+#else
+		pr_info("%05d  0x%px   %pa   %7ld\n",
+#endif
 			i, vaddr+(i*PAGE_SIZE), &pa, pfn);
 		if (!!contiguity_check)
 			prev_pfn = pfn;
