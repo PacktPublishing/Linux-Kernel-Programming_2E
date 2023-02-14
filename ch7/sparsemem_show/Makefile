@@ -81,8 +81,7 @@ ifeq (${MYDEBUG}, y)
 
 # https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#compilation-flags
 # EXTRA_CFLAGS deprecated; use ccflags-y
-  ccflags-y   += -DDEBUG -g -ggdb -gdwarf-4 -Og -Wall -fno-omit-frame-pointer -fvar-tracking-assignments
-  # man gcc: "...-Og may result in a better debugging experience"
+  ccflags-y   += -DDEBUG -g -ggdb -gdwarf-4 -Wall -fno-omit-frame-pointer -fvar-tracking-assignments
 else
   INSTALL_MOD_STRIP := 1
   #ccflags-y   += --strip-debug
