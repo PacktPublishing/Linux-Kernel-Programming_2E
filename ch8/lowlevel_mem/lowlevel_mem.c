@@ -122,7 +122,7 @@ static int bsa_alloc(void)
 	pr_info("4.       alloc_page()   1 page      %px\n"
 		" (struct page addr = %px)\n", (void *)gptr4, pg_ptr1);
 
-	/* 5. Allocate and init 2^5 = 32 pages with the alloc_pages() API.
+	/* 5. Allocate 2^5 = 32 pages with the alloc_pages() API.
 	 * < Same warning as above applies here too! >
 	 */
 	gptr5 = page_address(alloc_pages(GFP_KERNEL, 5));

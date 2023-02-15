@@ -78,7 +78,7 @@ void llkd_minsysinfo(void)
 }
 
 /* 
- * show_phy_pages - show the virtual, physical addresses and PFNs of the memory
+ * show_phy_pages() - show the virtual, physical addresses and PFNs of the memory
  *            range provided on a per-page basis.
  *
  * ! NOTE   NOTE   NOTE !
