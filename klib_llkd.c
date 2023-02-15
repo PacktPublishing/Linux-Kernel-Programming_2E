@@ -101,7 +101,7 @@ void show_phy_pages(void *kaddr, size_t len, bool contiguity_check)
 #if(BITS_PER_LONG == 64)
 	const char *hdr = "-pg#-  --------va--------   --------pa--------   ---PFN---\n";
 #else             // 32-bit
-	const char *hdr = "-pg#-  ----va----   ----pa----   --PFN--\n";
+	const char *hdr = "-pg#-  ----va----   --------pa--------   --PFN--\n";
 #endif
 	phys_addr_t pa;
 	int loops = len/PAGE_SIZE, i;
