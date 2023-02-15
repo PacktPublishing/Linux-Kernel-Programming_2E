@@ -59,7 +59,7 @@ static int bsa_alloc(void)
 	 *    addresses, from PAGE_OFFSET for 5 pages
 	 */
 	pr_info("0. Show identity mapping: RAM page frames : kernel virtual pages :: 1:1\n"
-			"(PAGE_SIZE = %ld bytes)\n", PAGE_SIZE);
+		"(PAGE_SIZE = %ld bytes)\n", PAGE_SIZE);
 	/* SEE THIS!
 	 * Show the virt, phy addr and PFNs (page frame numbers).
 	 * This function is in our 'library' code here: ../../klib_llkd.c
@@ -79,15 +79,14 @@ static int bsa_alloc(void)
 		 * allocation failed. In practice it isn't required; the kernel
 		 * will definitely emit many warning printk's if a memory alloc
 		 * request ever fails! Thus, we do this only once (here; could also
-         * use the WARN_ONCE()); from now on we don't pedantically print any
+		 * use the WARN_ONCE()); from now on we don't pedantically print any
 		 * error message on a memory allocation request failing.
 		 */
 		goto out1;
 	}
-	pr_info("#.    BSA/PA API     Amt alloc'ed        KVA\n"); // header
+	pr_info("#.    BSA/PA API     Amt alloc'ed        KVA\n");	// header
 
 	pr_info("1.  __get_free_page()     1 page    %px\n", gptr1);
-	//pr_info("1. __get_free_page() alloc'ed 1 page from the BSA/PA @ kva %px\n", gptr1);
 
 	/* 2. Allocate 2^bsa_alloc_order pages with the __get_free_pages() API */
 	numpg2alloc = powerof(2, bsa_alloc_order);	// returns 2^bsa_alloc_order
@@ -97,8 +96,6 @@ static int bsa_alloc(void)
 		goto out2;
 	}
 	pr_info("2. __get_free_pages()  2^%d page(s)  %px\n",
-//	pr_info("2. __get_free_pages() alloc'ed 2^%d = %llu page(s) = %lu bytes\n"
-//		" from the BSA/PA @ kva %px\n",
 		bsa_alloc_order, gptr2);
 	pr_info("[--------- show_phy_pages() output follows:\n");
 	show_phy_pages(gptr2, numpg2alloc * PAGE_SIZE, 1);
@@ -108,9 +105,8 @@ static int bsa_alloc(void)
 	gptr3 = (void *)get_zeroed_page(GFP_KERNEL);
 	if (!gptr3)
 		goto out3;
-	pr_info("#.    BSA/PA API     Amt alloc'ed        KVA\n"); // header
+	pr_info("#.    BSA/PA API     Amt alloc'ed        KVA\n");	// header
 	pr_info("3.  get_zeroed_page()   1 page      %px\n", gptr3);
-	//pr_info("3. get_zeroed_page() alloc'ed 1 page from the BSA/PA @ kva %px\n", gptr3);
 
 	/* 4. Allocate one page with the alloc_page() API.
 	 * Careful! It does not return the alloc'ed page addr but rather the pointer
@@ -124,9 +120,7 @@ static int bsa_alloc(void)
 		goto out4;
 	gptr4 = page_address(pg_ptr1);
 	pr_info("4.       alloc_page()   1 page      %px\n"
-			" (struct page addr = %px)\n",
-			(void *)gptr4, pg_ptr1);
-	//pr_info("4. alloc_page() alloc'ed 1 page from the BSA/PA @ kva %px\n"
+		" (struct page addr = %px)\n", (void *)gptr4, pg_ptr1);
 
 	/* 5. Allocate and init 2^5 = 32 pages with the alloc_pages() API.
 	 * < Same warning as above applies here too! >
@@ -135,7 +129,6 @@ static int bsa_alloc(void)
 	if (!gptr5)
 		goto out5;
 	pr_info("5.      alloc_pages()  %lld pages     %px\n",
-//	pr_info("5. alloc_pages() alloc'ed %lld pages from the BSA/PA @ kva %px\n",
 		powerof(2, 5), (void *)gptr5);
 
 	return 0;
