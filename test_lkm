@@ -1,7 +1,15 @@
 #!/bin/bash
+# test_lkm
+# Test loadable kernel module(s) (LKM) from the given directory, recursively
+# We ASSUME a file named Makefile will be present within the LKM dir
+# License: MIT
 
-# Use (unofficial) Bash 'strict mode'; _really_ helps prevent bugs
+# Turn on Bash 'strict mode'! V useful
+# "Convert many kinds of hidden, intermittent, or subtle bugs into immediate, glaringly obvious errors"
+# ref: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
+
+name=$(basename $0)
 QUIET=0
 
 SUCCESS_MSG="^^^ SUCCESS ^^^"
@@ -81,26 +89,51 @@ echo "${SUCCESS_MSG}"
 return 0
 }
 
-
-#--- 'main'
-
-[[ $# -eq 1 ]] && {
-   [[ "$1" = "-q" ]] && QUIET=1
+usage()
+{
+echo -n "Usage: ${name} [-h|-q] path-to-kernel-module-dir
+[-h] : optional; show this help screen
+[-q] : optional; run in quiet mode: "
+[[ ${QUIET} -eq 1 ]] && echo "currently ON" || echo "currently OFF"
+echo "path-to-kernel-module-dir : mandatory; test all kernel modules within this dir recursively."
 }
 
+
+#--- 'main'
+[[ $# -eq 0 ]] && {
+   usage ; exit 1
+}
+if [[ $# -eq 1 ]] ; then
+   [[ "$1" = "-h" ]] && {
+	   usage ; exit 0
+   }
+   [[ "$1" = "-q" ]] && {  # only '-q' isn't ok
+	   usage ; exit 1
+   }
+   LKM_DIR=$1
+elif [[ $# -eq 2 ]] ; then
+   [[ "$1" = "-q" ]] && QUIET=1
+   LKM_DIR=$2
+fi
+
+#echo "LKM_DIR=${LKM_DIR}, quiet=${QUIET}"
 [[ ${QUIET} -eq 0 ]] && echo "FYI, can pass -q to run in quiet mode"
+
 i=1
 TOP=$(pwd)
-for DIR in $(find ${TOP}/ -type d)
+for KDIR in $(find ${LKM_DIR}/ -type d)
 do
-	[[ "${DIR}" == *".git"* || "${DIR}" == "." ]] && continue || true
+	[[ "${KDIR}" == *".git"* || "${KDIR}" == "." ]] && continue || true
 	#--- special case!
-	[[ "${DIR}" == *"3_lockdep"* || "${DIR}" == "." ]] && continue || true
+	[[ "${KDIR}" == *"3_lockdep"* || "${KDIR}" == "." ]] && continue || true
 
-	[[ -f ${DIR}/Makefile ]] || continue && true
-	echo "$i: DIR = ${DIR}"
+	if [[ ! -f ${TOP}/${KDIR}/Makefile ]] ; then
+		[[ ${QUIET} -eq 0 ]] && echo "<no Makefile in ${KDIR}, skipping..>"
+		continue
+	fi
+	echo "$i: KDIR = ${KDIR}"
 	cd ${TOP}
-	testlkm ${DIR} || true
+	testlkm ${KDIR} || true
 	let i=i+1
 done
 exit 0
