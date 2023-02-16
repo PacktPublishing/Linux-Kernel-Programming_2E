@@ -76,7 +76,7 @@ static int show_prcs_in_tasklist(void)
 		pr_info("%s", tmp);
 		//pr_debug("n=%d numread=%d tmp=%s\n", n, numread, tmp);
 
-		cond_resched();
+		//cond_resched(); // don't call this when RCU nest depth >= 1 (it's 1 here)
 		total++;
 	}
 	rcu_read_unlock();
