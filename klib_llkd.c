@@ -117,8 +117,8 @@ void show_phy_pages(void *kaddr, size_t len, bool contiguity_check)
 	 */
 #endif
 
-	pr_info(" start kaddr %px, len %zu, contiguity_check is %s\n",
-		       vaddr, len, contiguity_check?"on":"off");
+	pr_info("%s():start kaddr %px, len %zu, contiguity_check is %s\n",
+		       __func__, vaddr, len, contiguity_check?"on":"off");
 	pr_info("%s", hdr);
 	if (len % PAGE_SIZE)
 		loops++;
