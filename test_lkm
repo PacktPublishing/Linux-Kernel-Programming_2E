@@ -1,7 +1,11 @@
 #!/bin/bash
 # test_lkm
 # Test loadable kernel module(s) (LKM) from the given directory, recursively
-# We ASSUME a file named Makefile will be present within the LKM dir
+# NOTE:
+# - we ASSUME a file named Makefile will be present within the LKM dir
+# - currently, there's no automated way to pass module parameters
+#
+# (c) Kaiwan NB, kaiwanTECH
 # License: MIT
 
 # Turn on Bash 'strict mode'! V useful
