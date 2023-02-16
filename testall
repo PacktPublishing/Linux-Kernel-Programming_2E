@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# Use (unofficial) Bash 'strict mode'; _really_ helps prevent bugs
+set -euo pipefail
+QUIET=0
+
+SUCCESS_MSG="^^^ SUCCESS ^^^"
+WARNING_BUILD_MSG="
+### WARNING(s) during build; must check ###
+"
+FAIL_MSG="
+*** *** *** *** *** *** ***  FAIL  *** *** *** *** *** *** *** ***
+"
+
+failit()
+{
+echo "${FAIL_MSG}" >&2
+echo "message: $*" >&2
+return 1
+}
+
+# Parameter(s):
+# $1 : directory containing the LKM
+# Returns:
+#  0 on success
+#  non-zero on failure
+testlkm()
+{
+cd $1 || {
+  failit "cd to $1"
+  return 1
+}
+echo "=== $1 ==="
+[[ ! -f Makefile ]] && {
+   echo "no Makefile, skipping..."
+   return 0
+}
+local TMPF=/tmp/test.$$
+if [[ ${QUIET} -eq 1 ]] ; then
+   echo "make clean ; make"
+   make clean >/dev/null 2>&1
+   make >${TMPF} 2>&1 || {
+	  failit "make failed"
+	  return 1
+   }
+else
+   make clean
+   make |tee ${TMPF} || {
+	  failit "make failed"
+	  return 1
+	}
+fi
+grep "warning:" ${TMPF} && echo "${WARNING_BUILD_MSG=}"
+#cat ${TMPF}
+#rm -f ${TMPF}
+
+[[ $(ls *.ko 2>/dev/null) ]] || {
+   make clean >/dev/null 2>&1
+   echo "<<< No LKM? (likely it's usermode code here); skipping... >>>"
+   return 2
+}
+local LKM_KO=$(basename $(ls *.ko))
+local LKM=${LKM_KO::-3} # get rid of the trailing .ko
+[[ -z "${LKM}" ]] && {
+  make clean >/dev/null 2>&1
+  failit "couldn't get module name"
+  return 1
+}
+sudo rmmod ${LKM} 2>/dev/null || true
+sudo dmesg -C
+sudo insmod ${LKM_KO} || {
+  make clean >/dev/null 2>&1
+  failit "insmod ${LKM_KO} failed"
+  return 1
+}
+lsmod|grep ${LKM}
+sudo rmmod ${LKM} 2>/dev/null
+[[ ${QUIET} -eq 1 ]] && sudo dmesg -C || sudo dmesg -c
+make clean >/dev/null 2>&1
+echo "${SUCCESS_MSG}"
+return 0
+}
+
+
+#--- 'main'
+
+[[ $# -eq 1 ]] && {
+   [[ "$1" = "-q" ]] && QUIET=1
+}
+
+[[ ${QUIET} -eq 0 ]] && echo "FYI, can pass -q to run in quiet mode"
+i=1
+TOP=$(pwd)
+for DIR in $(find ${TOP}/ -type d)
+do
+	[[ "${DIR}" == *".git"* || "${DIR}" == "." ]] && continue || true
+	#--- special case!
+	[[ "${DIR}" == *"3_lockdep"* || "${DIR}" == "." ]] && continue || true
+
+	[[ -f ${DIR}/Makefile ]] || continue && true
+	echo "$i: DIR = ${DIR}"
+	cd ${TOP}
+	testlkm ${DIR} || true
+	let i=i+1
+done
+exit 0
