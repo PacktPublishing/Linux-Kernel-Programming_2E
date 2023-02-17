@@ -14,6 +14,15 @@
 set -euo pipefail
 
 name=$(basename $0)
+ECHO_PFX=">>>"
+
+DEBUG=0
+decho()
+{
+[[ ${DEBUG} -eq 0 ]] && return
+echo "$*"
+}
+
 QUIET=0
 
 SUCCESS_MSG="^^^ SUCCESS ^^^"
@@ -31,44 +40,172 @@ echo "message: $*" >&2
 return 1
 }
 
-# Parameter(s):
-# $1 : directory containing the LKM
-# Returns:
-#  0 on success
-#  non-zero on failure
-testlkm()
+#----------------------------------------------------------------------
+LINE="-------------------------------------------------------------------------"
+CHECKPATCH=/lib/modules/$(uname -r)/build/scripts/checkpatch.pl
+OPEN_IN_ED=0
+ED=gedit
+
+TMP_CHECKPATCH=.tmp_checkpatch
+TMP_FLAWFINDER=.tmp_flawfinder
+TMP_CPPCHECK=.tmp_cppcheck
+TMP_SPARSE=.tmp_sparse
+TMP_SGCC=.tmp_sgcc
+
+# 'better' Makefile?
+verify_makefile()
 {
-cd $1 || {
-  failit "cd to $1"
-  return 1
-}
-echo "=== $1 ==="
+local okay=1
 [[ ! -f Makefile ]] && {
    echo "no Makefile, skipping..."
-   return 0
+   return 1
 }
-local TMPF=/tmp/test.$$
+grep -w "^install:" Makefile >/dev/null || okay=0
+grep -w "^code-style:" Makefile >/dev/null || okay=0
+grep -w "^checkpatch:" Makefile >/dev/null || okay=0
+grep -w "^sa:" Makefile >/dev/null || okay=0
+grep -w "^sa_flawfinder:" Makefile >/dev/null || okay=0
+grep -w "^sa_cppcheck:" Makefile >/dev/null || okay=0
+grep -w "^sa_sparse:" Makefile >/dev/null || okay=0
+grep -w "^help:" Makefile >/dev/null || okay=0
+[[ ${okay} -eq 1 ]] && return 0 || return 2
+}
+
+lkm_static_analysis_checks()
+{
+make clean >/dev/null 2>&1
+
+local SRC=$(ls *.c 2>/dev/null)
+local SRC_NOEXT=${SRC::-2}
+decho "SRC=${SRC}   SRC_NOEXT=${SRC_NOEXT}"
+
+chmod 0644 ${SRC} Makefile
+[ ${OPEN_IN_ED} -eq 1 ] && ${ED} ${SRC} Makefile
+
+#echo ${LINE}
+grep -q "MODULE_LICENSE(.*)" ${SRC} || echo "${ECHO_PFX} *** NO license! ***" && \
+	echo "${ECHO_PFX} License present"
+
+CHECKPATCH_ARGS="--no-tree -f"
 if [[ ${QUIET} -eq 1 ]] ; then
-   echo "make clean ; make"
+	${CHECKPATCH} ${CHECKPATCH_ARGS} ${SRC} > ${TMP_CHECKPATCH} 2>&1
+else
+    ${CHECKPATCH} ${CHECKPATCH_ARGS} ${SRC} 2>&1 |tee ${TMP_CHECKPATCH}
+fi
+local chkpatch_err=0
+chkpatch_err=$(grep -w "^ERROR:" ${TMP_CHECKPATCH} |wc -l) || chkpatch_err=0 
+local chkpatch_warns=0
+chkpatch_warns=$(grep -w "^WARNING:" ${TMP_CHECKPATCH} |wc -l) || chkpatch_warns=0
+(
+grep -q "pr_fmt(.*)" ${SRC} || true
+if [ $? -ne 0 ]; then
+  echo "${ECHO_PFX} NO pr_fmt() macro!"
+else
+  echo "${ECHO_PFX} pr_fmt() present"
+fi
+echo "${ECHO_PFX} checkpatch: errors=${chkpatch_err} warnings=${chkpatch_warns}"
+#echo ${LINE}
+)
+
+#--- --- Static analysis --- ---
+echo "-------------------- Static analysis --------------------"
+if [[ ${QUIET} -eq 1 ]] ; then
+   make sa_flawfinder > ${TMP_FLAWFINDER} 2>&1 || true
+else
+   make sa_flawfinder 2>&1 | tee ${TMP_FLAWFINDER} || true
+fi
+local flawfinder_hits=0
+flawfinder_hits=$(grep "^Hits =" ${TMP_FLAWFINDER} |cut -d'=' -f2) || flawfinder_hits=0
+grep -q "No hits found" ${TMP_FLAWFINDER} && flawfinder_hits=0
+echo "${ECHO_PFX} flawfinder_hits = ${flawfinder_hits}" # | tee -a ${RESFILE}
+
+#--- cppcheck
+if [[ ${QUIET} -eq 1 ]] ; then
+   make sa_cppcheck > ${TMP_CPPCHECK} 2>&1 || true
+else
+   make sa_cppcheck 2>&1 | tee ${TMP_CPPCHECK} || true
+fi
+local cppcheck_hits=0
+cppcheck_hits=$(grep "\^" ${TMP_CPPCHECK} |wc -l) || cppcheck_hits=0
+echo "${ECHO_PFX} cppcheck_hits = ${cppcheck_hits}"  #| tee -a ${RESFILE}
+
+#--- sparse
+if [[ ${QUIET} -eq 1 ]] ; then
+   make sa_sparse > ${TMP_SPARSE} 2>&1 || true
+else
+   make sa_sparse 2>&1 | tee ${TMP_SPARSE} || true
+fi
+local sparse_err=0
+sparse_err=$(grep -w "error:" ${TMP_SPARSE} |wc -l) || sparse_err=0
+local sparse_warns=0
+sparse_warns=$(grep -w "warning:" ${TMP_SPARSE} |wc -l) || sparse_warns=0
+echo "${ECHO_PFX} sparse: errors=${sparse_err} warnings=${sparse_warns}"  #| tee -a ${RESFILE}
+
+#--- (static analysis) gcc
+if [[ ${QUIET} -eq 1 ]] ; then
+   make sa_gcc > ${TMP_SGCC} 2>&1 || true
+else
+   make sa_gcc 2>&1 | tee ${TMP_SGCC} || true
+fi
+local sgcc_err=0
+sgcc_err=$(grep -w "error:" ${TMP_SGCC} |wc -l) || sgcc_err=0
+local sgcc_warns=0
+sgcc_warns=$(grep -w "warning:" ${TMP_SGCC} |wc -l) || sgcc_warns=0
+echo "${ECHO_PFX} (static)gcc: errors=${sgcc_err} warnings=${sgcc_warns}" #| tee -a ${RESFILE}
+#echo ${LINE}
+
+rm -f ${TMP_CHECKPATCH} ${TMP_FLAWFINDER} ${TMP_CPPCHECK} ${TMP_SPARSE} ${TMP_SGCC}
+
+[ 0 -eq 1 ] && {
+echo "---Static analysis with Coccinelle---"
+coccichk ${SRC}
+echo ${LINE}
+}
+return 0
+}
+
+#----------------------------------------------------------------------
+
+
+build_lkm()
+{
+echo "----------------------- LKM Build -----------------------"
+local TMP_BUILD=.tmp_build
+if [[ ${QUIET} -eq 1 ]] ; then
+   decho "make clean ; make"
    make clean >/dev/null 2>&1
-   make >${TMPF} 2>&1 || {
-	  failit "make failed"
-	  return 1
-   }
+   make >${TMP_BUILD} 2>&1
 else
    make clean
-   make |tee ${TMPF} || {
-	  failit "make failed"
-	  return 1
-	}
+   make 2>&1 |tee ${TMP_BUILD}
 fi
-grep "warning:" ${TMPF} && echo "${WARNING_BUILD_MSG=}"
-#cat ${TMPF}
-#rm -f ${TMPF}
 
+local make_err=0
+make_err=$(grep -w "error:" ${TMP_BUILD} |wc -l) || make_err=0
+local make_warns=0
+make_warns=$(grep -w "warning:" ${TMP_BUILD} |wc -l) || make_warns=0
+echo "${ECHO_PFX} make: errors=${make_err} warnings=${make_warns}" #| tee -a ${RESFILE}
+[[ ${make_err} -ge 1 ]] && {
+	failit "LKM build failed"
+	echo ${LINE}
+	return 1
+}
+#echo ${LINE}
+
+grep "warning:" ${TMP_BUILD} && echo "${WARNING_BUILD_MSG}"
+#cat ${TMP_BUILD}
+#rm -f ${TMP_BUILD}
+  return 0
+}
+
+# No intelligence... simply performs insmod, rmmmod
+# -no module params, checking of o/p
+insmod_rmmod_lkm()
+{
+echo "-------------------- LKM insmod+rmmod -------------------"
 [[ $(ls *.ko 2>/dev/null) ]] || {
    make clean >/dev/null 2>&1
-   echo "<<< No LKM? (likely it's usermode code here); skipping... >>>"
+   echo "<<< No LKM .ko found? (likely it's usermode code here); skipping... >>>"
    return 2
 }
 local LKM_KO=$(basename $(ls *.ko))
@@ -89,7 +226,49 @@ lsmod|grep ${LKM}
 sudo rmmod ${LKM} 2>/dev/null
 [[ ${QUIET} -eq 1 ]] && sudo dmesg -C || sudo dmesg -c
 make clean >/dev/null 2>&1
+
 echo "${SUCCESS_MSG}"
+return 0
+}
+
+# Parameter(s):
+# $1 : directory containing the LKM
+# Returns:
+#  0 on success
+#  non-zero on failure
+testlkm()
+{
+cd $1 || {
+  failit "cd to $1"
+  return 1
+}
+
+verify_makefile
+local _ret=$?
+[[ ${_ret} -ne 0 ]] && {
+	echo "*** Makefile verification failed ***"
+	[[ ${_ret} -eq 2 ]] && echo " doesn't have targets corr to the 'better' Makefile"
+	return 1
+}
+
+lkm_static_analysis_checks
+[[ $? -ne 0 ]] && {
+	echo "*** lkm_static_analysis_checks() failed ***"
+	return 1
+}
+
+build_lkm
+[[ $? -ne 0 ]] && {
+#	echo "*** build_lkm() failed ***"
+	return 1
+}
+# Ok, the LKM build is fine; insmod & rmmod it now
+insmod_rmmod_lkm
+[[ $? -ne 0 ]] && {
+#	echo "*** insmod_rmmod_lkm() failed ***"
+	return 1
+}
+
 return 0
 }
 
@@ -120,8 +299,12 @@ elif [[ $# -eq 2 ]] ; then
    LKM_DIR=$2
 fi
 
-#echo "LKM_DIR=${LKM_DIR}, quiet=${QUIET}"
-[[ ${QUIET} -eq 0 ]] && echo "FYI, can pass -q to run in quiet mode"
+decho "LKM_DIR=${LKM_DIR}, quiet=${QUIET}"
+[[ ${QUIET} -eq 0 ]] && {
+	echo "FYI, can pass -q to run in quiet mode"
+	ECHO_PFX="
+${ECHO_PFX}"
+}
 
 i=1
 TOP=$(pwd)
@@ -135,7 +318,8 @@ do
 		[[ ${QUIET} -eq 0 ]] && echo "<no Makefile in ${KDIR}, skipping..>"
 		continue
 	fi
-	echo "$i: KDIR = ${KDIR}"
+	[[ $i -ne 1 ]] && echo
+	echo "====================== $i: LKM ${KDIR} ======================"
 	cd ${TOP}
 	testlkm ${KDIR} || true
 	let i=i+1
