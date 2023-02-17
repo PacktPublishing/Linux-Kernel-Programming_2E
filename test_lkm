@@ -32,6 +32,8 @@ WARNING_BUILD_MSG="
 FAIL_MSG="
 *** *** *** *** *** *** ***  FAIL  *** *** *** *** *** *** *** ***
 "
+MAKEFILE_FAIL_MSG="The Makefile doesn't have targets corresponding to the 'better' Makefile
+(https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/ch6/foreach/prcs_showall/Makefile)"
 
 failit()
 {
@@ -243,19 +245,24 @@ cd $1 || {
   return 1
 }
 
+local BETTER_MAKEFILE_OK=1
 verify_makefile
 local _ret=$?
 [[ ${_ret} -ne 0 ]] && {
-	echo "*** Makefile verification failed ***"
-	[[ ${_ret} -eq 2 ]] && echo " doesn't have targets corr to the 'better' Makefile"
-	return 1
+	echo "*** 'better' Makefile verification failed ***"
+	[[ ${_ret} -eq 2 ]] && echo "${MAKEFILE_FAIL_MSG}"
+	BETTER_MAKEFILE_OK=0
 }
 
-lkm_static_analysis_checks
-[[ $? -ne 0 ]] && {
-	echo "*** lkm_static_analysis_checks() failed ***"
-	return 1
-}
+if [[ ${BETTER_MAKEFILE_OK} -eq 1 ]]; then
+	lkm_static_analysis_checks
+	[[ $? -ne 0 ]] && {
+		echo "*** lkm_static_analysis_checks() failed ***"
+		return 1
+	}
+else
+	echo "${ECHO_PFX} No 'better' Makefile, so skipping LKM static analysis checks"
+fi
 
 build_lkm
 [[ $? -ne 0 ]] && {
