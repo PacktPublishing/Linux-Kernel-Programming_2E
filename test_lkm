@@ -48,11 +48,11 @@ CHECKPATCH=/lib/modules/$(uname -r)/build/scripts/checkpatch.pl
 OPEN_IN_ED=0
 ED=gedit
 
-TMP_CHECKPATCH=.tmp_checkpatch
-TMP_FLAWFINDER=.tmp_flawfinder
-TMP_CPPCHECK=.tmp_cppcheck
-TMP_SPARSE=.tmp_sparse
-TMP_SGCC=.tmp_sgcc
+TMP_CHECKPATCH=/tmp/tmp_checkpatch
+TMP_FLAWFINDER=/tmp/tmp_flawfinder
+TMP_CPPCHECK=/tmp/tmp_cppcheck
+TMP_SPARSE=/tmp/tmp_sparse
+TMP_SGCC=/tmp/tmp_sgcc
 
 # 'better' Makefile?
 verify_makefile()
@@ -88,11 +88,10 @@ chmod 0644 ${SRC} Makefile
 grep -q "MODULE_LICENSE(.*)" ${SRC} || echo "${ECHO_PFX} *** NO license! ***" && \
 	echo "${ECHO_PFX} License present"
 
-CHECKPATCH_ARGS="--no-tree -f"
 if [[ ${QUIET} -eq 1 ]] ; then
-	${CHECKPATCH} ${CHECKPATCH_ARGS} ${SRC} > ${TMP_CHECKPATCH} 2>&1
+   make checkpatch > ${TMP_CHECKPATCH} 2>&1 || true
 else
-    ${CHECKPATCH} ${CHECKPATCH_ARGS} ${SRC} 2>&1 |tee ${TMP_CHECKPATCH}
+   make checkpatch 2>&1 |tee ${TMP_CHECKPATCH} || true
 fi
 local chkpatch_err=0
 chkpatch_err=$(grep -w "^ERROR:" ${TMP_CHECKPATCH} |wc -l) || chkpatch_err=0 
