@@ -101,7 +101,7 @@ chkpatch_warns=$(grep -w "^WARNING:" ${TMP_CHECKPATCH} |wc -l) || chkpatch_warns
 set +e  # Bash strict mode side effects
 grep "pr_fmt(.*)" ${SRC} >/dev/null
 if [ $? -ne 0 ]; then
-  echo "${ECHO_PFX} pr_fmt() macro missing!"
+  echo "${ECHO_PFX} ### pr_fmt() macro missing! ###"
 else
   echo "${ECHO_PFX} pr_fmt() macro present"
 fi
@@ -223,6 +223,7 @@ sudo dmesg -C
 sudo insmod ${LKM_KO} || {
   make clean >/dev/null 2>&1
   failit "insmod ${LKM_KO} failed"
+  [[ ${QUIET} -eq 0 ]] && sudo dmesg
   return 1
 }
 lsmod|grep ${LKM}
