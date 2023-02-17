@@ -98,12 +98,14 @@ chkpatch_err=$(grep -w "^ERROR:" ${TMP_CHECKPATCH} |wc -l) || chkpatch_err=0
 local chkpatch_warns=0
 chkpatch_warns=$(grep -w "^WARNING:" ${TMP_CHECKPATCH} |wc -l) || chkpatch_warns=0
 (
-grep -q "pr_fmt(.*)" ${SRC} || true
+set +e  # Bash strict mode side effects
+grep "pr_fmt(.*)" ${SRC} >/dev/null
 if [ $? -ne 0 ]; then
-  echo "${ECHO_PFX} NO pr_fmt() macro!"
+  echo "${ECHO_PFX} pr_fmt() macro missing!"
 else
-  echo "${ECHO_PFX} pr_fmt() present"
+  echo "${ECHO_PFX} pr_fmt() macro present"
 fi
+set -e
 echo "${ECHO_PFX} checkpatch: errors=${chkpatch_err} warnings=${chkpatch_warns}"
 #echo ${LINE}
 )
