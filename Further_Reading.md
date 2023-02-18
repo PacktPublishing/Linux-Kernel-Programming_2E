@@ -349,7 +349,10 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - Information regarding GFP flags internal usage, etc: ['Memory management when failure is not an option', LWN, Mar 2015](https://lwn.net/Articles/635354/)
 
-- CPU Caches
+- smem: [smem memory reporting tool](https://www.selenic.com/smem/)
+
+- CPU Caching
+    - [Why software developers should care about CPU caches, EventHelix, Medium, July 2017](https://medium.com/software-design/why-software-developers-should-care-about-cpu-caches-8da04355bb8a)
     - ["How L1 and L2 CPU Caches Work, and Why They’re an Essential Part of Modern Chips", Joel Hruska, Aug 2018](http://www.extremetech.com/extreme/188776-how-l1-and-l2-cpu-caches-work-and-why-theyre-an-essential-part-of-modern-chips)
     - An example diagram of CPU (cache) hierarchy: ["Memory hierarchy of an AMD Bulldozer server"](https://en.wikipedia.org/wiki/CPU_cache#/media/File:Hwloc.png)
 
@@ -357,7 +360,11 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     -   ['Toward a more efficient slab allocator', LWN, Jon Corbet, Jan 2015](https://lwn.net/Articles/629152/)
     -   Blog article ['INTERESTING NUMBERS'](https://kaiwantech.wordpress.com/2015/05/01/interesting-numbers/); see the section on *Networking* for some information on how the network subsystem has time critical code paths (and the resource links that follow)
 
-- ["GNUPLOT 4.2 - A Brief Manual and Tutorial", Duke University](https://people.duke.edu/~hpgavin/gnuplot.html)
+- GNUplot
+    - Must-See [Demos for gnuplot version 5.4 (pngcairo terminal)](http://gnuplot.sourceforge.net/demo/index.html)
+    - ["GNUPLOT 4.2 - A Brief Manual and Tutorial", Duke University](https://people.duke.edu/~hpgavin/gnuplot.html)
+    - [gnuplot Quick Reference](http://www.gnuplot.info/docs_4.0/gpcard.pdf)
+
 - ['Object-oriented design patterns in the kernel, part 1', Neil Brown, LWN, June 2011](https://lwn.net/Articles/444910/)
 
 <br>
