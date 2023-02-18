@@ -22,7 +22,7 @@ set -euo pipefail
 name=$(basename $0)
 TMPFILE=/tmp/plotdata
 OUTFILE=plotdata.txt
-PAUSE_TO_SHOW=1
+GUI_ENV=1
 IMAGE_NAME=graph.jpg
 
 prep_datafile()
@@ -46,8 +46,15 @@ local PLOTCMD="plot '${OUTFILE}' using ${SCALE} with lines title '${TITLE}',\
 		'${OUTFILE}' title 'datafile: ${OUTFILE}'\
 		with linespoints"
 			 # the 2nd 'title ...' here is for the Legend
-[ ${PAUSE_TO_SHOW} -eq 1 ] && PLOTCMD="${PLOTCMD}; \
- pause -1;"
+date
+if [[ ${GUI_ENV} -eq 1 ]]; then
+  PLOTCMD="${PLOTCMD}; \
+  pause -1;"  # wait forever.. (until user closes the GUI gnuplot window)
+else
+  PLOTCMD="${PLOTCMD}; \
+  pause 1" # theoretically wait 1s but in practice it takes a minute; why??
+  echo "${name}: non-gui: patience pl, it takes about a minute to get the JPG image...(unsure why)..."
+fi
 #echo "PLOTCMD=${PLOTCMD}"
 
 gnuplot -e \
@@ -65,7 +72,7 @@ gnuplot -e \
 	replot; \
 	" 2>/dev/null
 
-	[[ -f ${IMAGE_NAME} ]] && echo "Graph saved as this image: ${IMAGE_NAME}"
+	[[ -f ${IMAGE_NAME} ]] && echo "Done, graph saved here: ${IMAGE_NAME}"
 }
 
 
@@ -74,7 +81,11 @@ hash gnuplot || {
 	echo "${name}: first install gnuplot"
 	exit 1
 }
-pgrep Xorg >/dev/null || echo "${name}: WARNING: are you sure you're running in a GUI? (no Xorg detected)"
+pgrep Xorg >/dev/null || {
+	echo "${name}: WARNING: are you sure you're running in a GUI? (no Xorg detected)"
+	GUI_ENV=0
+}
+
 prep_datafile
 plotit
 
