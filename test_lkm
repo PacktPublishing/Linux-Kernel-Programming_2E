@@ -283,11 +283,14 @@ return 0
 
 usage()
 {
-echo -n "Usage: ${name} [-h|-q] path-to-kernel-module-dir
-[-h] : optional; show this help screen
-[-q] : optional; run in quiet mode: "
-[[ ${QUIET} -eq 1 ]] && echo "currently ON" || echo "currently OFF"
-echo "path-to-kernel-module-dir : mandatory; test all kernel modules within this dir recursively."
+echo -n "Usage: ${name} [-q|-h] starting-dir
+Parameters:
+ starting-dir : test all kernel modules starting from this directory, recursively (mandatory)
+[Optional]:
+ [-q] : run in quiet mode (default: "
+[[ ${QUIET} -eq 1 ]] && echo "ON)" || echo "OFF)"
+echo " [-h] : show this help screen"
+echo "Expects usage of the 'better' Makefile (but will work regardless)"
 }
 
 
