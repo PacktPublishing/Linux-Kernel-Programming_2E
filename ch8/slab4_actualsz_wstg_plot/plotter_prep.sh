@@ -20,11 +20,64 @@
 set -euo pipefail
 
 TMPFILE=/tmp/plotdata
-OUTFILE=2plotdata.txt
+OUTFILE=plotdata.txt
+PAUSE_TO_SHOW=1
+IMAGE_NAME=graph.jpg
 
+prep_datafile()
+{
 sudo dmesg > ${TMPFILE}
 cut -c16- ${TMPFILE} | grep -v -i "^[a-z]" > ${OUTFILE}
+# trim whitespace to one space
+tr -s ' ' < ${OUTFILE} > /tmp/$$.1
+# replace space with separator char (,)
+tr ' ' ',' < /tmp/$$.1 > ${OUTFILE}  #/tmp/$$.2
 rm -f ${TMPFILE}
-echo "Done, data file for gnuplot is ${OUTFILE}
-(follow the steps in the LKP book, Ch 8, to plot the graph)."
+echo "Done, generated data file for gnuplot: ${OUTFILE}"
 ls -l ${OUTFILE}
+}
+
+plotit()
+{
+local TITLE="Slab/Page Allocator: Requested vs Actually allocated size Wastage in Percent"
+local SCALE="1:50"
+local PLOTCMD="plot '${OUTFILE}' using ${SCALE} with lines title '${TITLE}',\
+		'${OUTFILE}' title 'datafile: ${OUTFILE}'\
+		with linespoints"
+			 # the 'title ...' here is for the Legend
+[ ${PAUSE_TO_SHOW} -eq 1 ] && PLOTCMD="${PLOTCMD}; \
+ pause -1;"
+#echo "PLOTCMD=${PLOTCMD}"
+
+gnuplot -e \
+	"set title \"${TITLE}\"; \
+	set xlabel '{/:Bold Required Size (bytes)}' ; \
+	set ylabel '{/:Bold Wastage incurred (%age)}' ; \
+	set grid; \
+	set ytics nomirror; \
+	set datafile separator \",\"; 
+	set xrange [*:*]; \
+	set yrange [*:*]; \
+	${PLOTCMD}; \
+	set terminal jpeg size 1024,768; \
+	set output '${IMAGE_NAME}'; \
+	replot; \
+	" 2>/dev/null
+
+	[[ -f ${IMAGE_NAME} ]] && echo "Graph saved as this image: ${IMAGE_NAME}"
+}
+
+#	set size 1,1; \
+#	set xrange [*:*]; \
+#	set yrange [*:*]; \
+
+#--- 'main'
+
+hash gnuplot || {
+	echo "${name}: first install gnuplot"
+	exit 1
+}
+prep_datafile
+plotit
+
+exit 0
