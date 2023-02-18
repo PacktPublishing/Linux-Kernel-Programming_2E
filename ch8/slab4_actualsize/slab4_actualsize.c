@@ -25,10 +25,10 @@ MODULE_DESCRIPTION("LKP2E book:ch8/slab4_actualsize: test slab alloc with the ks
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.2");
 
-static int stepsz = 204800;  // 20K
+static int stepsz = 204800;  // 200K
 module_param(stepsz, int, 0644);
 MODULE_PARM_DESC(stepsz,
-"Amount to increase allocation by on each loop iteration (default=20K");
+"Amount to increase allocation by on each loop iteration (default=200K");
 
 static int test_maxallocsz(void)
 {
