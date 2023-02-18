@@ -1,0 +1,45 @@
+Readme (for ch8/slab4_actualsz_wstg_plot)
+
+Refers to material covered in LKP 2E, Ch 8, Kernel Memory Allocation for Module
+Authors, Part 1, section 'Graphing it'.
+
+Steps to follow to plot the graph (of
+ X-axis: required size to allocate (bytes) vs
+ Y-axis: wastage percentage that occurs when allocating using slab APIs):
+
+0. Firstly, you need to be running a recent Linux distro in GUI mode and have
+the gnuplot package installed
+
+1. Ensure you first clear the kernel log
+sudo dmesg -C
+
+2. Now build the module and insmod it (it will fail at some point, that's fine)
+../../lkm slab4_actualsz_wstg_plot
+
+3. Run the helper script plot_graph.sh; f.e.:
+
+(Recommended: Before running the script, pl check the data file; it should ONLY
+have data of the form:
+100,28
+20580,59
+41060,59
+[...]
+4137060,1
+4157540,0
+
+If any unwanted lines exist (typically output from the kernel WARN*() macro,
+delete them).
+Note that the script is designed to auto-eliminate unwanted lines, just mentioning
+this as an additional safety.
+
+Now run the plot script:
+
+$ ./plot_graph.sh 
+Done, generated data file for gnuplot: plotdata.txt
+-rw-rw-r-- 1 kaiwan kaiwan 2162 Feb 18 12:45 plotdata.txt
+
+<< The graph should now be seen; after closing it ... >>
+
+Graph saved as this image: graph.jpg
+
+Done.
