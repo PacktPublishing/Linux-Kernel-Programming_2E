@@ -40,7 +40,7 @@ ls -l ${OUTFILE}
 
 plotit()
 {
-local TITLE="Slab/Page Allocator: Requested vs Actually allocated size Wastage in Percent"
+local TITLE="{/=15 LKP 2E / Ch 8 : Slab/Page Allocator}\n\n{/:Bold Requested mem size vs Wastage in Percent}"
 local SCALE="1:50"
 local PLOTCMD="plot '${OUTFILE}' using ${SCALE} with lines title '${TITLE}',\
 		'${OUTFILE}' title 'datafile: ${OUTFILE}'\
