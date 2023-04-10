@@ -11,7 +11,7 @@ name=$(basename $0)
    exit 1
 }
 
-[[ ! -f /sys/kernel/debug/slab/kmalloc-64/alloc-traces ]] && {
+[[ ! -f /sys/kernel/debug/slab/kmalloc-64/alloc_traces ]] && {
    echo "${name}: can't find the alloc-traces pseudofile(s); check:
 - are you running kernel ver >= 6.1 (required) ?
 - have you booted with kernel parameter slub_debug=FZPU ?"
@@ -20,7 +20,7 @@ name=$(basename $0)
 
 TMPF=/tmp/t.$$
 IFS=$'\n\t'
-cmd="grep -r -H -w waste /sys/kernel/debug/slab/kmalloc-[1-9]/alloc_traces"
+cmd="grep -r -H -w waste /sys/kernel/debug/slab/kmalloc-[1-9]*/alloc_traces"
 for rec in $(eval ${cmd})
 do
  #echo "rec = ${rec}"
@@ -41,7 +41,7 @@ done
 grep -v "\[.*\]" ${TMPF} > /tmp/kint.waste
 grep "\[.*\]" ${TMPF} > /tmp/kmods.waste
 
-echo "======== Wastage (highest-to-lowest with dups eliminated) ========"
+echo "======== Wastage (highest-to-lowest with duplicate lines eliminated) ========"
 echo "--------------- kernel internal ----------------"
 # kernel internal - the 8th fields is the number of 'waste' bytes
 # (As the abs number of wasted bytes is already there in the output, we use awk
