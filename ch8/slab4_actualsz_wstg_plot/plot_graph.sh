@@ -49,7 +49,7 @@ local PLOTCMD="plot '${OUTFILE}' using ${SCALE} with lines title '${TITLE}',\
 date
 if [[ ${GUI_ENV} -eq 1 ]]; then
   PLOTCMD="${PLOTCMD}; \
-  pause -1;"  # wait forever.. (until user closes the GUI gnuplot window)
+  pause -1;"  # wait forever.. (or until user closes the GUI gnuplot window)
 else
   PLOTCMD="${PLOTCMD}; \
   pause 1" # theoretically wait 1s but in practice it takes a minute; why??
