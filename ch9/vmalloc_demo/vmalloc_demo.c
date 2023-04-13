@@ -126,7 +126,7 @@ static int vmalloc_try(void)
             pgprot_t prot, unsigned long vm_flags, int node,
             const void *caller)
  */
-	pr_info("5. >= 5.8.0 : __vmalloc(): no page prot param; can use __vmalloc_node_range() but it's not exported..");
+	pr_info("5. >= 5.8.0 : __vmalloc(): no page prot param; can use __vmalloc_node_range() in-tree but it's not exported for modules...");
 	pr_cont(" so, simply skip this case\n");
 #endif
 
