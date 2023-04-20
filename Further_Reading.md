@@ -49,9 +49,10 @@ A few excellent books that come to mind (specific books on the Linux kernel and 
 - The Practice of Programming, Brian Kernighan and Rob Pike
 - The Pragmatic Programmer: From Journeyman to Master, Hunt and Thomas
 - The Joy of Linux, Hall and Proffitt
-- Linux Kernel Debugging, Kaiwan N Billimoria
-- Linux Kernel Programming, Part 2 - Writing character device drivers: Learn to work with user-kernel interfaces, handle peripheral I/O & hardware interrupts, Kaiwan N Billimoria
-- Hands-On System Programming with Linux, Kaiwan N Billimoria
+- Linux Kernel Debugging - Leverage proven tools and advanced techniques to effectively debug Linux kernels and kernel modules, Kaiwan N Billimoria, Packt
+- Linux Kernel Programming - A comprehensive guide to kernel internals, writing kernel modules, and kernel synchronization, Kaiwan N Billimoria, Packt
+- Linux Kernel Programming, Part 2 - Writing character device drivers: Learn to work with user-kernel interfaces, handle peripheral I/O & hardware interrupts, Kaiwan N Billimoria, Packt
+- Hands-On System Programming with Linux, Kaiwan N Billimoria, Packt
 - Unix Network Programming, W. Richard Stevens
 - Unix Systems Programming: Communication, Concurrency and Threads, Robbins and Robbins
 - [Secure Programming for Linux and Unix HOWTO, David Wheeler](https://www.tldp.org/HOWTO/pdf/Secure-Programs-HOWTO.pdf)
@@ -347,6 +348,8 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 	- Ch 2 : Virtual Memory
 - [Linux kernel documentation on memory management](https://www.kernel.org/doc/html/latest/core-api/index.html#memory-management)
 
+- [A pair of memory-allocation improvements in 5.13, Jon Corbet, LWN, May 2021](https://lwn.net/Articles/855226/)
+
 - Information regarding GFP flags internal usage, etc: ['Memory management when failure is not an option', LWN, Mar 2015](https://lwn.net/Articles/635354/)
 
 - smem: [smem memory reporting tool](https://www.selenic.com/smem/)
@@ -375,7 +378,9 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - [LWN kernel index on memory management](https://lwn.net/Kernel/Index/#Memory_management)
 
+- [Better tools for out-of-memory debugging, LWN, Jon Corbet, May 2022](https://lwn.net/Articles/894546/)
 - ['kvmalloc()', Jon Corbet, LWN, Jan 2017](https://lwn.net/Articles/711653/)
+- [A pair of memory-allocation improvements in 5.13, Jon Corbet, LWN, May 2021](https://lwn.net/Articles/855226/)
 - ['The "too small to fail" memory-allocation rule', Jon Corbet, LWN, Dec 2014](https://lwn.net/Articles/627419/)
 - Blog article: ['linux slab poisoning 101', Mar 2009](http://www.chizang.net/alex/2009/03/11/linux-slab-poisoning-101/)
 - ['The slab and protected-memory allocators', LWN, May 2018](https://lwn.net/Articles/753154/)
@@ -394,6 +399,8 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 
 - OOM and VM Overcommit
+    - [Better tools for out-of-memory debugging, Jon Corbet, May 2022, LWN](https://lwn.net/Articles/894546/)
+    - [Per-file OOM badness, Jon Corbet, June 2022, LWN](https://lwn.net/Articles/896738/)
     - [Toward more predictable and reliable out-of-memory handling, LWN, Jon Corbet, December 2015](https://lwn.net/
 Articles/668126/)
     - [Quora: What are the disadvantages of disabling memory overcommit in Linux?](https://www.quora.com/What-are-the-disadvantages-of-disabling-memory-overcommit-in-Linux)

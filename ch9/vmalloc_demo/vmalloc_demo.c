@@ -56,6 +56,14 @@ static int vmalloc_try(void)
 	pr_info("1. vmalloc():   vptr_rndm = 0x%pK (actual=0x%px)\n",
 		vptr_rndm, vptr_rndm);
 	print_hex_dump_bytes(" content: ", DUMP_PREFIX_NONE, vptr_rndm, DISP_BYTES);
+	/*
+	 * Is vmalloc() using huge pages?
+	 * This can be answered via the is_vm_area_hugepages() inline function. It,
+	 * however, calls find_vm_area() which isn't exported, hence we can't use
+	 * it here in an out-of-tree module...
+	pr_info("Are vmalloc-ed pages huge pages? %s\n",
+		is_vm_area_hugepages(vptr_rndm)?"yes":"no");
+	 */
 
 	/* 2. vzalloc(); mem contents are set to zeroes */
 	vptr_init = vzalloc(10000);
@@ -126,7 +134,7 @@ static int vmalloc_try(void)
             pgprot_t prot, unsigned long vm_flags, int node,
             const void *caller)
  */
-	pr_info("5. >= 5.8.0 : __vmalloc(): no page prot param; can use __vmalloc_node_range() but it's not exported..");
+	pr_info("5. >= 5.8.0 : __vmalloc(): no page prot param; can use __vmalloc_node_range() in-tree but it's not exported for modules...");
 	pr_cont(" so, simply skip this case\n");
 #endif
 
