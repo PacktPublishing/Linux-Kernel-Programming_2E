@@ -1,5 +1,5 @@
 /*
- * klib_llkd.c
+ * klib.c
  ***********************************************************************
  * This program is part of the source code released for the book
  *  "Linux Kernel Programming" 2E
@@ -19,18 +19,18 @@
  *
  * For details, please refer the book.
  */
-#include "klib_llkd.h"
+#include "klib.h"
 
-/* llkd_minsysinfo:
+/* minsysinfo:
  * Similar to our ch5/min_sysinfo code; it's just simpler (avoiding deps) to
  * package this code into this small 'library' of sorts rather than to use it
  * via the module stacking approach.
  *
- * A more security-aware version of the llkd_sysinfo routine. We used
+ * A more security-aware version of the klib_sysinfo routine. We used
  * David Wheeler's flawfinder(1) tool to detect possible vulnerabilities;
  * so, we change the strlen, and replace the strncat with strlcat.
  */
-void llkd_minsysinfo(void)
+void minsysinfo(void)
 {
 #define MSGLEN   128
         char msg[MSGLEN];

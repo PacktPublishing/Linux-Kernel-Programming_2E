@@ -37,7 +37,7 @@
 #include <linux/version.h>
 #include <asm/pgtable.h>
 #include <asm/fixmap.h>
-#include "../../klib_llkd.h"
+#include "../../klib.h"
 #include "../../convenient.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
@@ -52,7 +52,7 @@ MODULE_PARM_DESC(show_uservas, "Show some user space VAS details; 0 = no (defaul
 
 #define ELLPS "|                         [ . . . ]                           |\n"
 
-extern void llkd_minsysinfo(void);	// it's in our klib_llkd 'library'
+extern void minsysinfo(void);	// it's in our klib 'library'
 
 /*
  * show_userspace_info
@@ -282,10 +282,10 @@ static int __init kernel_seg_init(void)
 
 	/* Display some minimal system info
 	 * Note: this function is within our kernel 'library' here:
-	 *  ../../llkd_klib.c
+	 *  ../../klib.c
 	 * Hence, we must arrange to link it in (see the Makefile)
 	 */
-	llkd_minsysinfo();
+	minsysinfo();
 	show_kernelseg_info();
 
 	if (show_uservas)

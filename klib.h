@@ -1,6 +1,6 @@
 /* 
- * klib_llkd.h
- * Our klib_llkd 'library' header.
+ * klib.h
+ * Our klib 'library' header.
  ***********************************************************************
  * This program is part of the source code released for the book
  *  "Linux Kernel Programming" 2E
@@ -23,7 +23,7 @@
 #include <linux/module.h>
 #include <asm/io.h>		/* virt_to_phys(), phys_to_virt(), ... */
 
-void llkd_minsysinfo(void);
+void minsysinfo(void);
 u64 powerof(int base, int exponent);
 void show_phy_pages(void *kaddr, size_t len, bool contiguity_check);
 void show_sizeof(void);

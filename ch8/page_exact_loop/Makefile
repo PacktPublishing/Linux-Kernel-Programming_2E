@@ -65,7 +65,7 @@ CC     := $(CROSS_COMPILE)gcc
 
 PWD            := $(shell pwd)
 obj-m          += ${FNAME_C}_lkm.o
-page_exact_loop_lkm-objs := ${FNAME_C}.o ../../klib_llkd.o
+page_exact_loop_lkm-objs := ${FNAME_C}.o ../../klib.o
 
 #--- Debug or production mode?
 # Set the MYDEBUG variable accordingly to y/n resp.

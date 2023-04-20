@@ -68,7 +68,7 @@ CC     := $(CROSS_COMPILE)gcc
 
 PWD            := $(shell pwd)
 obj-m          += show_kernel_seg.o
-show_kernel_seg-objs  += kernel_seg.o ../../klib_llkd.o
+show_kernel_seg-objs  += kernel_seg.o ../../klib.o
 
 #--- Debug or production mode?
 # Set the MYDEBUG variable accordingly to y/n resp.

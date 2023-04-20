@@ -17,7 +17,7 @@
  *
  * As an interesting point, we show the virtual, physical addresses and PFNs
  * (Page Frame Numbers) of each page in the memory range. The function
- * show_phy_pages() is in our 'library' code here: ../../klib_llkd.c
+ * show_phy_pages() is in our 'library' code here: ../../klib.c
  * This way, we can see if the pages allocated are really physically
  * contiguous!
  *
@@ -33,7 +33,7 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/mm.h>
-#include "../../klib_llkd.h"
+#include "../../klib.h"
 
 MODULE_DESCRIPTION("LKP2E/ch8: demo kernel module to exercise essential page allocator APIs");
 MODULE_AUTHOR("Kaiwan N Billimoria");
@@ -62,7 +62,7 @@ static int bsa_alloc(void)
 		"(PAGE_SIZE = %ld bytes)\n", PAGE_SIZE);
 	/* SEE THIS!
 	 * Show the virt, phy addr and PFNs (page frame numbers).
-	 * This function is in our 'library' code here: ../../klib_llkd.c
+	 * This function is in our 'library' code here: ../../klib.c
 	 * This way, we can see if the pages allocated are really physically
 	 * contiguous! Signature:
 	 *  void show_phy_pages(const void *kaddr, size_t len, bool contiguity_check);
