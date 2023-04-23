@@ -336,7 +336,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 - Linux (physical) memory models
     - [Official kernel doc: Physical Memory Model](https://docs.kernel.org/mm/memory-model.html#physical-memory-model)
     - [Memory: the flat, the discontiguous, and the sparse, LWN, M Rapoport, May 2019](https://lwn.net/Articles/789304/)
-
+- Blog article: [In defence of swap: common misconceptions, Chris Down, Jan 2018](https://chrisdown.name/2018/01/02/in-defence-of-swap.html)
 <br>
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
@@ -408,6 +408,9 @@ Articles/668126/)
     - Blog article: ['Virtual memory settings in Linux - The Problem with Overcommit'](http://engineering.pivotal.io/post/virtual_memory_settings_in_linux_-_the_problem_with_overcommit/)
     - RHEL specific but useful: ['Interpreting /proc/meminfo and free output for Red Hat Enterprise Linux 5, 6 and 7'](https://access.redhat.com/solutions/406773)
     - [Blog article: Surviving the Linux OOM Killer, October 2018](https://dev.to/rrampage/surviving-the-linux-oomkiller-2ki9)
+    - User space OOM killer systemd-oomd
+        - [Man page on systemd-oomd.service(8)](https://www.freedesktop.org/software/systemd/man/systemd-oomd.service.html)
+        - Older - March 2014: [User-space out-of-memory handling, David Rientjes, LWN](https://lwn.net/Articles/590960/)
 
 - [StackOverflow: How to mmap a Linux kernel buffer to userspace?](https://stackoverflow.com/a/10770582/779269)
 
