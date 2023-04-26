@@ -19,7 +19,7 @@ function die
 }
 runcmd()
 {
-    [ $# -eq 0 ] && return
+    [[ $# -eq 0 ]] && return
     echo "$@"
     eval "$@" || die "failed"
 }
@@ -72,5 +72,5 @@ groups |grep -q -w vboxsf || runcmd sudo usermod -G vboxsf -a ${USER}
 spc2=$(df|grep sda1|awk '{print $3}')
 echo "Difference : ($spc2 - $spc1) : $((spc2-spc1)) KB"
 
-sudo apt autoremove
+runcmd sudo apt autoremove
 exit 0
