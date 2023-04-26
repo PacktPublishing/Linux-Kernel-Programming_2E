@@ -51,7 +51,7 @@ runcmd sudo apt install -y \
 	bc bpfcc-tools bsdextrautils \
 	clang cppcheck cscope curl exuberant-ctags \
 	fakeroot flawfinder \
-	git gnome-system-monitor gnuplot hwloc indent \
+	git gnome-system-monitor gnuplot hwloc indent kmod \
 	libnuma-dev linux-headers-$(uname -r) linux-tools-$(uname -r) \
 	man-db net-tools numactl openjdk-18-jre  \
 	perf-tools-unstable psmisc python3-distutils  \
