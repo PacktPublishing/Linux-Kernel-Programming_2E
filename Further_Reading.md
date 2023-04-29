@@ -164,6 +164,17 @@ Miscellaneous:
 	- To circumvent the EXPORT_SYMBOL_GPL(), people have been known to use a GPL "shim" kernel module whose routines are invoked from a proprietary module; [Greg K Hartman 'Re: EXPORT_SYMBOL_GPL recursive for shim and/or wrapper](http://linux-kernel.2935.n7.nabble.com/EXPORT-SYMBOL-GPL-recursive-for-shim-and-or-wrappers-tp474689p474690.html)
 	- [MIT vs. BSD vs. Dual License](https://softwareengineering.stackexchange.com/questions/121998/mit-vs-bsd-vs-dual-license)
 
+- io_uring
+    - [What is io_uring?, unixism.net, 2020](https://unixism.net/loti/what_is_io_uring.html)
+    - [The next deep magic Linux program to change the world? Io_uring, ￼Steven J. Vaughan-Nichols, The Register, Sept 2022](https://www.theregister.com/2022/09/16/column/)
+    - [Why you should use io_uring for network I/O, D Hunter, RedHat Developer, April 2023](https://developers.redhat.com/articles/2023/04/12/why-you-should-use-iouring-network-io)
+        - This article includes more resource links.
+
+- Rust in the Linux kernel !
+    - [Rust in the Linux Kernel, ￼Steven J. Vaughan-Nichols, thenewstack, Oct 2022](https://thenewstack.io/rust-in-the-linux-kernel/)
+    - [Article on How to create a kernel module using Rust, Jack Clayton, 2022?](https://www.jackos.io/rust-kernel/rust-for-linux.html)
+        - Based on this video presentation: [Mentorship Session: Writing Linux Kernel Modules in Rust, The Linux Foundation](https://www.youtube.com/watch?v=-l-8WrGHEGI)
+
 - [Configuring the kernel](https://www.kernel.org/doc/html/latest/admin-guide/README.html#configuring-the-kernel)
 - Detailed article: [Exploring the Linux kernel: The secrets of Kconfig/kbuild](https://opensource.com/article/18/10/kbuild-and-kconfig)
 - Article: [How to compile a Linux kernel in the 21st century, S Kenlon, Aug 2019](https://opensource.com/article/19/8/linux-kernel-21st-century)
