@@ -174,9 +174,13 @@ Miscellaneous:
     - [Rust in the Linux Kernel, ￼Steven J. Vaughan-Nichols, thenewstack, Oct 2022](https://thenewstack.io/rust-in-the-linux-kernel/)
     - [Article on How to create a kernel module using Rust, Jack Clayton, 2022?](https://www.jackos.io/rust-kernel/rust-for-linux.html)
         - Based on this video presentation: [Mentorship Session: Writing Linux Kernel Modules in Rust, The Linux Foundation](https://www.youtube.com/watch?v=-l-8WrGHEGI)
+    - Official kernel doc: [Rust](https://www.kernel.org/doc/html/v6.1/rust/index.html)
 
 - [Configuring the kernel](https://www.kernel.org/doc/html/latest/admin-guide/README.html#configuring-the-kernel)
-- Detailed article: [Exploring the Linux kernel: The secrets of Kconfig/kbuild](https://opensource.com/article/18/10/kbuild-and-kconfig)
+- Kconfig/Kbuild system
+    - Detailed article: [Exploring the Linux kernel: The secrets of Kconfig/kbuild](https://opensource.com/article/18/10/kbuild-and-kconfig)
+    - Slide presentation (PDF): [A Dive Into Kbuild, Cao Jin, Fujitsu, Aug 2018](https://events19.linuxfoundation.org/wp-content/uploads/2017/11/A-Dive-into-Kbuild-Cao-Jin-Fujitsu.pdf)
+
 - Article: [How to compile a Linux kernel in the 21st century, S Kenlon, Aug 2019](https://opensource.com/article/19/8/linux-kernel-21st-century)
 - Interesting: [Meet the contributor of the 1-millionth commit: Ricardo Neri, Swapnil Bharatiya, Sept 2020](https://www.linux.com/featured/meet-the-one-millionth-committer-to-linux-ricardo-neri/)
 
