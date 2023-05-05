@@ -25,7 +25,7 @@ eval ${1}
 echo "Running ping in the background..."
 ping altavista.com >/dev/null 2>&1 &
 
-cmd="sudo ${PRG} --regex 'net_[tr]x_action' --duration 3 --perpid --delimited 2>/dev/null"
+cmd="sudo ${PRG} --regex 'net_[rt]x_action' --duration 3 --perpid --delimited 2>/dev/null"
 desc="Show net_rx_action() and net_tx_action() (the NET_RX_SOFTIRQ and NET_TX_SOFTIRQ softirq's) call stacks:"
 doit "${cmd}" "${desc}"
 
@@ -34,11 +34,17 @@ desc="Show ip_output() call stacks:"
 doit "${cmd}" "${desc}"
 
 cmd="sudo ${PRG} 'dev_hard_start_xmit' --duration 3 --perpid --delimited 2>/dev/null"
+# With --verbose, even the virtual address of the text (code) function in question is printed on the left
+#cmd="sudo ${PRG} --verbose 'dev_hard_start_xmit' --duration 3 --perpid --delimited 2>/dev/null"
 desc="Show dev_hard_start_xmit() call stacks:"
 doit "${cmd}" "${desc}"
 
 pkill ping
 
-#cmd="sudo ${PRG} t:sched:sched_switch --duration 1 --perpid --delimited 2>/dev/null"
-#desc="Show CPU scheduler context switch  call stacks:"
-#doit "${cmd}" "${desc}"
+[[ 0 -eq 1 ]] && {
+# Show sched context switch call stacks (off by default here)
+cmd="sudo ${PRG} t:sched:sched_switch --duration 1 --perpid --delimited 2>/dev/null"
+desc="Show CPU scheduler context switch call stacks:"
+doit "${cmd}" "${desc}"
+}
+exit 0
