@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
-Linux Kernel Programming, 2E
+Linux Kernel Programming, 2E, Kaiwan N Billimoria, Packt.
 ------------------------------------------------------------------------------
 Solutions to selected assignments ::
 Ch 1: Kernel Workspace Setup
