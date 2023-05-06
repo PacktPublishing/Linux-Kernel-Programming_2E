@@ -321,6 +321,10 @@ Miscellaneous:
     - [Lockdown as a security module, Jonathan Corbet, LWN, June 2019](https://lwn.net/Articles/791863/)
     - [Running an eBPF program may require lifting the kernel lockdown, Gehrcke, September 2019](https://gehrcke.de/2019/09/running-an-ebpf-program-may-require-liftingthe-kernel-lockdown/)
 
+- System Call internals
+    - Internal glibc-and-kernel level implementation of system calls, a good blog article: [LINUX SYSTEM CALLS UNDER THE HOOD, Julien Sobczak, Aug 2021](https://www.juliensobczak.com/inspect/2021/08/10/linux-system-calls-under-the-hood.html)
+    - Official kernel doc: [Adding a New System Call](https://www.kernel.org/doc/html/v6.1/process/adding-syscalls.html#adding-a-new-system-call)
+
 <br>
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
