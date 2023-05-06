@@ -8,7 +8,7 @@
  *  GitHub repository:
  *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
  *
- * From: Ch 6 : Kernel and MM Internals - Essentials
+ * From: Ch 6 : Kernel Internals Essentials - Processes and Threads
  ****************************************************************
  * Brief Description:
  * This kernel module iterates over the task structures of all *processes*
@@ -32,8 +32,7 @@
 #include <linux/kallsyms.h>
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
-MODULE_DESCRIPTION("LKP 2E:ch6/foreach/prcs_showall: \
-Show all processes by iterating over the task list");
+MODULE_DESCRIPTION("LKP 2E:ch6/foreach/prcs_showall: Show all processes by iterating over the task list");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.2");
 
@@ -42,11 +41,14 @@ static int show_prcs_in_tasklist(void)
 	struct task_struct *p;
 #define MAXLEN   128
 	char tmp[MAXLEN];
-	int numread = 0, n = 0, total = 0;
+	int numread = 0, total = 0;
 	char hdr[] = "     Name       |  TGID  |   PID  |  RUID |  EUID";
 
 	pr_info("%s\n", &hdr[0]);
 	/*
+	 * (The stuff mentioned on locking here can be skipped on first reading; you can check
+	 * it out once you read the materials on kernel synchronization / locking, Ch 12 and
+	 * Ch 13; will leave it to you...).
 	 * The for_each_process() is a macro that iterates over the task structures in memory.
 	 * The task structs are global of course; this implies we should hold a lock of some
 	 * sort while working on them (even if only reading!). So, doing
@@ -56,27 +58,29 @@ static int show_prcs_in_tasklist(void)
 	 * BUT, this lock - tasklist_lock - isn't exported and thus unavailable to modules.
 	 * So, using an RCU read lock is indicated here.
 	 * FYI: a) Ch 12 and Ch 13 cover the details on kernel synchronization.
-	 *      b) Read Copy Update (RCU) is a complex synchronization mechanism; it's
-	 *  conceptually explained really well in this blog article:
+	 *      b) Read Copy Update (RCU) is a complex synchronization mechanism and implies
+	 *         an atomic critical section (no blocking between the RCU lock/unlock).
+	 *  RCU's conceptually explained really well in this blog article:
 	 *  https://reberhardt.com/blog/2020/11/18/my-first-kernel-module.html
 	 */
 	rcu_read_lock();
 	for_each_process(p) {
+		int n = 0;
+
 		memset(tmp, 0, 128);
-		get_task_struct(p); // take a reference to the task struct
+		get_task_struct(p);	// take a reference to the task struct
 		n = snprintf(tmp, 128, "%-16s|%8d|%8d|%7u|%7u\n", p->comm, p->tgid, p->pid,
-			     /* (old way to disp credentials): p->uid, p->euid -or-
-			      *	current_uid().val, current_euid().val
-				  * better way using kernel accessor __kuid_val():
+			     /* (old way to display credentials): p->uid, p->euid -or-
+			      * current_uid().val, current_euid().val
+			      * Better way is using the kernel accessor __kuid_val():
 			      */
 			     __kuid_val(p->cred->uid), __kuid_val(p->cred->euid)
 		    );
-		put_task_struct(p); // release reference to the task struct
+		put_task_struct(p);	// release reference to the task struct
 		numread += n;
 		pr_info("%s", tmp);
 		//pr_debug("n=%d numread=%d tmp=%s\n", n, numread, tmp);
-
-		//cond_resched(); // don't call this when RCU nest depth >= 1 (it's 1 here)
+		//cond_resched(); // don't call this when holding an RCU lock! no blocking APIs...
 		total++;
 	}
 	rcu_read_unlock();
@@ -94,11 +98,9 @@ static int __init prcs_showall_init(void)
 
 	return 0;		/* success */
 }
-
 static void __exit prcs_showall_exit(void)
 {
 	pr_info("removed\n");
 }
-
 module_init(prcs_showall_init);
 module_exit(prcs_showall_exit);
