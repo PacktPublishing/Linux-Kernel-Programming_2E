@@ -300,7 +300,7 @@ Miscellaneous:
 	- Ch 2 : Virtual Memory
 - CPU ABI, a blog article : [APPLICATION BINARY INTERFACE (ABI) DOCS AND THEIR MEANING](https://kaiwantech.wordpress.com/2018/05/07/application-binary-interface-abi-docs-and-their-meaning/)
 
-- [LWN kernel index on kernel stacks](https://lwn.net/Kernel/Index/#Kernel_ stack)
+- [LWN kernel index on kernel stacks](https://lwn.net/Kernel/Index/#Kernel_stack)
 
 - Blog article: [Some Tricks used by the Linux kernel](https://geeksww.com/tutorials/operating_systems/linux/tips_and_tricks/some_tricks_used_by_the_linux_kernel.php)
 - [un]likely() macros:
@@ -533,8 +533,8 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 ## Chapter 13, Kernel Synchronization, Part 2 - Further Reading
 
-- Deeper details on the LKMM: [Explanation of the Linux-Kernel Memory Model](https://github.com/aparri/memory-model/blob/master/Documentation/explanation. txt)
-- Reference Counting API: [kernsec: a summary](https://kernsec.org/wiki/index.php/Kernel_Protections/refcount_ t)
+- Deeper details on the LKMM: [Explanation of the Linux-Kernel Memory Model](https://github.com/aparri/memory-model/blob/master/Documentation/explanation.txt)
+- Reference Counting API: [kernsec: a summary](https://kernsec.org/wiki/index.php/Kernel_Protections/refcount_t)
 
 - An extremely detailed take on concurrency topics, both hardware and software-wise: [Is Parallel Programming Hard, And, If So, What Can You Do About It?, Paul E.McKenney, December 2019](https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.2019.12.22a.pdf)
 
