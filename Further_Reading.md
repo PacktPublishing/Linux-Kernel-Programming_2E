@@ -345,7 +345,15 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - ["On vsyscalls and the vDSO"](https://lwn.net/Articles/446528/), LWN, Jon Corbet, June 2011
     - ["Are system calls the only way to interact with the Linux kernel from user land?", StackExchange, Apr 2014](https://unix.stackexchange.com/questions/124928/are-system-calls-the-only-way-to-interact-with-the-linux-kernel-from-user-land)
 
-- ['Linux Terminal: Check who uses all your memory with smem', Linuxaria, Oct 2013](https://linuxaria.com/pills/linux-terminal-check-who-uses-all-your-memory-with-smem)
+- Using the pmap and smem utilities
+    - [pmap(1) man page](https://linux.die.net/man/1/pmap)
+    - ['How to analyze a Linux process' memory map with pmap', Rossi, RedHat, Dec 2022](https://www.redhat.com/sysadmin/pmap-command)
+    - [How to Use the pmap Linux Command to Check Memory Usage, D Kariuki, June 2022](https://linuxhint.com/pmap-linux-command-check-memory-usage/)
+
+    - [smem(8) - Linux man page](https://linux.die.net/man/8/smem)
+    - ['Get memory use statistics with this Linux command-line tool', T Waraksa, Oct 2021](https://opensource.com/article/21/10/memory-stats-linux-smem)
+    - [smem memory reporting tool, Selenic](https://www.selenic.com/smem/)
+    - ['Linux Terminal: Check who uses all your memory with smem', Linuxaria, Oct 2013](https://linuxaria.com/pills/linux-terminal-check-who-uses-all-your-memory-with-smem)
 
 - Kernel memory optimization techniques
 	- [THP (Transparent Huge Pages)](https://www.kernel.org/doc/html/latest/admin-guide/mm/transhuge.html#admin-guide-transhuge)
