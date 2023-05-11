@@ -54,7 +54,7 @@ runcmd sudo apt install -y \
 	git gnome-system-monitor gnuplot hwloc indent kmod \
 	libnuma-dev linux-headers-$(uname -r) linux-tools-$(uname -r) \
 	man-db net-tools numactl openjdk-18-jre  \
-	perf-tools-unstable psmisc python3-distutils  \
+	perf-tools-unstable procps psmisc python3-distutils  \
 	rt-tests smem sparse stress sysfsutils \
 	tldr-py trace-cmd tree tuna virt-what yad
 echo "-----------------------------------------------------------------------"
