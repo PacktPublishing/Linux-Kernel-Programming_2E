@@ -105,17 +105,17 @@ static void show_userspace_info(void)
 
 	pr_info(
 #if (BITS_PER_LONG == 64)
-			"Kernel, User VAS (TASK_SIZE) size each = %15zu bytes  [  %zu GB]\n"
+		"Kernel, User VAS (TASK_SIZE) size each = %15zu bytes  [  %zu GB]\n"
 #else	// 32-bit
 	       "Size of User VAS size (TASK_SIZE) = %10lu bytes            [  %lu GB]\n"
 #endif
 	       " # userspace memory regions (VMAs) = %d\n",
 #if (BITS_PER_LONG == 64)
-				TASK_SIZE, (TASK_SIZE >> 30),
+			TASK_SIZE, (TASK_SIZE >> 30),
 #else	// 32-bit
-				TASK_SIZE, (TASK_SIZE >> 20),
+			TASK_SIZE, (TASK_SIZE >> 20),
 #endif
-		       current->mm->map_count);
+			current->mm->map_count);
 
 #ifdef DEBUG
 	pr_info("[DEBUG] Above statistics are wrt 'current' thread (see below):\n");
@@ -142,11 +142,11 @@ static void show_kernelseg_info(void)
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 0, 0)
 	ram_size = totalram_pages() * PAGE_SIZE;
-#else // totalram_pages() undefined on the BeagleBone running an older 4.19 kernel..
+#else /* totalram_pages() undefined on the BeagleBone running an older 4.19 kernel.. */
 	ram_size = totalram_pages * PAGE_SIZE;
 #endif
 	pr_info("PAGE_SIZE = %lu, total RAM ~= %lu MB (%lu bytes)\n",
-			PAGE_SIZE, ram_size/(1024*1024), ram_size);
+		PAGE_SIZE, ram_size/(1024*1024), ram_size);
 
 #if defined(CONFIG_ARM64)
 	pr_info("VA_BITS (CONFIG_ARM64_VA_BITS) = %d\n", VA_BITS);
@@ -297,11 +297,9 @@ static int __init kernel_seg_init(void)
 
 	return 0;		/* success */
 }
-
 static void __exit kernel_seg_exit(void)
 {
 	pr_info("%s: removed\n", KBUILD_MODNAME);
 }
-
 module_init(kernel_seg_init);
 module_exit(kernel_seg_exit);
