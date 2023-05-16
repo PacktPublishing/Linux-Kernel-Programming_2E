@@ -156,9 +156,10 @@ Miscellaneous:
 - Fun: [Occurences of words in the Linux kernel source code over time](https://www.vidarholen.net/contents/wordcount/#hack*,workaround*,todo,fixme)
 
 - Licensing
-	-   [The differences between the GPL, LGPL and the BSD](https://fosswire.com/post/2007/04/the-differences-between-the-gpl-lgpl-and-the-bsd/)
+	- [The differences between the GPL, LGPL and the BSD](https://fosswire.com/post/2007/04/the-differences-between-the-gpl-lgpl-and-the-bsd/)
 	- [Proprietary loadable kernel modules, LWN](https://lwn.net/Articles/434491/)
 	- [Choose an open source license](https://choosealicense.com/)
+	- [Open source licensing for supervillains, Mossberg, Jan 2021](https://offlinemark.com/2021/01/22/open-source-licensing-for-supervillains/)
 	- [Legal Risks of Open Source – GPL/Linux Loadable Kernel Modules](http://sourceauditor.com/blog/legal-risks-of-open-source-gpllinux-loadable-kernel-modules/)
 	- [Linux kernel licensing rules](https://www.kernel.org/doc/html/latest/process/license-rules.html#linux-kernel-licensing-rules)
 	- To circumvent the EXPORT_SYMBOL_GPL(), people have been known to use a GPL "shim" kernel module whose routines are invoked from a proprietary module; [Greg K Hartman 'Re: EXPORT_SYMBOL_GPL recursive for shim and/or wrapper](http://linux-kernel.2935.n7.nabble.com/EXPORT-SYMBOL-GPL-recursive-for-shim-and-or-wrappers-tp474689p474690.html)
@@ -338,6 +339,11 @@ Miscellaneous:
 - Deep detail on MM and paging on the Intel processors can be found in their excellent manuals here (Ch 4, Paging): [Intel® 64 and IA-32 Architectures
 Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide](https://software.intel.com/en-us/download/intel-64-and-ia-32-architectures-sdm-combined-volumes-3a-3b-3c-and-3d-system-programming-guide)
 	- [All Intel 64 and IA-32 architecture and programming environment manuals](https://software.intel.com/en-us/articles/intel-sdm)
+	- Excellent blog article: [Linux Internals: How /proc/self/mem writes to unwritable memory, 'offlinemark', May 2021](https://offlinemark.com/2021/05/12/an-obscure-quirk-of-proc/)
+- pahole, BTF
+    - ['Poke-a-hole and friends', Rodrigues, LWN, June 2009](https://lwn.net/Articles/335942/)
+    - [How to generate BTF information ?](https://github.com/aquasecurity/btfhub/blob/main/docs/how-to-use-pahole.md)
+    - Official kernel doc: [BPF Type Format (BTF)](https://www.kernel.org/doc/html/v6.1/bpf/btf.html#bpf-type-format-btf)
 
 - [How the ARM32 kernel starts, Linus Walleij, Aug 2020](https://people.kernel.org/linusw/how-the-arm32-kernel-starts)
 
