@@ -430,6 +430,15 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - A quite simple and interesting example of a “DMA test application” device driver is from Xilinx (for it's Zynq PL330 DMA controller); [wiki page here](http://www.wiki.xilinx.com/Zynq+Linux+pl330+DMA)
     - [Q&A on SO: Linux DMA: Using the DMAengine for scatter-gather transactions, May 2016](http://stackoverflow.com/questions/37119332/linux-dma-using-the-dmaengine-for-scatter-gather-transactions)
 
+- Multi Generational LRU (MGLRU); merged in 6.1
+    - Official kernel docs:
+        - [Multi-Gen LRU](https://www.kernel.org/doc/html/v6.1/admin-guide/mm/multigen_lru.html): provides documentation on quick start, enabling / disabling it, the various tunables and how to use them: 
+        - [MGLRU design doc](https://www.kernel.org/doc/html/latest/mm/multigen_lru.html)
+    - LWN:
+        - [Merging the multi-generational LRU, Jon Corbet, May 2022](https://lwn.net/Articles/894859/)
+        - [Multi-generational LRU: the next generation, Jon Corbet, May 2022](https://lwn.net/Articles/856931/)
+        - [The multi-generational LRU, Jon Corbet, April 2022](https://lwn.net/Articles/851184/)
+        - [Early commit: mm: multi-gen LRU: minimal implementation](https://github.com/torvalds/linux/commit/ac35a490237446b71e3b4b782b1596967edd0aa8)
 
 - OOM and VM Overcommit
     - [Better tools for out-of-memory debugging, Jon Corbet, May 2022, LWN](https://lwn.net/Articles/894546/)
