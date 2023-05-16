@@ -1,0 +1,9 @@
+I used the 'convert' app to stitch together - vertically tile - multiple screenshots
+into one loooong screenshot..
+
+syntax:
+
+convert -append <file1> <file2> ... <filen> <outfile.png>
+
+F.e., for the R Pi AArch64, I captured 6 screenshots and stitched them like this:
+convert a64-[123456].png -append out-aarch64.png
