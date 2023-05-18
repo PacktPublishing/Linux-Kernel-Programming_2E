@@ -433,15 +433,30 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - A quite simple and interesting example of a “DMA test application” device driver is from Xilinx (for it's Zynq PL330 DMA controller); [wiki page here](http://www.wiki.xilinx.com/Zynq+Linux+pl330+DMA)
     - [Q&A on SO: Linux DMA: Using the DMAengine for scatter-gather transactions, May 2016](http://stackoverflow.com/questions/37119332/linux-dma-using-the-dmaengine-for-scatter-gather-transactions)
 
+- Reclaim: [Official kernel documentation](https://www.kernel.org/doc/html/v6.1/admin-guide/mm/concepts.html#reclaim)
+
 - Multi Generational LRU (MGLRU); merged in 6.1
     - Official kernel docs:
-        - [Multi-Gen LRU](https://www.kernel.org/doc/html/v6.1/admin-guide/mm/multigen_lru.html): provides documentation on quick start, enabling / disabling it, the various tunables and how to use them: 
+        - [Multi-Gen LRU](https://www.kernel.org/doc/html/v6.1/admin-guide/mm/multigen_lru.html): provides documentation on quick start, enabling / disabling it, various tunables
         - [MGLRU design doc](https://www.kernel.org/doc/html/latest/mm/multigen_lru.html)
     - LWN:
         - [Merging the multi-generational LRU, Jon Corbet, May 2022](https://lwn.net/Articles/894859/)
         - [Multi-generational LRU: the next generation, Jon Corbet, May 2022](https://lwn.net/Articles/856931/)
         - [The multi-generational LRU, Jon Corbet, April 2022](https://lwn.net/Articles/851184/)
+    - Related:
+        - [Enable or disable multigenerational LRU](https://github.com/hakavlad/mg-lru-helper/tree/main). Practical..
+        - [mm: multi-gen LRU: per-process heatmaps](https://lwn.net/Articles/907718/)
+        - [Linux kernel page replacement algorithms, SoByte, Jan 2022](https://www.sobyte.net/post/2022-01/linux-multi-lru/)
+        - [Linux to Adopt New Multi-Generation LRU Page Reclaim Policy, Sergio De Simone, Jan 2022](https://www.infoq.com/news/2022/01/linux-mglru-memory-reclaim/)
         - [Early commit: mm: multi-gen LRU: minimal implementation](https://github.com/torvalds/linux/commit/ac35a490237446b71e3b4b782b1596967edd0aa8)
+
+- DAMON Data Access Monitor
+    - [Official kernel doc: DAMON](https://www.kernel.org/doc/html/v6.1/admin-guide/mm/damon/index.html)
+        - [Section 'Visualizing Recorded Patterns'](https://www.kernel.org/doc/html/v6.1/admin-guide/mm/damon/start.html#visualizing-recorded-patterns)
+    - [DAMON: Data Access Monitor, SeongJae Park, May 2023](https://sjp38.github.io/post/damon/)
+    - [An example of DAMON usage for profiling, SeongJae Park, April 2023](https://sjp38.github.io/post/damon_profile_callstack_example/
+    - [Using DAMON for proactive reclaim, Jon Corbet, LWN, July 2021](https://lwn.net/Articles/863753/)
+    - [Memory-management optimization with DAMON, Jon Corbet, LWN, Feb 2020](https://lwn.net/Articles/812707/)
 
 - OOM and VM Overcommit
     - [Better tools for out-of-memory debugging, Jon Corbet, May 2022, LWN](https://lwn.net/Articles/894546/)
@@ -608,6 +623,7 @@ Paul E. McKenney, IBM LTC, June 2010](http://www.rdrop.com/~paulmck/scalability/
     - The excellent and extensive kernel community documentation: [RCU](https://www.kernel.org/doc/Documentation/RCU/00-INDEX)
     - [My First Kernel Module: A Debugging Nightmare, Ryan Eberhardt. Nov 2020](https://reberhardt.com/blog/2020/11/18/my-first-kernel-module.html); see the section entitled 'RCU: Read, Copy, Update', excellent and clear!
     - ['RCU Usage In the Linux Kernel: One Decade Later', McKenny et al (PDF), circa 2013](http://www2.rdrop.com/~paulmck/techreports/RCUUsage.2013.02.24a.pdf)
+    - [Linux RCU, Lizhou Shan, Oct 2021](http://lastweek.io/notes/linux/linux-rcu/)
     - A 3 series article to learn RCU: ['What is RCU, Fundamentally?', LWN, Paul McKenney, Dec 2007, Part 1 of 3 ](https://lwn.net/Articles/262464/)
     - ['Make any algorithm lock-free with this one crazy trick', May 2016](https://www.the-paper-trail.org/post/2016-05-25-make-any-algorithm-lock-free-with-this-one-crazy-trick/)
     - ['The lockless page cache', LWN, Jon Corbet, July 2008](https://lwn.net/Articles/291826/) (an interesting article)
