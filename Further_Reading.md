@@ -57,11 +57,14 @@ A few excellent books that come to mind (specific books on the Linux kernel and 
 - Unix Systems Programming: Communication, Concurrency and Threads, Robbins and Robbins
 - [Secure Programming for Linux and Unix HOWTO, David Wheeler](https://www.tldp.org/HOWTO/pdf/Secure-Programs-HOWTO.pdf)
 
-- In general an excellent in-depth technical article: [SO YOU WANT TO BUILD AN EMBEDDED LINUX SYSTEM?, Jay Carlson, Oct 2020](https://jaycarlson.net/embedded-linux/) ; it covers an introduction to the whys and why-nots of using Linux on an embedded system, hardware and software design workflow, as well as a pretty detailed rundown on 10 CPUs/boards that run embedded Linux (with benchmarks)
-- Julia Evans' blog and zines:
-    - ['You can be a kernel hacker!', Julia Evans](https://jvns.ca/blog/2014/09/18/you-can-be-a-kernel-hacker/)
-    - [Blog](https://jvns.ca/)
-    - [Zines](https://wizardzines.com/)
+- Excellent newsletters / blogs (biased towards embedded but useful to all IMO)
+    - [The Embedded Muse (TEM) blog/newsletter by Jack Ganssle](http://www.ganssle.com/tem-subunsub.html)
+    - [Embedded Artistry](https://embeddedartistry.com/first-time-here/)
+    - In general an excellent in-depth technical article: [SO YOU WANT TO BUILD AN EMBEDDED LINUX SYSTEM?, Jay Carlson, Oct 2020](https://jaycarlson.net/embedded-linux/) ; it covers an introduction to the whys and why-nots of using Linux on an embedded system, hardware and software design workflow, as well as a pretty detailed rundown on 10 CPUs/boards that run embedded Linux (with benchmarks)
+    - Julia Evans' blog and zines:
+        - ['You can be a kernel hacker!', Julia Evans](https://jvns.ca/blog/2014/09/18/you-can-be-a-kernel-hacker/)
+        - [Blog](https://jvns.ca/)
+        - [Zines](https://wizardzines.com/)
 
 - [Lowlevel programming University, gurugio](https://github.com/gurugio/lowlevelprogramming-university)
 
