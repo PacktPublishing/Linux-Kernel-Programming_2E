@@ -11,7 +11,7 @@ For your convenience, below are chapter-wise links to the *Further Reading* note
 - [**Generic online and book resources : miscellaneous, very useful**](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#generic-online-and-book-resources--miscellaneous-very-useful)
 
  - [Chapter 1, Kernel workspace setup](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-1-kernel-development-workspace-setup---further-reading)
- - [Chapter 2, Building the Kernel From Source, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source-part-1---further-reading) 
+ - [Chapter 2, Building the Kernel From Source, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source-part-1---further-reading)
  - [Chapter 3, Building the 5.0 Linux kernel from Source, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-3-building-the-linux-kernel-from-source-part-2---further-reading)
  - [Chapter 4, Writing your first Kernel Module - the LKM Framework, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-4-writing-your-first-kernel-module-lkms-part-1---further-reading)
  - [Chapter 5, Writing your first Kernel Module - the LKM Framework, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-5-writing-your-first-kernel-module-lkms-part-2---further-reading)
@@ -347,7 +347,7 @@ Miscellaneous:
 - Deep detail on MM and paging on the Intel processors can be found in their excellent manuals here (Ch 4, Paging): [Intel® 64 and IA-32 Architectures
 Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide](https://software.intel.com/en-us/download/intel-64-and-ia-32-architectures-sdm-combined-volumes-3a-3b-3c-and-3d-system-programming-guide)
 	- [All Intel 64 and IA-32 architecture and programming environment manuals](https://software.intel.com/en-us/articles/intel-sdm)
-	- Excellent blog article: [Linux Internals: How /proc/self/mem writes to unwritable memory, 'offlinemark', May 2021](https://offlinemark.com/2021/05/12/an-obscure-quirk-of-proc/)
+- Excellent blog article: [Linux Internals: How /proc/self/mem writes to unwritable memory, 'offlinemark', May 2021](https://offlinemark.com/2021/05/12/an-obscure-quirk-of-proc/)
 - pahole, BTF
     - ['Poke-a-hole and friends', Rodrigues, LWN, June 2009](https://lwn.net/Articles/335942/)
     - [How to generate BTF information ?](https://github.com/aquasecurity/btfhub/blob/main/docs/how-to-use-pahole.md)
@@ -397,6 +397,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - CPU Caching
     - [Why software developers should care about CPU caches, EventHelix, Medium, July 2017](https://medium.com/software-design/why-software-developers-should-care-about-cpu-caches-8da04355bb8a)
+    - [Cache coherence](https://en.wikipedia.org/wiki/Cache_coherence)
     - ["How L1 and L2 CPU Caches Work, and Why They’re an Essential Part of Modern Chips", Joel Hruska, Aug 2018](http://www.extremetech.com/extreme/188776-how-l1-and-l2-cpu-caches-work-and-why-theyre-an-essential-part-of-modern-chips)
     - An example diagram of CPU (cache) hierarchy: ["Memory hierarchy of an AMD Bulldozer server"](https://en.wikipedia.org/wiki/CPU_cache#/media/File:Hwloc.png)
 
@@ -454,11 +455,15 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
         - [Linux kernel page replacement algorithms, SoByte, Jan 2022](https://www.sobyte.net/post/2022-01/linux-multi-lru/)
         - [Linux to Adopt New Multi-Generation LRU Page Reclaim Policy, Sergio De Simone, Jan 2022](https://www.infoq.com/news/2022/01/linux-mglru-memory-reclaim/)
         - [Early commit: mm: multi-gen LRU: minimal implementation](https://github.com/torvalds/linux/commit/ac35a490237446b71e3b4b782b1596967edd0aa8)
+        - [OpenWrt / MIPS benchmark with MGLRU, Yu Zhao, Aug 2022](https://lore.kernel.org/all/20220831041731.3836322-1-yuzhao@google.com/)
 
 - DAMON Data Access Monitor
     - [Official kernel doc: DAMON](https://www.kernel.org/doc/html/v6.1/admin-guide/mm/damon/index.html)
         - [Section 'Visualizing Recorded Patterns'](https://www.kernel.org/doc/html/v6.1/admin-guide/mm/damon/start.html#visualizing-recorded-patterns)
+    - [D A M O N: Data Access MONitoring Framework for Fun and Memory Management Optimizations, SeongJae Park, Kernel Summit Aug 2020](https://lpc.events/event/7/contributions/659/attachments/503/1195/damon_ksummit_2020.pdf)
     - [DAMON: Data Access Monitor, SeongJae Park, May 2023](https://sjp38.github.io/post/damon/)
+    - [The damo front-end utility on GitHub](https://github.com/awslabs/damo); Shows some nice usage examples!
+    - [The masim memory access simulator on GitHub](https://github.com/sjp38/masim)
     - [An example of DAMON usage for profiling, SeongJae Park, April 2023](https://sjp38.github.io/post/damon_profile_callstack_example/
     - [Using DAMON for proactive reclaim, Jon Corbet, LWN, July 2021](https://lwn.net/Articles/863753/)
     - [Memory-management optimization with DAMON, Jon Corbet, LWN, Feb 2020](https://lwn.net/Articles/812707/)
