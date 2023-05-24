@@ -66,8 +66,13 @@ A few excellent books that come to mind (specific books on the Linux kernel and 
         - [Blog](https://jvns.ca/)
         - [Zines](https://wizardzines.com/)
 
-- [Lowlevel programming University, gurugio](https://github.com/gurugio/lowlevelprogramming-university)
+- Ideas / articles on Software Design (biased towards embedded)
+    - [Collection of excellent articles from Embedded Artistry](https://embeddedartistry.com/archive/#featured-posts)
+    - [Practical Decoupling Techniques Applied to a C-based Radio Driver,  PHILLIP JOHNSTON, Embedded Artistry, Aug 2019](https://embeddedartistry.com/blog/2019/8/5/practical-decoupling-techniques-applied-to-a-c-based-radio-driver/)
+    - [LOW-LEVEL SOFTWARE DESIGN, Kaiwan NB, Jan 2017](https://kaiwantech.wordpress.com/2017/01/03/low-level-software-design/)
 
+- [Lowlevel programming University, gurugio](https://github.com/gurugio/lowlevelprogramming-university)
+- [ADVICE TO A YOUNG FIRMWARE DEVELOPER – BY JACK GANSSLE; AND ASSEMBLY, Kaiwan NB, Nov 2018](https://kaiwantech.wordpress.com/2018/11/20/advice-to-a-young-firmware-developer-by-jack-ganssle-and-assembly/)
 - *Tip (reprodcued from Chapter 5)*:
 "Is there a really practical hands-on tip, an almost guaranteed way to become a kernel hacker? Of course, keep reading this book! Ha ha, yes, besides, do partake in the [simply awesome Eudyptula Challenge](http://www.eudyptula-challenge.org/). Hang on, it's - very unfortuantely, and as of this writing - closed down.
 Fear not, [here's a site with all the challenges](https://github.com/agelastic/eudyptula) posted (and the solutions, don't cheat!); do check it out and try the challenges."
