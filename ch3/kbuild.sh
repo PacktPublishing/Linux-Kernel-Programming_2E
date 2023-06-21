@@ -1,8 +1,20 @@
 #!/bin/bash
 # kbuild.sh
+# ***************************************************************
+# * This program is part of the source code released for the book
+# *  "Linux Kernel Programming", 2nd Ed
+# *  (c) Author: Kaiwan N Billimoria
+# *  Publisher:  Packt
+# *  GitHub repository:
+# *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
+# *
+# * From: Ch 3 : Building the 6.x Linux Kernel from Source - Part 2
+# ****************************************************************
+# * Brief Description:
 # Simple kernel build script; minimally tested, YMMV!
+# ****************************************************************
 
-# Turn on Bash 'strict mode'! V useful
+# Turn on Bash 'strict mode'! V useful to catch potential bugs/issues early.
 # ref: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
