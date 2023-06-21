@@ -202,7 +202,7 @@ Miscellaneous:
 - Initramfs (initrd):
     - [Opening and modifying the initrd](http://www.alexonlinux.com/opening-and-modifying-the-initrd)
     - [Initramfs (on Ubuntu wiki)](https://wiki.ubuntu.com/Initramfs)
-    - informative: [debian bug report: intel-microcode: breaks initrd for newer kernels, Sept 2014](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=760765)
+    - Informative: [debian bug report: intel-microcode: breaks initrd for newer kernels, Sept 2014](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=760765)
     - [distri: 20x faster initramfs (initrd) from scratch, Jan 2020](https://michael.stapelberg.ch/posts/2020-01-21-initramfs-from-scratch-golang/)
     - Encrypting disks with LUKS and cryptsetup
         - ['How To: Linux Hard Disk Encryption With LUKS (cryptsetup Command), Sept 2017, nixCraft](https://www.cyberciti.biz/hardware/howto-linux-hard-disk-encryption-with-luks-cryptsetup-command/)
@@ -218,14 +218,11 @@ Miscellaneous:
 - Building the (usual 32-bit) kernel for the Raspberry Pi device
     - [Raspberry Pi kernel build: official doc](https://www.raspberrypi.org/documentation/linux/kernel/building.md)
     - Building a **64-bit** kernel for the Raspberry Pi
-
+        - blog article: [Cross compiling for arm or aarch64 on Debian or Ubuntu, Jensd, Jan 2021](https://jensd.be/1126/linux/cross-compiling-for-arm-or-aarch64-on-debian-or-ubuntu)
         - blog article: ['BUILD A 64-BIT KERNEL FOR YOUR RASPBERRY PI 3', Dec 2016](https://devsidestory.com/build-a-64-bit-kernel-for-your-raspberry-pi-3/)
-  
         - blog article: ['Tutorial: How (and why!) to set up a 64-bit kernel, 32-bit Raspbian host OS, 64-bit nspawn Debian guest OS RPi3 system', Jan 2019](https://www.raspberrypi.org/forums/viewtopic.php?f=56&t=232415&sid=146ea82cef8d235c1eaf64a12a8c3427)
         - On GitHub: ['Bootable RPi3 image with 64-bit kernel, 32-bit Raspbian Stretch host OS, 64-bit Debian Buster guest OS in nspawn container', Sakaki, Apr 2019](https://github.com/sakaki-/raspbian-nspawn-64)
-        - Interesting, an [Ubuntu 18.04 server on Aarch64 Raspberry Pi](https://wiki.ubuntu.com/ARM/RaspberryPi); simplest way to get a 64-bit Raspberry Pi kernel and rootfs in a single image which can be burned onto the SD card
-
-- New Linux kernel: ['Linux 5.6 Is Looking Like It Will Be Spectacular With A Long List Of Features', Phoronix, 26Jan2020](https://www.phoronix.com/scan.php?page=news_item&px=Linux-5.6-Spectacular)
+        - Interesting, an [Ubuntu 18.04 server on Aarch64 Raspberry Pi](https://wiki.ubuntu.com/ARM/RaspberryPi); simplest way to get a 64-bit Raspberry Pi kernel and rootfs in a single image which can be burned onto the SD card.
 
 <br>
 
@@ -464,7 +461,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - [DAMON: Data Access Monitor, SeongJae Park, May 2023](https://sjp38.github.io/post/damon/)
     - [The damo front-end utility on GitHub](https://github.com/awslabs/damo); Shows some nice usage examples!
     - [The masim memory access simulator on GitHub](https://github.com/sjp38/masim)
-    - [An example of DAMON usage for profiling, SeongJae Park, April 2023](https://sjp38.github.io/post/damon_profile_callstack_example/
+    - [An example of DAMON usage for profiling, SeongJae Park, April 2023](https://sjp38.github.io/post/damon_profile_callstack_example/)
     - [Using DAMON for proactive reclaim, Jon Corbet, LWN, July 2021](https://lwn.net/Articles/863753/)
     - [Memory-management optimization with DAMON, Jon Corbet, LWN, Feb 2020](https://lwn.net/Articles/812707/)
 
