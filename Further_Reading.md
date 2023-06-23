@@ -209,7 +209,7 @@ Miscellaneous:
         - ['Basic Guide To Encrypting Linux Partitions With LUKS', Oct 2016, Nick Congleton](https://linuxconfig.org/basic-guide-to-encrypting-linux-partitions-with-luks)
         - RedHat-specific: ['What is LUKS disk encryption and how can it be implemented?', Oct 2019, RedHat](https://access.redhat.com/solutions/100463)
 
-
+- Article: [How to Build Linux Kernel From Scratch {Step-By-Step Guide}, Nov 2020](https://phoenixnap.com/kb/build-linux-kernel)
 - [GRUB: How do I change the default boot kernel](https://askubuntu.com/questions/216398/set-older-kernel-as-default-grub-entry)
 - [How to Boot into Single User Mode in CentOS/RHEL 7, Kili, Tecmint, August 2017](https://www.tecmint.com/boot-into-single-user-mode-in-centos-7/)
 - Article: [Linux Kernel Cross Compilation](https://gts3.org/2017/cross-kernel.html)
