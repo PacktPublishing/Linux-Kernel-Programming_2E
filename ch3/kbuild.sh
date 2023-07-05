@@ -59,8 +59,8 @@ else
   make oldconfig  # Update current config utilising a provided .config as base
 fi
 
-# Ensure config is sane; on Ubuntu, SYSTEM_REVOCATION_KEYS being enabled causes
-# the build to fail..
+# Ensure config is sane; on recent Ubuntu (~ kernel ver >= 5.13),
+# SYSTEM_REVOCATION_KEYS being enabled causes the build to fail..
 echo
 echo "[+] scripts/config --disable SYSTEM_REVOCATION_KEYS"
 scripts/config --disable SYSTEM_REVOCATION_KEYS
