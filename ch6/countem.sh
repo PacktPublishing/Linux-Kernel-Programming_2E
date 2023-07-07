@@ -17,13 +17,9 @@
 # ****************************************************************
 set -euo pipefail
 echo "System release info:"
-which lsb_release >/dev/null
-if [ $? -eq 0 ] ; then
-  lsb_release -a 2>/dev/null
-else
-  [ -f /etc/issue ] && cat /etc/issue
-  [ -f /etc/os-release ] && cat /etc/os-release
-fi
+which lsb_release >/dev/null && lsb_release -a || true
+[[ -f /etc/issue ]] && cat /etc/issue
+[[ -f /etc/os-release ]] && cat /etc/os-release
 
 total_prcs=$(ps -A|wc -l)
 printf "\nTotal # of processes alive               = %9d\n" ${total_prcs}
