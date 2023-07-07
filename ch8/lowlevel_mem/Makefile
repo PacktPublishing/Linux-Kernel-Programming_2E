@@ -1,13 +1,5 @@
 # Makefile
 # ***************************************************************
-# This program is part of the source code released for the book
-#  "Linux Kernel Programming" 2E
-#  (c) Author: Kaiwan N Billimoria
-#  Publisher:  Packt
-#  GitHub repository:
-#  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
-#
-# ***************************************************************
 # Brief Description:
 # A 'better' Makefile template for Linux LKMs (Loadable Kernel Modules); besides
 # the 'usual' targets (the build, install and clean), we incorporate targets to
@@ -21,9 +13,9 @@
 # To get started, just type:
 #  make help
 #
-# For details on this so-called 'better' Makefile, please refer my earlier book
-# 'Linux Kernel Programming', Packt, Mar 2021, Ch 5 section 'A "better" Makefile
-# template for your kernel modules'.
+# For details on this so-called 'better' Makefile, please refer my book
+# 'Linux Kernel Programming' 2nd Ed, Packt, 2023, Chapter 5, section
+# 'A "better" Makefile template for your kernel modules'.
 
 #------------------------------------------------------------------
 # Set FNAME_C to the kernel module name source filename (without .c)
@@ -31,9 +23,11 @@
 # As well, the MYDEBUG variable (see it below) can be set to 'y' or 'n' (no being
 # the default)
 FNAME_C := lowlevel_mem
-#------------------------------------------------------------------
 ifeq ($(FNAME_C),)
-	$(error ERROR: set the Makefile var FNAME_C to the name of the C source file excl the .c)
+  $(error You MUST pass the C file like this:\
+make FNAME_C=csrc-filename-without-.c target-name)
+else
+  $(info [FNAME_C = $(FNAME_C)])
 endif
 #------------------------------------------------------------------
 
@@ -85,7 +79,7 @@ ifeq (${MYDEBUG}, y)
   ccflags-y   += -DDEBUG -g -ggdb -gdwarf-4 -Wall -fno-omit-frame-pointer -fvar-tracking-assignments
 else
   INSTALL_MOD_STRIP := 1
-  #ccflags-y   += --strip-debug
+  ccflags-y   += -UDEBUG
 endif
 # We always keep the dynamic debug facility enabled; this allows us to turn
 # dynamically turn on/off debug printk's later... To disable it simply comment
@@ -94,6 +88,9 @@ ccflags-y   += -DDYNAMIC_DEBUG_MODULE
 
 KMODDIR ?= /lib/modules/$(shell uname -r)
 STRIP := ${CROSS_COMPILE}strip
+
+# gcc-10 issue:
+#ccflags-y  += $(call cc-option,--allow-store-data-races)
 
 all:
 	@echo
@@ -108,10 +105,15 @@ install:
 	@echo " [First, invoking the 'make' ]"
 	make
 	@echo
-	@echo " [Now for the 'make install' ]"
-	make -C $(KDIR) M=$(PWD) modules_install
+	@echo " [Now for the 'sudo make install' ]"
+	sudo make -C $(KDIR) M=$(PWD) modules_install
+	@echo " sudo depmod"
+	sudo depmod
 	@echo " [If !debug, stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
-	$(shell if [ "${MYDEBUG}" != "y" ]; then ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko; fi)
+	$(shell if [ "${MYDEBUG}" != "y" ]; then sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko; fi)
+nsdeps:
+	@echo "--- nsdeps (namespace dependencies resolution; for possibly importing ns's) ---"
+	make -C $(KDIR) M=$(PWD) nsdeps
 clean:
 	@echo
 	@echo "--- cleaning ---"
@@ -227,7 +229,8 @@ help:
 
 	@echo '--- 'usual' kernel LKM targets ---'
 	@echo 'typing "make" or "all" target : builds the kernel module object (the .ko)'
-	@echo 'install     : installs the kernel module(s) to INSTALL_MOD_PATH (default here: /lib/modules/$(shell uname -r)/); should run this target as root/via sudo'
+	@echo 'install     : installs the kernel module(s) to INSTALL_MOD_PATH (default here: /lib/modules/$(shell uname -r)/)'
+	@echo 'nsdeps      : namespace dependencies resolution; for possibly importing namespaces'
 	@echo 'clean       : cleanup - remove all kernel objects, temp files/dirs, etc'
 
 	@echo

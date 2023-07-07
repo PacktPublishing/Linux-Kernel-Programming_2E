@@ -1,14 +1,5 @@
 # Makefile
 # ***************************************************************
-# This program is part of the source code released for the book
-#  "Linux Kernel Programming"
-#  (c) Author: Kaiwan N Billimoria
-#  Publisher:  Packt
-#  GitHub repository:
-#  https://github.com/PacktPublishing/Linux-Kernel-Programming
-#
-# From: Ch 5 : Writing Your First Kernel Module LKMs, Part 2
-# ***************************************************************
 # Brief Description:
 # A 'better' Makefile template for Linux LKMs (Loadable Kernel Modules); besides
 # the 'usual' targets (the build, install and clean), we incorporate targets to
@@ -22,9 +13,9 @@
 # To get started, just type:
 #  make help
 #
-# For details on this so-called 'better' Makefile, please the book
-# 'Linux Kernel Programming', 2 Ed, Packt, Ch 5 section 'A "better" Makefile
-# template for your kernel modules'.
+# For details on this so-called 'better' Makefile, please refer my book
+# 'Linux Kernel Programming' 2nd Ed, Packt, 2023, Chapter 5, section
+# 'A "better" Makefile template for your kernel modules'.
 
 #------------------------------------------------------------------
 # Set FNAME_C to the kernel module name source filename (without .c)
@@ -51,7 +42,7 @@ ifeq ($(ARCH),arm)
 else ifeq ($(ARCH),arm64)
   # *UPDATE* 'KDIR' below to point to the ARM64 (Aarch64) Linux kernel source
   # tree on your box
-  KDIR ?= ~/rpi_work/kernel_rpi/linux
+  KDIR ?= ~/kernel/linux-5.4
 else ifeq ($(ARCH),powerpc)
   # *UPDATE* 'KDIR' below to point to the PPC64 Linux kernel source tree on your box
   KDIR ?= ~/kernel/linux-5.0
@@ -80,7 +71,7 @@ show_kernel_seg-objs  += kernel_seg.o ../../klib.o
 # generation of debug symbols, if so required. Also, realize that the DEBUG
 # macro is turned on by many CONFIG_*DEBUG* options; hence, we use a different
 # macro var name, MYDEBUG).
-MYDEBUG := y
+MYDEBUG := n
 ifeq (${MYDEBUG}, y)
 
 # https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#compilation-flags
@@ -107,7 +98,7 @@ all:
 	@${CC} --version|head -n1
 	@echo
 	make -C $(KDIR) M=$(PWD) modules
-	$(shell [ "${MYDEBUG}" != "y" ] && ${STRIP} --strip-debug ./${FNAME_C}.ko 2>/dev/null)
+	$(shell [ "${MYDEBUG}" != "y" ] && ${STRIP} --strip-debug ./${FNAME_C}.ko)
 install:
 	@echo
 	@echo "--- installing ---"
@@ -120,6 +111,9 @@ install:
 	sudo depmod
 	@echo " [If !debug, stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
 	$(shell if [ "${MYDEBUG}" != "y" ]; then sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko; fi)
+nsdeps:
+	@echo "--- nsdeps (namespace dependencies resolution; for possibly importing ns's) ---"
+	make -C $(KDIR) M=$(PWD) nsdeps
 clean:
 	@echo
 	@echo "--- cleaning ---"
@@ -236,6 +230,7 @@ help:
 	@echo '--- 'usual' kernel LKM targets ---'
 	@echo 'typing "make" or "all" target : builds the kernel module object (the .ko)'
 	@echo 'install     : installs the kernel module(s) to INSTALL_MOD_PATH (default here: /lib/modules/$(shell uname -r)/)'
+	@echo 'nsdeps      : namespace dependencies resolution; for possibly importing namespaces'
 	@echo 'clean       : cleanup - remove all kernel objects, temp files/dirs, etc'
 
 	@echo

@@ -1,13 +1,4 @@
-# Makefile (for kernel modules)
-# ***************************************************************
-# This program is part of the source code released for the book
-#  "Linux Kernel Programming"
-#  (c) Author: Kaiwan N Billimoria
-#  Publisher:  Packt
-#  GitHub repository:
-#  https://github.com/PacktPublishing/Linux-Kernel-Programming
-#
-# From: Ch 5 : Writing Your First Kernel Module LKMs, Part 2
+# Makefile
 # ***************************************************************
 # Brief Description:
 # A 'better' Makefile template for Linux LKMs (Loadable Kernel Modules); besides
@@ -15,28 +6,46 @@
 # do useful (and indeed required) stuff like:
 #  - adhering to kernel coding style (indent+checkpatch)
 #  - several static analysis targets (via sparse, gcc, flawfinder, cppcheck)
-#  - two 'dummy' dynamic analysis targets (KASAN, LOCKDEP)
+#  - two _dummy_ dynamic analysis targets (KASAN, LOCKDEP); just to remind you!
 #  - a packaging (.tar.xz) target and
 #  - a help target.
 #
 # To get started, just type:
 #  make help
 #
-# For details on this Makefile 'template', please refer the book, Ch 5.
+# For details on this so-called 'better' Makefile, please refer my book
+# 'Linux Kernel Programming' 2nd Ed, Packt, 2023, Chapter 5, section
+# 'A "better" Makefile template for your kernel modules'.
+
+#------------------------------------------------------------------
+# Set FNAME_C to the kernel module name source filename (without .c)
+# This enables you to use this Makefile as a template; just update this variable!
+# As well, the MYDEBUG variable (see it below) can be set to 'y' or 'n' (no being
+# the default)
+FNAME_C := slab4_actualsz_wstg_plot
+ifeq ($(FNAME_C),)
+  $(error You MUST pass the C file like this:\
+make FNAME_C=csrc-filename-without-.c target-name)
+else
+  $(info [FNAME_C = $(FNAME_C)])
+endif
+#------------------------------------------------------------------
 
 # To support cross-compiling for kernel modules:
 # For architecture (cpu) 'arch', invoke make as:
 #  make ARCH=<arch> CROSS_COMPILE=<cross-compiler-prefix>
+# The KDIR var is set to a sample path below; you're expected to update it on
+# your box to the appropriate path to the kernel src tree for that arch.
 ifeq ($(ARCH),arm)
   # *UPDATE* 'KDIR' below to point to the ARM Linux kernel source tree on your box
   KDIR ?= ~/rpi_work/kernel_rpi/linux
 else ifeq ($(ARCH),arm64)
   # *UPDATE* 'KDIR' below to point to the ARM64 (Aarch64) Linux kernel source
   # tree on your box
-  KDIR ?= ~/kernel/linux-4.14
+  KDIR ?= ~/kernel/linux-5.4
 else ifeq ($(ARCH),powerpc)
   # *UPDATE* 'KDIR' below to point to the PPC64 Linux kernel source tree on your box
-  KDIR ?= ~/kernel/linux-4.9.1
+  KDIR ?= ~/kernel/linux-5.0
 else
   # 'KDIR' is the Linux 'kernel headers' package on your host system; this is
   # usually an x86_64, but could be anything, really (f.e. building directly
@@ -44,26 +53,75 @@ else
   KDIR ?= /lib/modules/$(shell uname -r)/build
 endif
 
+# Compiler
+CC     := $(CROSS_COMPILE)gcc
+#CC := clang
+
 PWD            := $(shell pwd)
-obj-m          += slab4_actualsz_wstg_plot.o
-EXTRA_CFLAGS   += -DDEBUG
+obj-m          += ${FNAME_C}.o
+
+#--- Debug or production mode?
+# Set the MYDEBUG variable accordingly to y/n resp.
+# (Actually, debug info is always going to be generated when you build the
+# module on a debug kernel, where CONFIG_DEBUG_INFO is defined, making this
+# setting of the ccflags-y (or EXTRA_CFLAGS) variable mostly redundant (besides
+# the -DDEBUG).
+# This simply helps us influence the build on a production kernel, forcing
+# generation of debug symbols, if so required. Also, realize that the DEBUG
+# macro is turned on by many CONFIG_*DEBUG* options; hence, we use a different
+# macro var name, MYDEBUG).
+MYDEBUG := n
+ifeq (${MYDEBUG}, y)
+
+# https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#compilation-flags
+# EXTRA_CFLAGS deprecated; use ccflags-y
+  ccflags-y   += -DDEBUG -g -ggdb -gdwarf-4 -Wall -fno-omit-frame-pointer -fvar-tracking-assignments
+else
+  INSTALL_MOD_STRIP := 1
+  ccflags-y   += -UDEBUG
+endif
+# We always keep the dynamic debug facility enabled; this allows us to turn
+# dynamically turn on/off debug printk's later... To disable it simply comment
+# out the following line
+ccflags-y   += -DDYNAMIC_DEBUG_MODULE
+
+KMODDIR ?= /lib/modules/$(shell uname -r)
+STRIP := ${CROSS_COMPILE}strip
+
+# gcc-10 issue:
+#ccflags-y  += $(call cc-option,--allow-store-data-races)
 
 all:
 	@echo
-	@echo '--- Building : KDIR=${KDIR} ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} EXTRA_CFLAGS=${EXTRA_CFLAGS} ---'
+	@echo '--- Building : KDIR=${KDIR} ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} ccflags-y=${ccflags-y} ---'
+	@${CC} --version|head -n1
 	@echo
 	make -C $(KDIR) M=$(PWD) modules
+	$(shell [ "${MYDEBUG}" != "y" ] && ${STRIP} --strip-debug ./${FNAME_C}.ko)
 install:
 	@echo
 	@echo "--- installing ---"
+	@echo " [First, invoking the 'make' ]"
+	make
 	@echo
-	make -C $(KDIR) M=$(PWD) modules_install
+	@echo " [Now for the 'sudo make install' ]"
+	sudo make -C $(KDIR) M=$(PWD) modules_install
+	@echo " sudo depmod"
+	sudo depmod
+	@echo " [If !debug, stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
+	$(shell if [ "${MYDEBUG}" != "y" ]; then sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko; fi)
+nsdeps:
+	@echo "--- nsdeps (namespace dependencies resolution; for possibly importing ns's) ---"
+	make -C $(KDIR) M=$(PWD) nsdeps
 clean:
 	@echo
 	@echo "--- cleaning ---"
 	@echo
 	make -C $(KDIR) M=$(PWD) clean
-	rm -f *~   # from 'indent'
+# from 'indent'
+	rm -f *~
+
+# Any usermode programs to build? Insert the build target(s) here
 
 #--------------- More (useful) targets! -------------------------------
 INDENT := indent
@@ -77,6 +135,9 @@ code-style:
 # coding style guidelines.
 # Note! original source file(s) is overwritten, so we back it up.
 indent:
+ifeq (,$(shell which indent))
+	$(error ERROR: install indent first)
+endif
 	@echo
 	@echo "--- applying kernel code style indentation with indent ---"
 	@echo
@@ -103,12 +164,17 @@ sa:
 
 # static analysis with sparse
 sa_sparse:
+ifeq (,$(shell which sparse))
+	$(error ERROR: install sparse first)
+endif
+
 	make clean
 	@echo
 	@echo "--- static analysis with sparse ---"
 	@echo
 # if you feel it's too much, use C=1 instead
-	make C=2 CHECK="/usr/bin/sparse" -C $(KDIR) M=$(PWD) modules
+# NOTE: deliberately IGNORING warnings from kernel headers!
+	make -Wsparse-all C=2 CHECK="/usr/bin/sparse --os=linux --arch=$(ARCH)" -C $(KDIR) M=$(PWD) modules 2>&1 |egrep -v "^\./include/.*\.h|^\./arch/.*\.h"
 
 # static analysis with gcc
 sa_gcc:
@@ -120,6 +186,9 @@ sa_gcc:
 
 # static analysis with flawfinder
 sa_flawfinder:
+ifeq (,$(shell which flawfinder))
+	$(error ERROR: install flawfinder first)
+endif
 	make clean
 	@echo
 	@echo "--- static analysis with flawfinder ---"
@@ -128,6 +197,9 @@ sa_flawfinder:
 
 # static analysis with cppcheck
 sa_cppcheck:
+ifeq (,$(shell which cppcheck))
+	$(error ERROR: install cppcheck first)
+endif
 	make clean
 	@echo
 	@echo "--- static analysis with cppcheck ---"
@@ -135,7 +207,7 @@ sa_cppcheck:
 	cppcheck -v --force --enable=all -i .tmp_versions/ -i *.mod.c -i bkp/ --suppress=missingIncludeSystem .
 
 # Packaging; just tar.xz as of now
-PKG_NAME := slab4_actualsz_wstg_plot
+PKG_NAME := ${FNAME_C}
 tarxz-pkg:
 	rm -f ../${PKG_NAME}.tar.xz 2>/dev/null
 	make clean
@@ -145,6 +217,8 @@ tarxz-pkg:
 	tar caf ../${PKG_NAME}.tar.xz *
 	ls -l ../${PKG_NAME}.tar.xz
 	@echo '=== package created: ../$(PKG_NAME).tar.xz ==='
+	@echo 'Tip: when extracting, to extract into a dir of the same name as the tar file,'
+	@echo ' do: tar -xvf ${PKG_NAME}.tar.xz --one-top-level'
 
 help:
 	@echo '=== Makefile Help : additional targets available ==='
@@ -154,7 +228,8 @@ help:
 
 	@echo '--- 'usual' kernel LKM targets ---'
 	@echo 'typing "make" or "all" target : builds the kernel module object (the .ko)'
-	@echo 'install     : installs the kernel module(s) to INSTALL_MOD_PATH (default: /lib/modules/$(shell uname -r)/)'
+	@echo 'install     : installs the kernel module(s) to INSTALL_MOD_PATH (default here: /lib/modules/$(shell uname -r)/)'
+	@echo 'nsdeps      : namespace dependencies resolution; for possibly importing namespaces'
 	@echo 'clean       : cleanup - remove all kernel objects, temp files/dirs, etc'
 
 	@echo
@@ -181,4 +256,6 @@ help:
 	@echo
 	@echo '--- misc targets ---'
 	@echo 'tarxz-pkg  : tar and compress the LKM source files as a tar.xz into the dir above; allows one to transfer and build the module on another system'
+	@echo ' Tip: when extracting, to extract into a dir of the same name as the tar file,'
+	@echo '  do: tar -xvf ${PKG_NAME}.tar.xz --one-top-level'
 	@echo 'help       : this help target'
