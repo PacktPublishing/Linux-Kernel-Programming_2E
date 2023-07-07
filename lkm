@@ -2,7 +2,12 @@
 # lkm : a silly kernel module dev - build, load, unload - helper wrapper script
 # License: MIT
 # Kaiwan NB
+
+# Turn on unofficial Bash 'strict mode'! V useful
+# "Convert many kinds of hidden, intermittent, or subtle bugs into immediate, glaringly obvious errors"
+# ref: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
+
 unset ARCH
 unset CROSS_COMPILE
 name=$(basename "${0}")
