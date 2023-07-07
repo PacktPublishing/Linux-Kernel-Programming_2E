@@ -23,9 +23,9 @@
 #include <linux/kernel.h>
 
 MODULE_AUTHOR("<insert your name here>");
-MODULE_DESCRIPTION("LKP2E book:ch4/printk_loglvl: print at each kernel log level");
+MODULE_DESCRIPTION("LKP2E book:ch4/printk_loglvl: printk at each kernel log level");
 MODULE_LICENSE("Dual MIT/GPL");
-MODULE_VERSION("0.1");
+MODULE_VERSION("0.2");
 
 static int __init printk_loglvl_init(void)
 {
