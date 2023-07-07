@@ -238,8 +238,14 @@ Miscellaneous:
 	- Article: ['Understanding Systemd Units and Unit Files', DigitalOcean](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files) 
 	- [Systemd Documentation](http://0pointer.de/blog/projects/systemd-docs.html)
 	- [Systemd FAQs](https://www.freedesktop.org/wiki/Software/systemd/FrequentlyAskedQuestions/)
+
 - [Linux console (on Wikipedia)](https://en.wikipedia.org/wiki/Linux_console)
 - [Debugging by printing, eLinux](https://elinux.org/Debugging_by_printing)
+- [LWN kernel index on 'Kernel messages' (printk)](https://lwn.net/Kernel/Index/#Kernel_messages)
+- [printk() indexing, Jon Corbet, LWN, May 2021](https://lwn.net/Articles/857148/)
+
+- [The Linux Kernel Module Programming Guide, by Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram, Jim Huang, 
+July 5, 2023](https://sysprog21.github.io/lkmpg/)
 - Blog article: ["MAKEFILES TUTORIAL", Liran B.H.](http://devarea.com/makefiles-tutorial/)
 - Blog article: [A Standalone Linux Kernel Module, Levinzon, Medium, May 2020](https://medium.com/@eitan.levinzon/a-standalone-linux-kernel-module-df54283d4803)
 - [BusyBox: The Swiss Army Knife of Embedded Linux](https://www.busybox.net/)
