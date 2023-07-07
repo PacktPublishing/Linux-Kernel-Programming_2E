@@ -23,9 +23,19 @@
 #include <linux/ratelimit.h>
 
 /*
- *** PLEASE READ this first ***
+ *------------------------- Basic Instrumentation ---------------------
+ * (the code-based debug-by-printing approach)
  *
- *  We can reduce the load, and increase readability, by using the trace_printk
+ *** PLEASE READ this first ***
+ *  1. The advent of the kernel's powerful *Dynamic Debug* functionality
+ *     (CONFIG_DYNAMIC_DEBUG=y), renders our the MSG*() (and DBGPRINT()) macros defined
+ *     here superfluous; they're not really required.
+ *     Do use the kernel dynamic debug facility instead:
+ *      https://www.kernel.org/doc/html/v6.1/admin-guide/dynamic-debug-howto.html#dynamic-debug
+ *     (You might still find the QP*() macros useful, and the MSG*() ones useful
+ *      for user space).
+ *
+ *  2. We can reduce the load, and increase readability, by using the trace_printk
  *  instead of printk. To see the trace_printk() output do:
  *     cat /sys/kernel/debug/tracing/trace
  *
@@ -33,16 +43,15 @@
  *	For the programmers' convenience, this too is programatically controlled
  *	(by an integer var USE_RATELIMITING [default: On]).
  *
- *** Kernel module authors Note: ***
+ * 3. Kernel module authors Note:
  *	To use the trace_printk(), pl #define the symbol USE_FTRACE_PRINT in your
  *	Makefile:
- *	 EXTRA_CFLAGS += -DUSE_FTRACE_PRINT
+ *	 ccflags-y += -DUSE_FTRACE_PRINT
  *	If you do not do this, we will use the usual printk() .
  *
- *	To view :
+ * 4. To view kernel messages sent via:
  *	  printk's       : dmesg
- *     trace_printk's : cat /sys/kernel/debug/tracing/trace
- *
+ *    trace_printk's : cat /sys/kernel/debug/tracing/trace
  *	 Default: printk (with rate-limiting)
  */
 /* Keep this defined to use the FTRACE-style trace_printk(), else will use
@@ -117,7 +126,8 @@
 #define QPDS
 #endif
 
-/* SHOW_DELTA_*(low, hi) :
+/*------------------------ SHOW_DELTA_{[bKMG*]} ------------------------
+ * SHOW_DELTA_*(low, hi) :
  * Show the low val, high val and the delta (hi-low) in either bytes/KB/MB/GB,
  * as required.
  * Inspired from raspberry pi kernel src: arch/arm/mm/init.c:MLM()
@@ -148,7 +158,8 @@
  *
  * [1] 'h' = hard irq is running ; 'H' = hard irq occurred inside a softirq]
  *
- * Sample output (via a debug printk; in this comment, we make / * into \* ...):
+ * Sample output (via a debug printk;
+ * also, as we're within a comment, we make / * ... * / into \* ... *\ ):
  *  CPU)  task_name:PID  | irqs,need-resched,hard/softirq,preempt-depth  \* func_name() *\
  *  001)  rdwr_drv_secret -4857   |  ...0   \* read_miscdrv_rdwr() *\
  *
@@ -215,12 +226,12 @@ Oct 04 12:19:53 dbg-LKD kernel:  dump_stack+0xbd/0xfa
  * Using assertions is great *but* be aware of traps & pitfalls:
  * http://blog.regehr.org/archives/1096
  *
- * The closest equivalent perhaps, to assert() in the kernel are the BUG()
- * or BUG_ON() and WARN() or WARN_ON() macros. Using BUG*() is _only_ for those
+ * The closest equivalent perhaps, to assert() in the kernel are the BUG(),
+ * BUG_ON() and WARN(), WARN_ON() macros. Using BUG*() is _only_ for those
  * cases where recovery is impossible. WARN*() is usally considered a better
  * option. Pl see <asm-generic/bug.h> for details.
  *
- * Here, we just trivially emit a noisy [trace_]printk() to "warn" the dev/user
+ * Here, we just trivially emit a noisy printk to "warn" the dev/user
  * that the assertion failed.
  */
 #ifdef __KERNEL__
@@ -255,7 +266,7 @@ static inline void beep(int what)
 {                                                                          \
 	int c = 0, m;                                                          \
 	unsigned int for_index, inner_index, x;                                \
-																			\
+																		   \
 	for (for_index = 0; for_index < loop_count; for_index++) {             \
 		beep((val));                                                       \
 		c++;                                                               \
@@ -295,8 +306,7 @@ void delay_sec(long val)
 #endif   /* #ifdef __KERNEL__ */
 
 #ifdef __KERNEL__
-/*
- * SHOW_DELTA() macro
+/*------------------------ SHOW_DELTA() macro -------------------------
  * Show the difference between the timestamps passed
  * Parameters:
  *  @later, @earlier : nanosecond-accurate timestamps
