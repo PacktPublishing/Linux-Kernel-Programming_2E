@@ -1,5 +1,6 @@
 # ch4/printk_loglvl/Makefile
 PWD          := $(shell pwd)
+KDIR         := /lib/modules/$(shell uname -r)/build/
 obj-m        += printk_loglvl.o
 
 # Enable the pr_debug() and pr_devel() as well by removing the comment from
@@ -9,8 +10,8 @@ obj-m        += printk_loglvl.o
 #CFLAGS_printk_loglvl.o := -DDEBUG
 
 all:
-	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules
+	make -C $(KDIR) M=$(PWD) modules
 install:
-	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules_install
+	make -C $(KDIR) M=$(PWD) modules_install
 clean:
-	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) clean
+	make -C $(KDIR) M=$(PWD) clean
