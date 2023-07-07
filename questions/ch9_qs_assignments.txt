@@ -1,7 +1,7 @@
 As we conclude, here is a list of questions for you to test your knowledge
 regarding this chapter's material. You will find answers to selected
 questions here:
-https://github.com/PacktPublishing/Linux-Kernel-Programming/tree/master/solutions_to_assgn
+https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/tree/master/solutions_to_assgn
 
 Chapter 9 : Questions and/or Assignments
 
@@ -62,7 +62,7 @@ memory allocation will only happen on a page-by-page basis when thread X
 ______ any address within the page, thus causing a ______.
   a. accesses (for r/w/x); segmentation fault
   b. writes; page fault
-  c. accesses (for rd/wr/exec); page fault
+  c. accesses (for r/w/x); page fault
   d. reads; page fault
 
 5. Assignment : slab_custom_mult
@@ -95,3 +95,7 @@ Write a script (or C program, it's up to you) to display the current OOM
 score of all the processes alive on the system.
 (Tip: https://dev.to/rrampage/surviving-the-linux-oom-killer-2ki9)
 
+7. Read:
+a) Per-file OOM badness, Jon Corbet, June 2022, LWN: https://lwn.net/Articles/896738/
+b) oom_badness(): read about one instance on how this function was improved:
+https://github.com/torvalds/linux/commit/9066e5cfb73cdbcdbb49e87999482ab615e9fc76
