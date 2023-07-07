@@ -66,8 +66,10 @@ static inline void show_ctx(void)
             current, current,
 			current->stack, current->stack);
 
+			/* FIXME- doesn't work
             if (task_state_to_char(current) == 'R')
                 pr_info("on virtual CPU? %s\n", (current->flags & PF_VCPU)?"yes":"no");
+			 */
     } else
         pr_alert("Whoa! running in interrupt context [Should NOT Happen here!]\n");
 }
