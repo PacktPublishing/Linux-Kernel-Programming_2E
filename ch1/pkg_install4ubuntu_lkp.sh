@@ -11,6 +11,7 @@
 # Brief Description:
 # Helper script to install all required packages (as well as a few more
 # possibly) for the Linux Kernel Programming 2E book.
+# Currently biased toward Debian/Ubuntu systems only... (uses apt).
 
 function die
 {
