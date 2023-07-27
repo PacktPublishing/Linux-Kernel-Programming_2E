@@ -2,11 +2,11 @@
  * solutions_to_assgn/ch8/slab_ptr_array/slab_ptr_array.c
  ***************************************************************
  * This program is part of the source code released for the book
- *  "Linux Kernel Programming"
+ *  "Linux Kernel Programming" 2E
  *  (c) Author: Kaiwan N Billimoria
  *  Publisher:  Packt
  *  GitHub repository:
- *  https://github.com/PacktPublishing/Linux-Kernel-Programming
+ *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
  *
  * From: Ch 8 : Kernel Memory Allocation for Module Authors Part 1
  ****************************************************************
@@ -31,7 +31,6 @@
  */
 #include <linux/init.h>
 #include <linux/module.h>
-#include <linux/kernel.h>
 #include <linux/slab.h>
 
 #define OURMODNAME       "slab_ptr_array"

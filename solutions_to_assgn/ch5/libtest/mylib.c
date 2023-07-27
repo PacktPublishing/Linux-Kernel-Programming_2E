@@ -2,11 +2,11 @@
  * solutions_to_assgn/ch5/libtest/mylib.c
  ***************************************************************
  * This program is part of the source code released for the book
- *  "Linux Kernel Programming"
+ *  "Linux Kernel Programming" 2E
  *  (c) Author: Kaiwan N Billimoria
  *  Publisher:  Packt
  *  GitHub repository:
- *  https://github.com/PacktPublishing/Linux-Kernel-Programming
+ *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
  *
  * From: Ch 5: Writing your First Kernel Module- LKMs Part 2
  ****************************************************************
@@ -23,7 +23,6 @@
 
 #include <linux/init.h>
 #include <linux/module.h>
-#include <linux/kernel.h>
 
 #if 0
 int product(int a, int b)

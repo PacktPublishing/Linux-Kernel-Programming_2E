@@ -18,13 +18,12 @@
  * For details, please refer the book, Ch 4.
  */
 #include <linux/init.h>
-#include <linux/kernel.h>
 #include <linux/module.h>
 
 MODULE_AUTHOR("<insert your name here>");
 MODULE_DESCRIPTION("LKP2E book:ch4/helloworld_lkm: hello, world, our first LKM");
 MODULE_LICENSE("Dual MIT/GPL");
-MODULE_VERSION("0.1");
+MODULE_VERSION("0.2");
 
 static int __init helloworld_lkm_init(void)
 {
