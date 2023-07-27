@@ -1,0 +1,14 @@
+#!/bin/bash
+# Simple wrapper script to run the largely CPU-bound 'yes' util on a given core.
+# Part of the LKP-2E book.
+name=$(basename $0)
+[[ $# -ne 1 ]] && {
+  echo "Usage: ${name} cpu#-to-run-yes-upon
+There are $(nproc) cpu cores available on this box, numbering starts at 0"
+  exit 1
+}
+which taskset >/dev/null || {
+  echo "Pl first install the taskset utility"
+  exit 1
+}
+taskset -c $1 yes > /dev/null

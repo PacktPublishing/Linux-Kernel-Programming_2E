@@ -1,0 +1,40 @@
+#!/bin/bash
+# Simple wrapper script over the exercise_cpu wrapper script...
+# Allows us to easily exercise several cores concurrently.
+# Part of the LKP-2E book.
+name=$(basename $0)
+[[ $# -ne 1 ]] && {
+  echo "Usage: ${name} number-of-processes-to-spawn
+FYI, there are $(nproc) cpu cores available on this box; we shall limit
+the number of processes to the number of cores
+TIP: run 'pkill yes' to terminate all instances"
+  exit 1
+}
+
+PDIR=$(which $0)
+[[ -z "${PDIR}" ]] && PDIR=$(dirname $0)  # true if this isn't in PATH
+export PFX=$(dirname ${PDIR})    # dir in which this script and tools reside
+#echo "PFX=${PFX}"
+[[ ! -x ${PFX}/exercise_cpu ]] && {
+   echo "${name}: ERROR: didn't locate or couldn't run the exercise_cpu script, aborting..."
+   exit 1
+}
+NUMCORES=$(nproc)
+[[ $1 -gt ${NUMCORES} ]] || [[ $1 -le 0 ]] && {
+   echo "${name}: ERROR: can't request more than $(nproc) (or <=0) processes, aborting..."
+   exit 1
+}
+
+trap 'pkill yes' INT QUIT
+
+# Right, lets do it!
+pkill yes
+c=0
+echo "${name}: spawning a 'yes' process on ..."
+while [[ $c -lt $1 ]]
+do
+   echo "... CPU core #$c now ..."
+   ${PFX}/exercise_cpu $c &
+   let c=c+1
+done
+exit 0
