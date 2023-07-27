@@ -2,11 +2,11 @@
  * solutions_to_assgn/ch3/libtest/mycaller.c
  ***************************************************************
  * This program is part of the source code released for the book
- *  "Linux Kernel Programming"
+ *  "Linux Kernel Programming" 2E
  *  (c) Author: Kaiwan N Billimoria
  *  Publisher:  Packt
  *  GitHub repository:
- *  https://github.com/PacktPublishing/Linux-Kernel-Programming
+ *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
  *
  * From: Ch 5: Writing your First Kernel Module- LKMs Part 2
  ****************************************************************
@@ -24,14 +24,13 @@
 
 #include <linux/init.h>
 #include <linux/module.h>
-#include <linux/kernel.h>
 
 #define OURMODNAME   "libtest"
 
 MODULE_AUTHOR("<insert your name here>");
-MODULE_DESCRIPTION("LKP book assignment : ch5/libtest");
+MODULE_DESCRIPTION("LKP2E book assignment : ch5/libtest");
 MODULE_LICENSE("Dual MIT/GPL");
-MODULE_VERSION("0.1");
+MODULE_VERSION("0.2");
 
 int prodint(int, int);
 

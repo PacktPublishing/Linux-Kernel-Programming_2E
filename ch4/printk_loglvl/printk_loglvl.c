@@ -20,7 +20,6 @@
  */
 #include <linux/init.h>
 #include <linux/module.h>
-#include <linux/kernel.h>
 
 MODULE_AUTHOR("<insert your name here>");
 MODULE_DESCRIPTION("LKP2E book:ch4/printk_loglvl: printk at each kernel log level");
