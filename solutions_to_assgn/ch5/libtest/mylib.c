@@ -16,7 +16,7 @@
  *  int product(int a, int b); returns (a*b)
  * Link them into a single kernel module called libtest.ko and verify that the
  * caller can indeed correctly invoke code from the 'library'.
- * 
+ *
  * This is the mylib.c - the 'library' - code.
  */
 #define pr_fmt(fmt) "%s:%s(): " fmt, KBUILD_MODNAME, __func__
@@ -51,8 +51,8 @@ int product(int a, int b)
 int prodint(int a, int b)
 {
 	if ((a > 0 && (b > INT_MAX/a || b < INT_MIN/a)) ||
- 	    (a < -1 && (b > INT_MIN/a || b < INT_MAX/a))  ||
-	    (a == -1 && b == INT_MIN)) {
+		(a < -1 && (b > INT_MIN/a || b < INT_MAX/a))  ||
+		(a == -1 && b == INT_MIN)) {
 		pr_warn("signed integer multiplication overflow detected!\n");
 		return -1;
 	}

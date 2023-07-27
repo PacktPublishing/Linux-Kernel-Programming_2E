@@ -212,7 +212,7 @@ static void show_kernelseg_info(void)
 		" %px - %px     | [%9zu MB = %6zu GB ~= %3zu TB]\n",
 		SHOW_DELTA_MGT((void *)VMEMMAP_START, (void *)VMEMMAP_START + VMEMMAP_SIZE));
 #endif
-#if defined(CONFIG_X86) && (BITS_PER_LONG==64)
+#if defined(CONFIG_X86) && (BITS_PER_LONG == 64)
 	// TODO: no size macro for X86_64?
 	pr_info(ELLPS
 		"|vmemmap region start %px                        |\n",
@@ -252,7 +252,7 @@ static void show_kernelseg_info(void)
 		SHOW_DELTA_M((void *)PAGE_OFFSET, (void *)(PAGE_OFFSET) + ram_size));
 
 	/* (possible) highmem region;  may be present on some 32-bit systems */
-#if defined(CONFIG_HIGHMEM) && (BITS_PER_LONG==32)
+#if defined(CONFIG_HIGHMEM) && (BITS_PER_LONG == 32)
 	pr_info("|HIGHMEM region:     "
 		" %px - %px                     | [%5zu MB]\n",
 		SHOW_DELTA_M((void *)PKMAP_BASE, (void *)((PKMAP_BASE) + (LAST_PKMAP * PAGE_SIZE))));

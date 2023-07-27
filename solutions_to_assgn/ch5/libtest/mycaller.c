@@ -11,13 +11,13 @@
  * From: Ch 5: Writing your First Kernel Module- LKMs Part 2
  ****************************************************************
  * Brief Description: Assignment:
- * 5.1 : libtest: 
+ * 5.1 : libtest:
  * Write a kernel module called mycaller.c. It must invoke a library routine
  * called 'product' that lives within another C file (mylib.c), whose signature
  * is: int product(int a, int b); and will return the value (a*b).
  * Link them into a single kernel module called libtest.ko and verify that the
  * caller can indeed correctly invoke code from the 'library'.
- * 
+ *
  * This is the mycaller.c code.
  */
 #define pr_fmt(fmt) "%s:%s(): " fmt, KBUILD_MODNAME, __func__

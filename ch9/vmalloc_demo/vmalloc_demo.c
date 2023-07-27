@@ -104,7 +104,7 @@ static int vmalloc_try(void)
 	/* 'Normal' usage: keep this commented out, else
 	 * we will crash! Read the book, Ch 9, for details  ;-)
 	 */
-	/*  
+	/*
 	 * In 5.8.0, commit 88dca4c 'mm: remove the pgprot argument to __vmalloc'
 	 * has removed the pgprot arg from the __vmalloc(). So, only attempt this
 	 * when we're on kernels < 5.8.0
@@ -129,10 +129,10 @@ static int vmalloc_try(void)
 #else
 /*
  * Logically, should now use the __vmalloc_node_range() BUT, whoops, it isn't exported!
- void *__vmalloc_node_range(unsigned long size, unsigned long align,
-            unsigned long start, unsigned long end, gfp_t gfp_mask,
-            pgprot_t prot, unsigned long vm_flags, int node,
-            const void *caller)
+	void *__vmalloc_node_range(unsigned long size, unsigned long align,
+		unsigned long start, unsigned long end, gfp_t gfp_mask,
+		pgprot_t prot, unsigned long vm_flags, int node,
+		const void *caller)
  */
 	pr_info("5. >= 5.8.0 : __vmalloc(): no page prot param; can use __vmalloc_node_range() in-tree but it's not exported for modules...");
 	pr_cont(" so, simply skip this case\n");
