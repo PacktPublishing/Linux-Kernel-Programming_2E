@@ -87,7 +87,7 @@ core_cg_files_show()
   printf "    %-41s   : %s    [2]\n" "cg frozen?" $(cat ${cg}/cgroup.freeze)
 
   # Show the process belonging to this cg
-  printf "    %-41s   : " "process PIDs"
+  printf "    %-41s   : " "Process PIDs"
   local procs="$(cat ${cg}/cgroup.procs | tr '\n' ' ')"
   [[ ! -z "${procs}" ]] && echo "${procs}" || echo "-"
 
@@ -100,9 +100,16 @@ core_cg_files_show()
   }
 
   # Show the threads belonging to this cg
-  printf "    %-41s   : " "thread PIDs"
+  printf "    %-41s   : " "Thread PIDs"
   local thrds="$(cat ${cg}/cgroup.threads | tr '\n' ' ')"
   [[ ! -z "${thrds}" ]] && echo "${thrds}" || echo "-"
+  # Show thread name(s)
+  [[ ${SHOW_THREAD_NAMES} -eq 1 ]] && [[ ! -z "${thrds}" ]] && {
+    thrds=${thrds::-1} # get rid of trailing space char
+    #echo "thrds=$thrds"
+    # ps -fp <...> : show list of PIDs
+    ps -mL -fp "${thrds}" 2>/dev/null || true
+  }
 
   # cgroup + irq pressure 
   #local cgroup_pressure=$(cat ${cg}/cgroup.pressure 2>/dev/null)
@@ -162,15 +169,15 @@ show_cg_dtl()
 {
   local cg=$1
 
-  printf "  %-45s : " $cg
 
   #--- Core interface files: cgroup.events
   # Is it populated?
   # core interface file: cgroup.events
   local pop=$(grep "populated" ${cg}/cgroup.events |awk '{print $2}')
   if [[ ${pop} -ne 0 ]] ; then
-     echo "populated"
+     printf "\n<<---------------  %-45s -----------------------------\n" $cg
   else
+     printf "  %-45s : " $cg
      echo "unpopulated"
      set +e
      return -1
@@ -185,6 +192,10 @@ show_cg_dtl()
 
   # Descendant cgroups?
   printf "    %-41s   : %s\n" "cg stat" "$(cat ${cg}/cgroup.stat | tr '\n' ' ')"
+  echo "${LINE}----------------------------------->>"
+#<<---------------  /sys/fs/cgroup/system.slice                   -------------------------
+#------------------------------------------------------------------------------------->>
+
 
   return 0
 }
@@ -210,6 +221,8 @@ is shown.
  Default : shows _all_ levels of the system's Cgroups v2 hierarchy.
 
 -p : show the name(s) of the processes belonging to the cgroup
+     Note that this option can increase processing time.
+-t : show the name(s) of the *threads* belonging to the cgroup
      Note that this option can increase processing time."
 }
 
@@ -234,11 +247,12 @@ MAX_FOOTNOTES=${#FOOTNOTES_ARRAY[@]}  #4 # keep updated!
 
 DEPTH=0
 SHOW_PROCESS_NAMES=0
+SHOW_THREAD_NAMES=0
 
 # Args processing
 OPTARG=""
 # if the arg requires a param following it (like, -d 2), put a ':' after the arg letter!
-while getopts ":hvd:p" arg; do
+while getopts ":hvd:pt" arg; do
 #	echo "arg = $arg"
   case $arg in
    d) DEPTH=${OPTARG}
@@ -246,6 +260,8 @@ while getopts ":hvd:p" arg; do
    v|V) VERBOSE=1
       ;;
    p) SHOW_PROCESS_NAMES=1
+      ;;
+   t) SHOW_THREAD_NAMES=1
       ;;
    h) # Display help.
       usage
