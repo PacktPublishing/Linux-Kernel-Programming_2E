@@ -257,13 +257,10 @@ while getopts ":hvd:p" arg; do
       ;;
   esac
 done
+# arg debugging
 #echo "
 #Params: # = $# : $*
 #"
-if [[ $# -ge 1 ]] && [[ "$1" != "-v" ]] && [[ "$1" != "-d" ]] && [[ "$1" != "-h" ]] && [[ "$1" != "--help" ]] ; then
-   usage
-   exit 1
-fi
 #echo "verbose=${VERBOSE} depth=${DEPTH}"
 #exit 0
 
