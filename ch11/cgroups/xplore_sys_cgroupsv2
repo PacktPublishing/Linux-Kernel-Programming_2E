@@ -1,9 +1,17 @@
 #!/bin/bash
 # Explore a bit into the system's Cgroups v2 hierarchy
+# This script's written looking at the official kernel doc on Cgroups v2:
+# https://docs.kernel.org/admin-guide/cgroup-v2.html
+# Please refer to it!
 #
 # Part of the code for
 #  Linux Kernel Programming, 2 Ed, Kaiwan NB, Packt
 #  Ch 11, The CPU Scheduler - Part 2
+
+# Turn on unofficial Bash 'strict mode'! V useful
+# "Convert many kinds of hidden, intermittent, or subtle bugs into immediate, glaringly obvious errors"
+# ref: http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
 
 function die
 {
@@ -44,19 +52,24 @@ runcmd "cat ${CGROUP_MOUNT}/cgroup.controllers"
 title "All controllers being applied to immd children"
 runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
 
-title "Cgroups:"
-ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth 1 -type d|sort)
+title "Cgroups (v2) on this system"
+ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth 1 -type d) #|sort)
 i=0
 for cg in ${ALL_CGROUPS}
 do
-  # skip first one, the root cgroup
+  # Skip first one, the root cgroup
   [[ $i -eq 0 ]] && {
+    printf "/ \n"
     i=1
     continue
   }
-  printf "%-45s : " $cg
+  len=${#CGROUP_MOUNT}
+  let len=len+1  # also exclude trailing '/'
+  cg_name=${cg:${len}}
+  printf "  %-45s : " $cg_name
 
   # Is it populated?
+  # core interface file: cgroup.events
   pop=$(grep "populated" ${cg}/cgroup.events |awk '{print $2}')
   if [[ ${pop} -ne 0 ]] ; then
      echo "populated"
@@ -64,16 +77,40 @@ do
      echo "unpopulated"
      continue
   fi
+  # A CG can also be 'frozen' via this interface file (cgroup.events)
+  # Or by writing 1 to cgroup.freeze
 
   # Any controllers?
+  # core interface file: cgroup.subtree_control
+  # From https://docs.kernel.org/admin-guide/cgroup-v2.html
   # "Top-down Constraint
   # Resources are distributed top-down and a cgroup can further distribute a resource only if the resource has been distributed to it from the parent. This means that all non-root "cgroup.subtree_control" files can only contain controllers which are enabled in the parent's "cgroup.subtree_control" file. A controller can be enabled only if the parent has the controller enabled and a controller can't be disabled if one or more children have it enabled."
   ctrls=$(cat ${cg}/cgroup.subtree_control)
-  printf "  (Sub)Controllers: "
+  printf "    %-41s   : " "(Sub)Controllers"
   [[ ! -z "${ctrls}" ]] && echo "${ctrls}" || echo "-none-"
+  # "... A controller name prefixed with '+' enables the controller and '-' disables. ..."
+
+  # Show the type
+  printf "    %-41s   : %s\n" "cg type" $(cat ${cg}/cgroup.type)
+
+  # Show the process belonging to this cg
+  printf "    %-41s   : " "process PIDs"
+  procs="$(cat ${cg}/cgroup.procs)"
+  [[ ! -z "${procs}" ]] && echo "${procs}" || echo "-"
+
+  # Show the threads belonging to this cg
+  printf "    %-41s   : " "thread PIDs"
+  thrds="$(cat ${cg}/cgroup.threads)"
+  [[ ! -z "${thrds}" ]] && echo "${thrds}" || echo "-"
+
+  #--- CPU controller:
+  # "... WARNING: cgroup2 doesn't yet support control of realtime processes and the cpu controller can only be enabled when all RT processes are in the root cgroup. Be aware that system management software may already have placed RT processes into nonroot cgroups during the system boot process, and these processes may need to be moved to the root cgroup before the cpu controller can be enabled. ..."
+  printf "    %-41s\n" "CPU"
+  printf "      %-41s   : %s\n" "cpu.weight" $(cat ${cg}/cpu.weight)
+  printf "      %-41s   : %s\n" "cpu.weight.nice" $(cat ${cg}/cpu.weight.nice)
+  printf "      %-41s   : %s\n" "cpu.max" "$(cat ${cg}/cpu.max)"
 
 
-  #cat ${cg}/cgroup.events
   echo
   let i=i+1
 done
