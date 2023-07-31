@@ -89,7 +89,7 @@ core_cg_files_show()
   #local cgroup_pressure=$(cat ${cg}/cgroup.pressure 2>/dev/null)
   #[[ ! -z "${cgroup_pressure}" ]] && printf "    %-41s   : %s    [3]\n" "cgroup.pressure" ${cgroup_pressure}
   local irq_pressure=$(cat ${cg}/irq.pressure 2>/dev/null)
-  [[ ! -z "${irq_pressure}" ]] && printf "    %-41s   : %s    [3]\n" "irq.pressure" ${irq_pressure}
+  [[ ! -z "${irq_pressure}" ]] && printf "    %-41s   : %s    [3]\n" "irq.pressure" ${irq_pressure} || true
 }
 
 # Params:
@@ -104,6 +104,7 @@ cpu_ctrl_show()
     verbose_title "CPU" 4
     #printf "    %-41s\n" "CPU [verbose mode]          [4]"
     grep --color=always . ${cg}/cpu.* 2>/dev/null || true
+    SHOW_FOOTNOTE_4=1
  else
   # We first query all the interface files...
   local cpu_weight=$(cat ${cg}/cpu.weight 2>/dev/null)
@@ -216,27 +217,6 @@ declare -a FOOTNOTES_ARRAY=("${FOOTNOTE_1}" "${FOOTNOTE_2}" "${FOOTNOTE_3}" "${F
 MAX_FOOTNOTES=${#FOOTNOTES_ARRAY[@]}  #4 # keep updated!
 
 DEPTH=0
-
-[[ 0 -eq 1 ]] && {
-if [[ $# -ge 1 ]] ; then
-    # FIXME
-   [[ "{$1:0}" = "-" ]] && {  # first char is a '-'
-     if [[ "$1" != "-h" ]] && [[ "$1" != "--help" ]] ; then
-        usage ; exit 1
-     fi
-   }
-   [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]] && {
-     usage ; exit 0
-   }
-   [[ "$1" = "-v" ]] && VERBOSE=1
-   [[ $1 -le 0 ]] && {
-     usage ; exit 1
-   }
-   DEPTH=$1
-   #[[ "$1" = "-a" ]] && DEPTH=1000000
-fi
-}
-
 
 # Args processing
 while getopts ":hvd:" arg; do
