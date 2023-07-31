@@ -493,7 +493,11 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 ## Chapter 10, The CPU Scheduler, Part 1 - Further Reading
 
 - Detailed PDF: ['A complete guide to Linux process scheduling', Nikita Ishkov, Feb 2015](https://trepo.tuni.fi/bitstream/handle/10024/96864/GRADU-1428493916.pdf)
-- An excellent detailed code-level article on how very particularly the context switching code path switch_to() has evolved on the x86[_64] arch: ['Evolution of the x86 context switch in Linux', Maizure, Sept 2018](https://www.maizure.org/projects/evolution_x86_context_switch_linux/)
+
+- Scheduler tuning:
+    - A short and useful PDF doc: [Completely Fair Scheduler and its tuning, Jacek Kobus and Rafał Szklarski, 2009](http://fizyka.umk.pl/~jkob/_downloads/cfs-tuning.pdf)
+    - [Tuning the Task Scheduler, SuSe documentation](https://documentation.suse.com/sles/12-SP4/html/SLES-all/cha-tuning-taskscheduler.html)
+    - [A real-world, useful case: Reducing latency spikes by tuning the CPU scheduler, T Gabriec, June 2016, Scylla]( https://www.scylladb.com/2016/06/10/read-latency-and-scylla-jmx-process/)
 
 - perf:
    - [Linux perf examples, Brendan Gregg](http://www.brendangregg.com/perf.html)
@@ -502,8 +506,8 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
    - Tutorial: [Playing around with perf](https://www.bernardi.cloud/2012/08/07/playing-around-with-perf/)
    - [Memory Access Patterns Are Important](https://mechanical-sympathy.blogspot.com/2012/08/memoryaccess-patterns-are-important.html)
 
-- [Tuning the Task Scheduler, SuSe documentation](https://documentation.suse.com/sles/12-SP4/html/SLES-all/cha-tuning-taskscheduler.html)
-- [A real-world, useful case: Reducing latency spikes by tuning the CPU scheduler, T Gabriec, June 2016, Scylla]( https://www.scylladb.com/2016/06/10/read-latency-and-scylla-jmx-process/)
+- [Video tutorial: talk recorded for the Linux Foundation’s OSSNA (Open Source Summit, North America), June 2023: 'Leveraging the OS CPU Scheduler to Write Real-Time MT Apps', Kaiwan Billimoria, kaiwanTECH](https://www.youtube.com/watch?v=h9psonTquHU&t=63s)
+
 - [Linux kernel preemption and the latency-throughput tradeoff, Dec 2019](https://www.codeblueprint.co.uk/2019/12/23/linuxpreemption-latency-throughput.html)
 - An excellent detailed code-level article on how, specifically, the context switching switch_to() code path has evolved on the x86[_64] arch: [Evolution of the x86 context switch in Linux, Maizure, September 2018](https://www.maizure.org/projects/evolution_x86_context_switch_linux/)
 
@@ -517,10 +521,21 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
 
 - Control Groups (cgroups)
+    - Four-part series on cgroups and systemd, Red Hat, Steve Ovens
+         - [A Linux sysadmin's introduction to cgroups, Steve Ovens, Sept 2020](https://www.redhat.com/sysadmin/cgroups-part-one)
+        - [How to manage cgroups with CPUShares, Steve Ovens, Oct 2020](https://www.redhat.com/sysadmin/cgroups-part-two)
+        - [Managing cgroups the hard way-manually, Steve Ovens, Oct 2020](https://www.redhat.com/sysadmin/cgroups-part-three)
+        - [Managing cgroups with systemd, Steve Ovens, Oct 2020](https://www.redhat.com/sysadmin/cgroups-part-four)
+
+    - [The must-read: official Linux kernel doc: Control Group v2](https://docs.kernel.org/admin-guide/cgroup-v2.html)
+
+    - [Understanding cgroups, Grant, Nov 2018](https://www.grant.pizza/blog/understanding-cgroups/)
     - Good introductory article (focussed on cgroups1): ['Control Groups in Linux', Feb 2017](http://blog.brew.com.hk/control-groups-in-linux/)
     - ['Understanding the new control groups API', Rami Rosen, LWN, Mar 2016](https://lwn.net/Articles/679786/)
     - ['Control Group v2' : Linux kernel 'official' documentation](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html#control-group-v2)
     - man page (informational): ['cgroups - Linux control groups'](http://man7.org/linux/man-pages/man7/cgroups.7.html) (man 7 cgroups)
+
+    - [Managing resources with cgroups in systemd, David Both, Oct 2020](https://opensource.com/article/20/10/cgroups)
     - RedHat System Design Guide (RHEL 8); focus on cgroups v1: ['SETTING LIMITS FOR APPLICATIONS'](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/system_design_guide/setting-limits-for-applications_system-design-guide)
     - FB: Includes an interesting case study on how Facebook uses Linux's cgroups2 to perform equitable resource distribution on (some of) it's servers: ['Maximizing Resource Utilization with cgroup2'](https://facebookmicrosites.github.io/cgroup2/docs/overview.html)
         - ['Creating and organizing cgroups'](https://facebookmicrosites.github.io/cgroup2/docs/create-cgroups.html)
@@ -549,9 +564,28 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - [Linux Extended BPF (eBPF) Tracing Tools, Brendan Gregg](http://www.brendangregg.com/ebpf.html)
     - [BPF Compiler Collection (BPFCC) on GitHub](https://github.com/iovisor/bcc)
 
+- Three article series on the formal verification (plus analysis) on the Realtime Linux kernel, by Daniel Bristot de Oliveira, Red Hat
+    - [A thread model for the real-time Linux kernel, Oct 2020](https://research.redhat.com/blog/article/a-thread-model-for-the-real-time-linux-kernel/)
+    - [Efficient runtime verification for the Linux kernel, Feb 2021](https://research.redhat.com/blog/article/efficient-runtime-verification-for-the-linux-kernel/)
+    - [Demystifying real-time Linux scheduling latency, May 2021](https://research.redhat.com/blog/article/demystifying-real-time-linux-scheduling-latency/)
+    - [Related: Video of Oliveira's presentation at the EOSS, June 2023: rtla timerlat: Debugging Real-time Linux Scheduling Latency - Daniel Bristot de Oliveira, Red Hat](https://www.youtube.com/watch?v=oLTRVcJ7_as)
+
 - The still amazing and very relevant book on software engineering: *'The Mythical Man Month: Essays on Software Engineering'*, Frederick P Brooks, 1975, 1995
     - [On Amazon (Anniversary Edition)](https://www.amazon.com/Mythical-Man-Month-Anniversary-Software-Engineering-ebook/dp/B00B8USS14/ref=sr_1_1?crid=3R2CNHTX5LYIC&keywords=mythical+man+month&qid=1562226712&s=digital-text&sprefix=mythical+%2Cdigital-text%2C376&sr=1-1)
     - [Quotes](https://en.wikiquote.org/wiki/Fred_Brooks)
+
+- New(er) articles on LWN regarding scheduling-related topics:
+    - [Fixing a corner case in asymmetric CPU packing (January 7, 2022)](https://lwn.net/Articles/880367/)
+    - [Hybrid scheduling gets more complicated (September 30, 2022)](https://lwn.net/Articles/909611/)
+    - [Core scheduling lands in 5.14 (July 1, 2021)](https://lwn.net/Articles/861251/)
+    - [Improved response times with latency nice (March 17, 2022)](https://lwn.net/Articles/887842/)
+    - [Evaluating vendor changes to the scheduler (May 19, 2020)](https://lwn.net/Articles/820825/)
+    - [Removing the scheduler's energy-margin heuristic (July 1, 2022)](https://lwn.net/Articles/899303/)
+
+    - Cgroups
+        - [The burstable CFS bandwidth controller (February 8, 2021)](https://lwn.net/Articles/844976/)
+        - [A "kill" button for control groups (May 3, 2021)](https://lwn.net/Articles/855049/)
+        - [Cleaning up dying control groups, 2022 edition (May 19, 2022)](https://lwn.net/Articles/895431/)
 
 <br>
 
