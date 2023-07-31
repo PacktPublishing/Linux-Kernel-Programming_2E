@@ -10,8 +10,9 @@
 # (c) Kaiwan N Billimoria
 #
 # TODO
+#  [ ] Controller interface files - display
 #  [ ] color
-#
+
 # Turn on unofficial Bash 'strict mode'! V useful
 # "Convert many kinds of hidden, intermittent, or subtle bugs into immediate, glaringly obvious errors"
 # ref: http://redsymbol.net/articles/unofficial-bash-strict-mode/
@@ -42,30 +43,19 @@ $*
 ${LINE}"
 }
 
+# Params
+#  $1 : title
+#  $2 : footnote #
+verbose_title()
+{
+ printf ">---------------------- %s [verbose mode]    [%s] -----\n" "$1" "$2"
+}
+
 # Params:
 #  $1 : path to cg
-show_cg_dtl()
+core_cg_files_show()
 {
-  local cg=$1
-
-  printf "  %-45s : " $cg
-
   #--- Core interface files
-  # Is it populated?
-  # core interface file: cgroup.events
-  local pop=$(grep "populated" ${cg}/cgroup.events |awk '{print $2}')
-  if [[ ${pop} -ne 0 ]] ; then
-     echo "populated"
-  else
-     echo "unpopulated"
-     set +e
-     return -1
-  fi
-
-  set -e
-  # A CG can also be 'frozen' via this interface file (cgroup.events)
-  # Or by writing 1 to cgroup.freeze
-
   # Any sub-controllers?
   # core interface file: cgroup.subtree_control
   # From https://docs.kernel.org/admin-guide/cgroup-v2.html
@@ -73,11 +63,17 @@ show_cg_dtl()
   # Resources are distributed top-down and a cgroup can further distribute a resource only if the resource has been distributed to it from the parent. This means that all non-root "cgroup.subtree_control" files can only contain controllers which are enabled in the parent's "cgroup.subtree_control" file. A controller can be enabled only if the parent has the controller enabled and a controller can't be disabled if one or more children have it enabled."
   ctrls=$(cat ${cg}/cgroup.subtree_control)
   printf "    %-41s   : " "(Sub)Controllers"
-  [[ ! -z "${ctrls}" ]] && echo "${ctrls}" || echo "-none-"
+  [[ ! -z "${ctrls}" ]] && echo "${ctrls}" || {
+    echo "-none-    [1]"
+    SHOW_FOOTNOTE_1=1
+  }
   # "... A controller name prefixed with '+' enables the controller and '-' disables. ..."
 
   # Show the type
   printf "    %-41s   : %s\n" "cg type" $(cat ${cg}/cgroup.type)
+  # Show frozen..
+  printf "    %-41s   : %s    [2]\n" "cg frozen?" $(cat ${cg}/cgroup.freeze)
+  #SHOW_FOOTNOTE_2=1
 
   # Show the process belonging to this cg
   printf "    %-41s   : " "process PIDs"
@@ -89,18 +85,92 @@ show_cg_dtl()
   thrds="$(cat ${cg}/cgroup.threads | tr '\n' ' ')"
   [[ ! -z "${thrds}" ]] && echo "${thrds}" || echo "-"
 
-  #--- CPU controller
-  # "... WARNING: cgroup2 doesn't yet support control of realtime processes and the cpu controller can only be enabled when all RT processes are in the root cgroup. Be aware that system management software may already have placed RT processes into nonroot cgroups during the system boot process, and these processes may need to be moved to the root cgroup before the cpu controller can be enabled. ..."
-  local cpu_weight=$(cat ${cg}/cpu.weight 2>/dev/null)
-  [[ ! -z "${cpu_weight}" ]] && {
-    printf "    %-41s\n" "CPU"
-    printf "      %-41s   : %s\n" "cpu.weight" ${cpu_weight}
-  }
-  local cpu_weight_nice=$(cat ${cg}/cpu.weight.nice 2>/dev/null)
-  [[ ! -z "${cpu_weight_nice}" ]] && printf "      %-41s   : %s\n" "cpu.weight.nice" ${cpu_weight_nice}
-  local cpu_max=$(cat ${cg}/cpu.max 2>/dev/null)
-  [[ ! -z "${cpu_max}" ]] && printf "      %-41s   : %s\n" "cpu.max" ${cpu_max}
+  # cgroup + irq pressure 
+  #local cgroup_pressure=$(cat ${cg}/cgroup.pressure 2>/dev/null)
+  #[[ ! -z "${cgroup_pressure}" ]] && printf "    %-41s   : %s    [3]\n" "cgroup.pressure" ${cgroup_pressure}
+  local irq_pressure=$(cat ${cg}/irq.pressure 2>/dev/null)
+  [[ ! -z "${irq_pressure}" ]] && printf "    %-41s   : %s    [3]\n" "irq.pressure" ${irq_pressure}
+}
 
+# Params:
+#  $1 : path to cg
+cpu_ctrl_show()
+{
+  #--- CPU controller
+  # https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu
+  # "... WARNING: cgroup2 doesn't yet support control of realtime processes and the cpu controller can only be enabled when all RT processes are in the root cgroup. Be aware that system management software may already have placed RT processes into nonroot cgroups during the system boot process, and these processes may need to be moved to the root cgroup before the cpu controller can be enabled. ..."
+  
+ if [[ ${VERBOSE} -eq 1 ]] ; then
+    verbose_title "CPU" 4
+    #printf "    %-41s\n" "CPU [verbose mode]          [4]"
+    grep --color=always . ${cg}/cpu.* 2>/dev/null || true
+ else
+  # We first query all the interface files...
+  local cpu_weight=$(cat ${cg}/cpu.weight 2>/dev/null)
+  local cpu_weight_nice=$(cat ${cg}/cpu.weight.nice 2>/dev/null)
+  local cpu_max=$(cat ${cg}/cpu.max 2>/dev/null)
+  local cpu_pressure=$(cat ${cg}/cpu.pressure 2>/dev/null)
+  # then decide - if any's non-null - to print the 'CPU' title ...
+  [[ ! -z "${cpu_weight}" ]] || [[ ! -z "${cpu_weight_nice}" ]] || \
+   [[ ! -z "${cpu_max}" ]] || [[ ! -z "${cpu_pressure}" ]] && {
+    printf "    %-41s\n" "CPU           [4]"
+    SHOW_FOOTNOTE_4=1
+  }
+  [[ ! -z "${cpu_weight}" ]] && printf "      %-41s   : %s\n" "cpu.weight" "${cpu_weight}"
+  [[ ! -z "${cpu_weight_nice}" ]] && printf "      %-41s   : %s\n" "cpu.weight.nice" "${cpu_weight_nice}"
+  [[ ! -z "${cpu_max}" ]] && printf "      %-41s   : %s\n" "cpu.max" "${cpu_max}"
+  [[ ! -z "${cpu_pressure}" ]] && printf "      %-39s   : %s\n" "cpu.pressure" "${cpu_pressure}"
+ fi
+}
+
+# Params:
+#  $1 : path to cg
+mem_ctrl_show()
+{
+  #--- Memory controller
+  # https://docs.kernel.org/admin-guide/cgroup-v2.html#memory
+  local cg=$1
+
+  SHOW_FOOTNOTE_5=1
+
+  if [[ ${VERBOSE} -eq 1 ]] ; then
+     verbose_title "MEMORY" 5
+     #printf "    %-41s\n" "MEMORY [verbose mode]          [5]"
+     grep --color=always . ${cg}/memory.* 2>/dev/null || true
+  else
+    printf "    %-41s\n" "MEMORY           [5]"
+  fi
+}
+
+# https://docs.kernel.org/admin-guide/cgroup-v2.html#core-interface-files
+# Params:
+#  $1 : path to cg
+show_cg_dtl()
+{
+  local cg=$1
+
+  printf "  %-45s : " $cg
+
+  #--- Core interface files: cgroup.events
+  # Is it populated?
+  # core interface file: cgroup.events
+  local pop=$(grep "populated" ${cg}/cgroup.events |awk '{print $2}')
+  if [[ ${pop} -ne 0 ]] ; then
+     echo "populated"
+  else
+     echo "unpopulated"
+     set +e
+     return -1
+  fi
+  # A CG can also be 'frozen' via this interface file (cgroup.events)
+  # Or by writing 1 to cgroup.freeze
+
+  core_cg_files_show ${cg}
+  cpu_ctrl_show ${cg}
+  mem_ctrl_show ${cg}
+
+
+  # Descendant cgroups?
   printf "    %-41s   : %s\n" "cg stat" "$(cat ${cg}/cgroup.stat | tr '\n' ' ')"
 
   return 0
@@ -108,36 +178,93 @@ show_cg_dtl()
 
 usage()
 {
- echo "Usage: ${name} maxdepth
-maxdepth is a positive integer that affects the depth to which the Cgroups v2 hierarchy
+ echo "Usage: ${name} [-v] [-d depth]
+-v : optional: run in verbose mode
+      Note! It's _very_ verbose, showing verbatim the content of all interface files for
+            the various controllers. On the plus side, it's nice colorful output! (provided
+	    your terminal supports it).
+      Off by default.
+
+-d depth : optional: a positive integer that affects the depth to which the Cgroups v2 hierarchy
 is shown.
  1       => show only a very top-level overview of the hierarchy
- 2,3,... => show to 2,3,... level(s) of the cgroup v2 hierarchy, whatever's specified
- -a      => show ALL levels of the cgroup v2 hierarchy [default]
+ 2,3,... => show to 2,3,... level(s) of the cgroup v2 hierarchy, whatever's specified.
 
  Practically speaking, most distros (i tested on Ubuntu/Fedora) will max out at 6 or 7
  levels of depth. (On mainstream distros, systemd typically sets up the Cgroup v2 hierarchy
  at boot).
- "
+ Default : shows _all_ levels of the system's Cgroups v2 hierarchy."
 }
 
 
 #--- 'main'
 CGROUP_MOUNT=/sys/fs/cgroup
+VERBOSE=0
 
-#if [[ $# -ne 1 ]]; then
-#   usage
-#   exit 1
-#fi
-MAXDEPTH=1000000
+# Footnotes
+
+SHOW_FOOTNOTE_1=0
+FOOTNOTE_1="[1] No sub-controllers in a cgroup implies no controllers are enabled; in effect, no cgroup constraints apply to it"
+SHOW_FOOTNOTE_2=1
+FOOTNOTE_2="[2] See cgroup.freeze (and cgroup.events) under https://docs.kernel.org/admin-guide/cgroup-v2.html#core-interface-files"
+SHOW_FOOTNOTE_3=1
+FOOTNOTE_3="[3] See cgroup.pressure, irq.pressure under https://docs.kernel.org/admin-guide/cgroup-v2.html#core-interface-files ; plus https://docs.kernel.org/accounting/psi.html#psi"
+SHOW_FOOTNOTE_4=0
+FOOTNOTE_4="[4] See https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files"
+
+declare -a FOOTNOTES_ARRAY=("${FOOTNOTE_1}" "${FOOTNOTE_2}" "${FOOTNOTE_3}" "${FOOTNOTE_4}")
+MAX_FOOTNOTES=${#FOOTNOTES_ARRAY[@]}  #4 # keep updated!
+
+DEPTH=0
+
+[[ 0 -eq 1 ]] && {
 if [[ $# -ge 1 ]] ; then
+    # FIXME
+   [[ "{$1:0}" = "-" ]] && {  # first char is a '-'
+     if [[ "$1" != "-h" ]] && [[ "$1" != "--help" ]] ; then
+        usage ; exit 1
+     fi
+   }
+   [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]] && {
+     usage ; exit 0
+   }
+   [[ "$1" = "-v" ]] && VERBOSE=1
    [[ $1 -le 0 ]] && {
+     usage ; exit 1
+   }
+   DEPTH=$1
+   #[[ "$1" = "-a" ]] && DEPTH=1000000
+fi
+}
+
+
+# Args processing
+while getopts ":hvd:" arg; do
+#	echo "arg = $arg"
+  case $arg in
+   d) DEPTH=${OPTARG}
+      ;;
+   v|V) VERBOSE=1
+      ;;
+   h) # Display help.
+      usage
+      exit 0
+      ;;
+    *) # Anything else, display help.
+      usage
+      exit 1
+      ;;
+  esac
+done
+#echo "
+#Params: # = $# : $*
+#"
+if [[ $# -ge 1 ]] && [[ "$1" != "-v" ]] && [[ "$1" != "-d" ]] && [[ "$1" != "-h" ]] && [[ "$1" != "--help" ]] ; then
    usage
    exit 1
-  }
-  MAXDEPTH=$1
-  [[ "$1" = "-a" ]] && MAXDEPTH=1000000
 fi
+#echo "verbose=${VERBOSE} depth=${DEPTH}"
+#exit 0
 
 title "All cgroupv2 files"
 runcmd "ls ${CGROUP_MOUNT}"
@@ -150,9 +277,14 @@ runcmd "cat ${CGROUP_MOUNT}/cgroup.controllers"
 title "All controllers being applied to immd children"
 runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
 
-title "Cgroups (v2) on this system"
+title "Cgroups (v2) on this system [verbose mode: ${VERBOSE}]"
 
-ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth ${MAXDEPTH} -type d) #|sort)
+if [[ ${DEPTH} -ne 0 ]] ; then
+   ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth ${DEPTH} -type d) #|sort)
+else
+   ALL_CGROUPS=$(find ${CGROUP_MOUNT} -type d) #|sort)
+fi
+
 i=0
 IFS=$'\n'
 for cg in ${ALL_CGROUPS}
@@ -165,10 +297,26 @@ do
   }
 
   show_cg_dtl "${cg}"
-  [[ $? -eq 0 ]] && echo
+  [[ $? -eq 0 ]] && {
+    echo
+    set -e
+  }
 
   let i=i+1
 done
+
+echo
+for fn in $(seq 1 ${MAX_FOOTNOTES})
+do
+  v1=SHOW_FOOTNOTE_${fn}
+  # indirect var usage!
+  [[ ${!v1} -eq 1 ]] && {
+    v2=FOOTNOTE_${fn}
+    echo "${!v2}"
+  }
+done
+
+[[ ${DEPTH} -eq 0 ]] && DEPTH="-unlimited-"
 echo "
-Parsed $i Cgroups (v2)"
+Parsed $i Cgroups (v2; with max depth set to ${DEPTH})"
 exit 0
