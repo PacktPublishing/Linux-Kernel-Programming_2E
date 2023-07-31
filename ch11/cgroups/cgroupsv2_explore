@@ -87,8 +87,9 @@ core_cg_files_show()
   printf "    %-41s   : %s    [2]\n" "cg frozen?" $(cat ${cg}/cgroup.freeze)
 
   # Show the process belonging to this cg
-  printf "    %-41s   : " "Process PIDs"
   local procs="$(cat ${cg}/cgroup.procs | tr '\n' ' ')"
+  local num_procs=$(echo "${procs}" | wc -w)
+  printf "    %-41s   : (%4d) : " "Process PIDs" ${num_procs}
   [[ ! -z "${procs}" ]] && echo "${procs}" || echo "-"
 
   # Show process name(s)
@@ -100,8 +101,9 @@ core_cg_files_show()
   }
 
   # Show the threads belonging to this cg
-  printf "    %-41s   : " "Thread PIDs"
   local thrds="$(cat ${cg}/cgroup.threads | tr '\n' ' ')"
+  local num_thrds=$(echo "${thrds}" | wc -w)
+  printf "    %-41s   : (%4d) : " "Thread PIDs" ${num_thrds}
   [[ ! -z "${thrds}" ]] && echo "${thrds}" || echo "-"
   # Show thread name(s)
   [[ ${SHOW_THREAD_NAMES} -eq 1 ]] && [[ ! -z "${thrds}" ]] && {
@@ -258,6 +260,7 @@ while getopts ":hvd:pt" arg; do
 #	echo "arg = $arg"
   case $arg in
    d) DEPTH=${OPTARG}
+	#echo "arg = $arg; OPTARG=$OPTARG"
       ;;
    v|V) VERBOSE=1
       ;;
