@@ -37,50 +37,31 @@ $*
 ${LINE}"
 }
 
+# Params:
+#  $1 : path to cg
+show_cg_dtl()
+{
+  local cg=$1
 
-#--- 'main'
-CGROUP_MOUNT=/sys/fs/cgroup
+  printf "  %-45s : " $cg
 
-title "All cgroupv2 files"
-runcmd "ls ${CGROUP_MOUNT}"
-
-title "All currently defined cgroups (includes /)"
-runcmd "find ${CGROUP_MOUNT} -maxdepth 1 -type d|sort"
-
-title "All cgroup controllers (enabled within kernel)"
-runcmd "cat ${CGROUP_MOUNT}/cgroup.controllers"
-title "All controllers being applied to immd children"
-runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
-
-title "Cgroups (v2) on this system"
-ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth 1 -type d) #|sort)
-i=0
-for cg in ${ALL_CGROUPS}
-do
-  # Skip first one, the root cgroup
-  [[ $i -eq 0 ]] && {
-    printf "/ \n"
-    i=1
-    continue
-  }
-  len=${#CGROUP_MOUNT}
-  let len=len+1  # also exclude trailing '/'
-  cg_name=${cg:${len}}
-  printf "  %-45s : " $cg_name
-
+  #--- Core interface files
   # Is it populated?
   # core interface file: cgroup.events
-  pop=$(grep "populated" ${cg}/cgroup.events |awk '{print $2}')
+  local pop=$(grep "populated" ${cg}/cgroup.events |awk '{print $2}')
   if [[ ${pop} -ne 0 ]] ; then
      echo "populated"
   else
      echo "unpopulated"
-     continue
+     set +e
+     return -1
   fi
+
+  set -e
   # A CG can also be 'frozen' via this interface file (cgroup.events)
   # Or by writing 1 to cgroup.freeze
 
-  # Any controllers?
+  # Any sub-controllers?
   # core interface file: cgroup.subtree_control
   # From https://docs.kernel.org/admin-guide/cgroup-v2.html
   # "Top-down Constraint
@@ -95,23 +76,35 @@ do
 
   # Show the process belonging to this cg
   printf "    %-41s   : " "process PIDs"
-  procs="$(cat ${cg}/cgroup.procs)"
+  procs="$(cat ${cg}/cgroup.procs | tr '\n' ' ')"
   [[ ! -z "${procs}" ]] && echo "${procs}" || echo "-"
 
   # Show the threads belonging to this cg
   printf "    %-41s   : " "thread PIDs"
-  thrds="$(cat ${cg}/cgroup.threads)"
+  thrds="$(cat ${cg}/cgroup.threads | tr '\n' ' ')"
   [[ ! -z "${thrds}" ]] && echo "${thrds}" || echo "-"
 
-  #--- CPU controller:
+  #--- CPU controller
   # "... WARNING: cgroup2 doesn't yet support control of realtime processes and the cpu controller can only be enabled when all RT processes are in the root cgroup. Be aware that system management software may already have placed RT processes into nonroot cgroups during the system boot process, and these processes may need to be moved to the root cgroup before the cpu controller can be enabled. ..."
-  printf "    %-41s\n" "CPU"
-  printf "      %-41s   : %s\n" "cpu.weight" $(cat ${cg}/cpu.weight)
-  printf "      %-41s   : %s\n" "cpu.weight.nice" $(cat ${cg}/cpu.weight.nice)
-  printf "      %-41s   : %s\n" "cpu.max" "$(cat ${cg}/cpu.max)"
+  local cpu_weight=$(cat ${cg}/cpu.weight 2>/dev/null)
+  [[ ! -z "${cpu_weight}" ]] && {
+    printf "    %-41s\n" "CPU"
+    printf "      %-41s   : %s\n" "cpu.weight" ${cpu_weight}
+  }
+  local cpu_weight_nice=$(cat ${cg}/cpu.weight.nice 2>/dev/null)
+  [[ ! -z "${cpu_weight_nice}" ]] && printf "      %-41s   : %s\n" "cpu.weight.nice" ${cpu_weight_nice}
+  local cpu_max=$(cat ${cg}/cpu.max 2>/dev/null)
+  [[ ! -z "${cpu_max}" ]] && printf "      %-41s   : %s\n" "cpu.max" ${cpu_max}
+
+  printf "    %-41s   : %s\n" "cg stat" "$(cat ${cg}/cgroup.stat | tr '\n' ' ')"
+
+  return 0
+}
 
 
   echo
+  show_cg_dtl "${cg}"
+  [[ $? -eq 0 ]] && echo
   let i=i+1
 done
 
