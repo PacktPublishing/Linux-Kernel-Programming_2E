@@ -11,7 +11,7 @@
 #
 # TODO
 #  [ ] Controller interface files - display
-#  [ ] color
+#  [ ] color / bold
 
 # Turn on unofficial Bash 'strict mode'! V useful
 # "Convert many kinds of hidden, intermittent, or subtle bugs into immediate, glaringly obvious errors"
@@ -51,6 +51,18 @@ verbose_title()
  printf ">---------------------- %s [verbose mode]    [%s] -----\n" "$1" "$2"
 }
 
+# Params
+#  $1 : path to cg
+#  $2 : controller
+#  $3 : footnote #
+verbose_display_cgctrl()
+{
+    verbose_title ${2^^} $3  # ${var^^} converts all to uppercase
+    grep --color=always . ${1}/$2.* 2>/dev/null || true
+    local ivar=SHOW_FOOTNOTE_$3
+    eval ${ivar}=1
+}
+
 # Params:
 #  $1 : path to cg
 core_cg_files_show()
@@ -61,7 +73,7 @@ core_cg_files_show()
   # From https://docs.kernel.org/admin-guide/cgroup-v2.html
   # "Top-down Constraint
   # Resources are distributed top-down and a cgroup can further distribute a resource only if the resource has been distributed to it from the parent. This means that all non-root "cgroup.subtree_control" files can only contain controllers which are enabled in the parent's "cgroup.subtree_control" file. A controller can be enabled only if the parent has the controller enabled and a controller can't be disabled if one or more children have it enabled."
-  ctrls=$(cat ${cg}/cgroup.subtree_control)
+  local ctrls=$(cat ${cg}/cgroup.subtree_control)
   printf "    %-41s   : " "(Sub)Controllers"
   [[ ! -z "${ctrls}" ]] && echo "${ctrls}" || {
     echo "-none-    [1]"
@@ -73,16 +85,23 @@ core_cg_files_show()
   printf "    %-41s   : %s\n" "cg type" $(cat ${cg}/cgroup.type)
   # Show frozen..
   printf "    %-41s   : %s    [2]\n" "cg frozen?" $(cat ${cg}/cgroup.freeze)
-  #SHOW_FOOTNOTE_2=1
 
   # Show the process belonging to this cg
   printf "    %-41s   : " "process PIDs"
-  procs="$(cat ${cg}/cgroup.procs | tr '\n' ' ')"
+  local procs="$(cat ${cg}/cgroup.procs | tr '\n' ' ')"
   [[ ! -z "${procs}" ]] && echo "${procs}" || echo "-"
+
+  # Show process name(s)
+  [[ ${SHOW_PROCESS_NAMES} -eq 1 ]] && [[ ! -z "${procs}" ]] && {
+    procs=${procs::-1} # get rid of trailing space char
+    #echo "procs=$procs"
+    # ps -fp <...> : show list of PIDs
+    ps -fp "${procs}" 2>/dev/null || true
+  }
 
   # Show the threads belonging to this cg
   printf "    %-41s   : " "thread PIDs"
-  thrds="$(cat ${cg}/cgroup.threads | tr '\n' ' ')"
+  local thrds="$(cat ${cg}/cgroup.threads | tr '\n' ' ')"
   [[ ! -z "${thrds}" ]] && echo "${thrds}" || echo "-"
 
   # cgroup + irq pressure 
@@ -101,10 +120,7 @@ cpu_ctrl_show()
   # "... WARNING: cgroup2 doesn't yet support control of realtime processes and the cpu controller can only be enabled when all RT processes are in the root cgroup. Be aware that system management software may already have placed RT processes into nonroot cgroups during the system boot process, and these processes may need to be moved to the root cgroup before the cpu controller can be enabled. ..."
   
  if [[ ${VERBOSE} -eq 1 ]] ; then
-    verbose_title "CPU" 4
-    #printf "    %-41s\n" "CPU [verbose mode]          [4]"
-    grep --color=always . ${cg}/cpu.* 2>/dev/null || true
-    SHOW_FOOTNOTE_4=1
+    verbose_display_cgctrl ${cg} cpu 4
  else
   # We first query all the interface files...
   local cpu_weight=$(cat ${cg}/cpu.weight 2>/dev/null)
@@ -132,12 +148,8 @@ mem_ctrl_show()
   # https://docs.kernel.org/admin-guide/cgroup-v2.html#memory
   local cg=$1
 
-  SHOW_FOOTNOTE_5=1
-
   if [[ ${VERBOSE} -eq 1 ]] ; then
-     verbose_title "MEMORY" 5
-     #printf "    %-41s\n" "MEMORY [verbose mode]          [5]"
-     grep --color=always . ${cg}/memory.* 2>/dev/null || true
+    verbose_display_cgctrl ${cg} memory 5
   else
     printf "    %-41s\n" "MEMORY           [5]"
   fi
@@ -180,13 +192,14 @@ show_cg_dtl()
 usage()
 {
  echo "Usage: ${name} [-v] [-d depth]
--v : optional: run in verbose mode
+All parameters are optional.
+-v : run in verbose mode
       Note! It's _very_ verbose, showing verbatim the content of all interface files for
             the various controllers. On the plus side, it's nice colorful output! (provided
 	    your terminal supports it).
       Off by default.
 
--d depth : optional: a positive integer that affects the depth to which the Cgroups v2 hierarchy
+-d depth : a positive integer that affects the depth to which the Cgroups v2 hierarchy
 is shown.
  1       => show only a very top-level overview of the hierarchy
  2,3,... => show to 2,3,... level(s) of the cgroup v2 hierarchy, whatever's specified.
@@ -194,7 +207,10 @@ is shown.
  Practically speaking, most distros (i tested on Ubuntu/Fedora) will max out at 6 or 7
  levels of depth. (On mainstream distros, systemd typically sets up the Cgroup v2 hierarchy
  at boot).
- Default : shows _all_ levels of the system's Cgroups v2 hierarchy."
+ Default : shows _all_ levels of the system's Cgroups v2 hierarchy.
+
+-p : show the name(s) of the processes belonging to the cgroup
+     Note that this option can increase processing time."
 }
 
 
@@ -217,14 +233,19 @@ declare -a FOOTNOTES_ARRAY=("${FOOTNOTE_1}" "${FOOTNOTE_2}" "${FOOTNOTE_3}" "${F
 MAX_FOOTNOTES=${#FOOTNOTES_ARRAY[@]}  #4 # keep updated!
 
 DEPTH=0
+SHOW_PROCESS_NAMES=0
 
 # Args processing
-while getopts ":hvd:" arg; do
+OPTARG=""
+# if the arg requires a param following it (like, -d 2), put a ':' after the arg letter!
+while getopts ":hvd:p" arg; do
 #	echo "arg = $arg"
   case $arg in
    d) DEPTH=${OPTARG}
       ;;
    v|V) VERBOSE=1
+      ;;
+   p) SHOW_PROCESS_NAMES=1
       ;;
    h) # Display help.
       usage
@@ -260,9 +281,11 @@ runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
 title "Cgroups (v2) on this system [verbose mode: ${VERBOSE}]"
 
 if [[ ${DEPTH} -ne 0 ]] ; then
-   ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth ${DEPTH} -type d) #|sort)
+   ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth ${DEPTH} -type d|sort)
+   #ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth ${DEPTH} -type d)
 else
-   ALL_CGROUPS=$(find ${CGROUP_MOUNT} -type d) #|sort)
+   ALL_CGROUPS=$(find ${CGROUP_MOUNT} -type d|sort)
+   #ALL_CGROUPS=$(find ${CGROUP_MOUNT} -type d)
 fi
 
 i=0
