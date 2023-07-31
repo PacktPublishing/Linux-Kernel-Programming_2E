@@ -7,12 +7,17 @@
 # Part of the code for
 #  Linux Kernel Programming, 2 Ed, Kaiwan NB, Packt
 #  Ch 11, The CPU Scheduler - Part 2
-
+# (c) Kaiwan N Billimoria
+#
+# TODO
+#  [ ] color
+#
 # Turn on unofficial Bash 'strict mode'! V useful
 # "Convert many kinds of hidden, intermittent, or subtle bugs into immediate, glaringly obvious errors"
 # ref: http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 
+name=$(basename $0)
 function die
 {
 echo >&2 "$@"
@@ -101,11 +106,69 @@ show_cg_dtl()
   return 0
 }
 
+usage()
+{
+ echo "Usage: ${name} maxdepth
+maxdepth is a positive integer that affects the depth to which the Cgroups v2 hierarchy
+is shown.
+ 1       => show only a very top-level overview of the hierarchy
+ 2,3,... => show to 2,3,... level(s) of the cgroup v2 hierarchy, whatever's specified
+ -a      => show ALL levels of the cgroup v2 hierarchy [default]
 
-  echo
+ Practically speaking, most distros (i tested on Ubuntu/Fedora) will max out at 6 or 7
+ levels of depth. (On mainstream distros, systemd typically sets up the Cgroup v2 hierarchy
+ at boot).
+ "
+}
+
+
+#--- 'main'
+CGROUP_MOUNT=/sys/fs/cgroup
+
+#if [[ $# -ne 1 ]]; then
+#   usage
+#   exit 1
+#fi
+MAXDEPTH=1000000
+if [[ $# -ge 1 ]] ; then
+   [[ $1 -le 0 ]] && {
+   usage
+   exit 1
+  }
+  MAXDEPTH=$1
+  [[ "$1" = "-a" ]] && MAXDEPTH=1000000
+fi
+
+title "All cgroupv2 files"
+runcmd "ls ${CGROUP_MOUNT}"
+
+title "All currently defined cgroups (includes /)"
+runcmd "find ${CGROUP_MOUNT} -maxdepth 1 -type d|sort"
+
+title "All cgroup controllers (enabled within kernel)"
+runcmd "cat ${CGROUP_MOUNT}/cgroup.controllers"
+title "All controllers being applied to immd children"
+runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
+
+title "Cgroups (v2) on this system"
+
+ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth ${MAXDEPTH} -type d) #|sort)
+i=0
+IFS=$'\n'
+for cg in ${ALL_CGROUPS}
+do
+  # Skip first one, the root cgroup
+  [[ $i -eq 0 ]] && {
+    printf "/ \n"
+    i=1
+    continue
+  }
+
   show_cg_dtl "${cg}"
   [[ $? -eq 0 ]] && echo
+
   let i=i+1
 done
-
+echo "
+Parsed $i Cgroups (v2)"
 exit 0
