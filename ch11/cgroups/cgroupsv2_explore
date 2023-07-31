@@ -202,28 +202,30 @@ show_cg_dtl()
 
 usage()
 {
- echo "Usage: ${name} [-v] [-d depth]
-All parameters are optional.
+ echo "Usage: ${name} [-v -p -t] [-d depth]
+All parameters are optional, and can be used in any combination.
+
 -v : run in verbose mode
       Note! It's _very_ verbose, showing verbatim the content of all interface files for
             the various controllers. On the plus side, it's nice colorful output! (provided
 	    your terminal supports it).
       Off by default.
 
+-p : show the name(s) of the processes belonging to the cgroup
+     Note that this option can increase processing time.
+-t : show the name(s) of the *threads* belonging to the cgroup
+     Note that this option can increase processing time.
+
 -d depth : a positive integer that affects the depth to which the Cgroups v2 hierarchy
-is shown.
+is shown. The 'depth' value can be:
  1       => show only a very top-level overview of the hierarchy
  2,3,... => show to 2,3,... level(s) of the cgroup v2 hierarchy, whatever's specified.
+ NOTE: do leave a space after the -d (f.e., -d 2 is fine, NOT -d2)
 
  Practically speaking, most distros (i tested on Ubuntu/Fedora) will max out at 6 or 7
  levels of depth. (On mainstream distros, systemd typically sets up the Cgroup v2 hierarchy
  at boot).
- Default : shows _all_ levels of the system's Cgroups v2 hierarchy.
-
--p : show the name(s) of the processes belonging to the cgroup
-     Note that this option can increase processing time.
--t : show the name(s) of the *threads* belonging to the cgroup
-     Note that this option can increase processing time."
+ Default : shows _all_ levels of the system's Cgroups v2 hierarchy."
 }
 
 
