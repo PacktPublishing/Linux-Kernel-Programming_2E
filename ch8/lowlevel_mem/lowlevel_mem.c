@@ -154,7 +154,7 @@ static void __exit lowlevel_mem_exit(void)
 	/* Free 'em! We follow the convention of freeing them in the reverse
 	 * order from which they were allocated
 	 */
-	free_pages((unsigned long)gptr5, 3);
+	free_pages((unsigned long)gptr5, 5);
 	free_page((unsigned long)gptr4);
 	free_page((unsigned long)gptr3);
 	free_pages((unsigned long)gptr2, bsa_alloc_order);
