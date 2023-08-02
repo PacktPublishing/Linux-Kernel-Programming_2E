@@ -161,6 +161,7 @@ mem_ctrl_show()
     verbose_display_cgctrl ${cg} memory 5
   else
     printf "    %-41s\n" "MEMORY           [5]"
+    SHOW_FOOTNOTE_5=1
   fi
 }
 
@@ -219,6 +220,12 @@ runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
 usage()
 {
  echo "Usage: ${name} [-v -p -t] [-d depth] [CGROUP]
+This script recursively shows the cgroups metadata from the specified
+CGROUP (the last parameter), down through it's hierarchy (tree).
+If no particular CGROUP's specified, it shows the entire system CGROUP
+hierarchy (typically the content of /sys/fs/cgroup). It assumes we're
+running on a Cgroups v2 supported system.
+
 All parameters are optional, and can be used in any combination (except
 for CGROUP; it must be the last one).
 
@@ -266,10 +273,16 @@ FOOTNOTE_2="[2] See cgroup.freeze (and cgroup.events) under https://docs.kernel.
 SHOW_FOOTNOTE_3=1
 FOOTNOTE_3="[3] See cgroup.pressure, irq.pressure under https://docs.kernel.org/admin-guide/cgroup-v2.html#core-interface-files ; plus https://docs.kernel.org/accounting/psi.html#psi"
 SHOW_FOOTNOTE_4=0
-FOOTNOTE_4="[4] See https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files"
+FOOTNOTE_4="[4] cpu: see https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu-interface-files"
+SHOW_FOOTNOTE_5=0
+FOOTNOTE_5="[5] memory: see https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html#memory"
 
-declare -a FOOTNOTES_ARRAY=("${FOOTNOTE_1}" "${FOOTNOTE_2}" "${FOOTNOTE_3}" "${FOOTNOTE_4}")
-MAX_FOOTNOTES=${#FOOTNOTES_ARRAY[@]}  #4 # keep updated!
+# keep updated!
+declare -a FOOTNOTES_ARRAY=("${FOOTNOTE_1}" "${FOOTNOTE_2}" "${FOOTNOTE_3}"
+ "${FOOTNOTE_4}"
+ "${FOOTNOTE_5}"
+ )
+MAX_FOOTNOTES=${#FOOTNOTES_ARRAY[@]}
 
 DEPTH=0
 SHOW_COMMON=0
@@ -362,7 +375,7 @@ printf "${name}: settings: depth=${depth_str}, verbose=${VERBOSE}, show-processe
 [[ ${VERBOSE} -eq 1 ]] && show_common
 
 printf "\n==================== cgroups v2 hierarchy ====================\n"
-printf "<< From ${start_cg} recursively >>\n"
+printf "<< Recursively from ${start_cg} >>\n"
 echo
 
 num_unpop=0
