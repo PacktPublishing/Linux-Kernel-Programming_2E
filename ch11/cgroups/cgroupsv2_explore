@@ -84,7 +84,7 @@ core_cg_files_show()
   # Show the type
   printf "    %-41s   : %s\n" "cg type" $(cat ${cg}/cgroup.type)
   # Show frozen..
-  printf "    %-41s   : %s    [2]\n" "cg frozen?" $(cat ${cg}/cgroup.freeze)
+  printf "    %-41s   : %s         [2]\n" "cg frozen?" $(cat ${cg}/cgroup.freeze)
 
   # Show the process belonging to this cg
   local procs="$(cat ${cg}/cgroup.procs | tr '\n' ' ')"
@@ -139,7 +139,7 @@ cpu_ctrl_show()
   # then decide - if any's non-null - to print the 'CPU' title ...
   [[ ! -z "${cpu_weight}" ]] || [[ ! -z "${cpu_weight_nice}" ]] || \
    [[ ! -z "${cpu_max}" ]] || [[ ! -z "${cpu_pressure}" ]] && {
-    printf "    %-41s\n" "CPU           [4]"
+    printf "    %-41s\n" "CPU              [4]"
     SHOW_FOOTNOTE_4=1
   }
   [[ ! -z "${cpu_weight}" ]] && printf "      %-41s   : %s\n" "cpu.weight" "${cpu_weight}"
@@ -204,15 +204,15 @@ show_cg_dtl()
 
 show_common()
 {
-title "All cgroupv2 files"
+title "System-wide cgroups v2 info"
 runcmd "ls ${CGROUP_MOUNT}"
 
-title "All currently defined cgroups (includes /)"
+title "All currently defined cgroups (includes root CGROUP @ ${CGROUP_MOUNT}; some may be empty)"
 runcmd "find ${CGROUP_MOUNT} -maxdepth 1 -type d|sort"
 
 title "All cgroup controllers (enabled within kernel)"
 runcmd "cat ${CGROUP_MOUNT}/cgroup.controllers"
-title "All controllers being applied to immd children"
+title "All controllers being applied to immediate children"
 runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
 }
 
@@ -272,11 +272,11 @@ declare -a FOOTNOTES_ARRAY=("${FOOTNOTE_1}" "${FOOTNOTE_2}" "${FOOTNOTE_3}" "${F
 MAX_FOOTNOTES=${#FOOTNOTES_ARRAY[@]}  #4 # keep updated!
 
 DEPTH=0
+SHOW_COMMON=0
 SHOW_PROCESS_NAMES=0
 SHOW_THREAD_NAMES=0
 
 #--- Args processing
-
 start_cg=${CGROUP_MOUNT}
 lastarg=
 lastargnum=0
@@ -307,15 +307,16 @@ if [[ $# -eq 1 ]] ; then
 else
    [[ $# -gt 1 ]] && lastargnum=$#  #$(($#-1))
 fi
-#echo "lastargnum=${lastargnum} = ${!lastargnum}"
+#echo "lastargnum=${lastargnum} val=${!lastargnum}"
 lastarg=${!lastargnum}
 
 [[ "${lastarg:0:1}" != "-" ]] && start_cg=${lastarg} #|| die "The last argument..."
-echo "start_cg=${start_cg}"
+#echo "start_cg=${start_cg}"
 
+#-- getopts
 OPTARG=""
 # if the arg requires a param following it (like, -d 2), put a ':' after the arg letter!
-while getopts ":hvd:pt" arg; do
+while getopts ":d:vpth" arg; do
 #	echo "arg = $arg"
   case $arg in
    d) DEPTH=${OPTARG}
@@ -343,12 +344,10 @@ done
 #"
 #echo "verbose=${VERBOSE} depth=${DEPTH}"
 #exit 0
+#---
 
-# TODO
-#show_common
 
-#title "Cgroups (v2) on this system [verbose mode: ${VERBOSE}]"
-
+# TODO- sort option..
 if [[ ${DEPTH} -ne 0 ]] ; then
    ALL_CGROUPS=$(find ${start_cg} -maxdepth ${DEPTH} -type d|sort)
    depth_str=${DEPTH}
@@ -359,14 +358,11 @@ else
    #ALL_CGROUPS=$(find ${CGROUP_MOUNT} -type d)
 fi
 
-#cg=/sys/fs/cgroup/user.slice/user-1000.slice/session-10.scope
-#  show_cg_dtl "${cg}"
-#exit
+printf "${name}: settings: depth=${depth_str}, verbose=${VERBOSE}, show-processes=${SHOW_PROCESS_NAMES}, show-threads=${SHOW_THREAD_NAMES}\n"
+[[ ${VERBOSE} -eq 1 ]] && show_common
 
 printf "\n==================== cgroups v2 hierarchy ====================\n"
 printf "<< From ${start_cg} recursively >>\n"
-printf "Settings: depth=${depth_str}, verbose=${VERBOSE}\n"
-printf "Settings: show-processes=${SHOW_PROCESS_NAMES}, show-threads=${SHOW_THREAD_NAMES}\n"
 echo
 
 num_unpop=0
@@ -402,5 +398,5 @@ do
 done
 
 echo "
-Parsed a total of $i (v2) CGROUPs ($num_unpop were empty)."
+Parsed a total of $i (v2) CGROUPs ($num_unpop were empty / unpopulated)."
 exit 0
