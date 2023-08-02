@@ -171,7 +171,6 @@ show_cg_dtl()
 {
   local cg=$1
 
-
   #--- Core interface files: cgroup.events
   # Is it populated?
   # core interface file: cgroup.events
@@ -182,6 +181,7 @@ show_cg_dtl()
      printf "  %-45s : " $cg
      echo "unpopulated"
      set +e
+     let num_unpop=num_unpop+1
      return -1
   fi
   # A CG can also be 'frozen' via this interface file (cgroup.events)
@@ -243,9 +243,9 @@ is shown. The 'depth' value can be:
  at boot).
  Default : shows _all_ levels of the specified CGROUP v2 hierarchy.
 
- CGROUP : Path to any cgroup; for example: /sys/fs/cgroup/user.slice/user-1000.slice/session-1.scope
- (Tip: you can first use systemd-cgls, or this script, with no particular CGROUP parameter, to list all cgroups
-  currently defined in the system).
+CGROUP : Path to any cgroup; for example: /sys/fs/cgroup/system.slice/wpa_supplicant.service
+ (Tip: you can first use systemd-cgls, or this script, with no particular CGROUP parameter,
+  to list all cgroups currently defined in the system).
  This Must be the last parameter."
 }
 
@@ -369,6 +369,7 @@ printf "Settings: depth=${depth_str}, verbose=${VERBOSE}\n"
 printf "Settings: show-processes=${SHOW_PROCESS_NAMES}, show-threads=${SHOW_THREAD_NAMES}\n"
 echo
 
+num_unpop=0
 i=0
 IFS=$'\n'
 for cg in ${ALL_CGROUPS}
@@ -401,5 +402,5 @@ do
 done
 
 echo "
-Parsed $i CGROUPs (v2)"
+Parsed a total of $i (v2) CGROUPs ($num_unpop were empty)."
 exit 0
