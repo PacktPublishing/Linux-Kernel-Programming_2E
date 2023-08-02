@@ -19,6 +19,7 @@
 set -euo pipefail
 
 name=$(basename $0)
+#----------------Convenience routines----------------------------------
 function die
 {
 echo >&2 "$@"
@@ -34,6 +35,41 @@ runcmd()
 echo "> $@"
 eval "$@"
 }
+
+# Src: ChatGPT 3.5 ! (slightly modified)
+# Function to convert memory size to human-readable format
+memory_size_to_readable() {
+  # is $1 a number?
+  [[ $# -eq 1 ]] && [[ $1 =~ ^[+-]?[0-9]+(\.[0-9]+)?$ ]] || return
+
+  local size_in_bytes=$1
+
+  # Define the size units and their corresponding thresholds
+  local units=("B" "KB" "MB" "GB" "TB" "PB" "EB")
+  local thresholds=(1 1024 1048576 1073741824 1099511627776 1125899906842624 1152921504606846976)
+
+  # Iterate through the units and find the appropriate one
+  local unit=""
+  for ((i = 0; i < ${#thresholds[@]}; i++)); do
+    local threshold=${thresholds[i]}
+    if ((size_in_bytes < threshold * 1024)); then
+      unit=${units[i]}
+      break
+    fi
+  done
+
+  # Perform the conversion
+  local converted_size=$(echo "scale=2; $size_in_bytes / $threshold" | bc)
+
+  # Print the result
+  echo "$converted_size $unit"
+}
+# Usage example:
+#memory_size_to_readable 2147483648   # Output: "2.00 GB"
+#memory_size_to_readable 5000000      # Output: "4.77 MB"
+#memory_size_to_readable 123456789    # Output: "117.74 MB"
+#You can use the `memory_size_to_readable` function by passing the memory size in bytes as an argument, and it will print the size in the appropriate units (KB, MB, GB, or TB).
+#----------------------------------------------------------------------
 
 LINE="---------------------------------------------------------"
 title()
@@ -131,21 +167,21 @@ cpu_ctrl_show()
  if [[ ${VERBOSE} -eq 1 ]] ; then
     verbose_display_cgctrl ${cg} cpu 4
  else
-  # We first query all the interface files...
+  # We first query the interface files...
   local cpu_weight=$(cat ${cg}/cpu.weight 2>/dev/null)
   local cpu_weight_nice=$(cat ${cg}/cpu.weight.nice 2>/dev/null)
   local cpu_max=$(cat ${cg}/cpu.max 2>/dev/null)
   local cpu_pressure=$(cat ${cg}/cpu.pressure 2>/dev/null)
-  # then decide - if any's non-null - to print the 'CPU' title ...
+  # then, if any are non-null, we print the 'CPU' title ...
   [[ ! -z "${cpu_weight}" ]] || [[ ! -z "${cpu_weight_nice}" ]] || \
-   [[ ! -z "${cpu_max}" ]] || [[ ! -z "${cpu_pressure}" ]] && {
+     [[ ! -z "${cpu_max}" ]] || [[ ! -z "${cpu_pressure}" ]] && {
     printf "    %-41s\n" "CPU              [4]"
     SHOW_FOOTNOTE_4=1
   }
-  [[ ! -z "${cpu_weight}" ]] && printf "      %-41s   : %s\n" "cpu.weight" "${cpu_weight}"
+  [[ ! -z "${cpu_weight}" ]] &&      printf "      %-41s   : %s\n" "cpu.weight" "${cpu_weight}"
   [[ ! -z "${cpu_weight_nice}" ]] && printf "      %-41s   : %s\n" "cpu.weight.nice" "${cpu_weight_nice}"
-  [[ ! -z "${cpu_max}" ]] && printf "      %-41s   : %s\n" "cpu.max" "${cpu_max}"
-  [[ ! -z "${cpu_pressure}" ]] && printf "      %-39s   : %s\n" "cpu.pressure" "${cpu_pressure}"
+  [[ ! -z "${cpu_max}" ]] &&         printf "      %-41s   : %s\n" "cpu.max" "${cpu_max}"
+  [[ ! -z "${cpu_pressure}" ]] &&    printf "      %-39s   : %s\n" "cpu.pressure" "${cpu_pressure}"
  fi
 }
 
@@ -160,7 +196,25 @@ mem_ctrl_show()
   if [[ ${VERBOSE} -eq 1 ]] ; then
     verbose_display_cgctrl ${cg} memory 5
   else
+    # We first query the interface files...
+    local mem_current=$(cat ${cg}/memory.current 2>/dev/null)
+    local mem_min=$(cat ${cg}/memory.min 2>/dev/null)
+    local mem_low=$(cat ${cg}/memory.low 2>/dev/null)
+    local mem_high=$(cat ${cg}/memory.high 2>/dev/null)
+
     printf "    %-41s\n" "MEMORY           [5]"
+    local numthrds="$(cat ${cg}/cgroup.threads | tr '\n' ' ' | wc -w)"
+    local mem_current_human=$(memory_size_to_readable ${mem_current})
+    printf "      %-39s   : %s (%s)\n" "mem.current" "${mem_current}" "${mem_current_human}"
+    # "If a memory cgroup is not populated with processes, its memory.min is ignored."
+    [[ ! -z "${mem_min}" ]] && [[ ${numthrds} -ge 1 ]] && printf "      %-39s   : %s\n" "mem.min" "${mem_min}"
+
+    local mem_low_human=$(memory_size_to_readable ${mem_low})
+    printf "      %-39s   : %s (%s)\n" "mem.low" "${mem_low}" "${mem_low_human}"
+
+    local mem_high_human=$(memory_size_to_readable ${mem_high})
+    printf "      %-39s   : %s (%s)\n" "mem.high" "${mem_high}" "${mem_high_human}"
+
     SHOW_FOOTNOTE_5=1
   fi
 }
@@ -256,6 +310,7 @@ CGROUP : Path to any cgroup; for example: /sys/fs/cgroup/system.slice/wpa_suppli
  This Must be the last parameter."
 }
 
+#memory_size_to_readable 115292150460684697
 
 #--- 'main'
 CGROUP_MOUNT=
