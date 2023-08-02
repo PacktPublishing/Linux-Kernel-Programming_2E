@@ -202,10 +202,25 @@ show_cg_dtl()
   return 0
 }
 
+show_common()
+{
+title "All cgroupv2 files"
+runcmd "ls ${CGROUP_MOUNT}"
+
+title "All currently defined cgroups (includes /)"
+runcmd "find ${CGROUP_MOUNT} -maxdepth 1 -type d|sort"
+
+title "All cgroup controllers (enabled within kernel)"
+runcmd "cat ${CGROUP_MOUNT}/cgroup.controllers"
+title "All controllers being applied to immd children"
+runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
+}
+
 usage()
 {
- echo "Usage: ${name} [-v -p -t] [-d depth]
-All parameters are optional, and can be used in any combination.
+ echo "Usage: ${name} [-v -p -t] [-d depth] [CGROUP]
+All parameters are optional, and can be used in any combination (except
+for CGROUP; it must be the last one).
 
 -v : run in verbose mode
       Note! It's _very_ verbose, showing verbatim the content of all interface files for
@@ -222,21 +237,28 @@ All parameters are optional, and can be used in any combination.
 is shown. The 'depth' value can be:
  1       => show only a very top-level overview of the hierarchy
  2,3,... => show to 2,3,... level(s) of the cgroup v2 hierarchy, whatever's specified.
- NOTE: do leave a space after the -d (f.e., -d 2 is fine, NOT -d2)
 
  Practically speaking, most distros (i tested on Ubuntu/Fedora) will max out at 6 or 7
  levels of depth. (On mainstream distros, systemd typically sets up the Cgroup v2 hierarchy
  at boot).
- Default : shows _all_ levels of the system's Cgroups v2 hierarchy."
+ Default : shows _all_ levels of the specified CGROUP v2 hierarchy.
+
+ CGROUP : Path to any cgroup; for example: /sys/fs/cgroup/user.slice/user-1000.slice/session-1.scope
+ (Tip: you can first use systemd-cgls, or this script, with no particular CGROUP parameter, to list all cgroups
+  currently defined in the system).
+ This Must be the last parameter."
 }
 
 
 #--- 'main'
-CGROUP_MOUNT=/sys/fs/cgroup
+CGROUP_MOUNT=
 VERBOSE=0
 
-# Footnotes
+# cgroup2 mount point 'should' be /sys/fs/cgroup but let's not assume anything
+CGROUP_MOUNT=$(mount|grep -w cgroup2 2>/dev/null|awk '{print $3}' 2>/dev/null)
+[[ -z "${CGROUP_MOUNT}" ]] && die "Couldn't obtain cgroup2 mount point"
 
+# Footnotes
 SHOW_FOOTNOTE_1=0
 FOOTNOTE_1="[1] No sub-controllers in a cgroup implies no controllers are enabled; in effect, no cgroup constraints apply to it"
 SHOW_FOOTNOTE_2=1
@@ -253,7 +275,44 @@ DEPTH=0
 SHOW_PROCESS_NAMES=0
 SHOW_THREAD_NAMES=0
 
-# Args processing
+#--- Args processing
+
+start_cg=${CGROUP_MOUNT}
+lastarg=
+lastargnum=0
+
+# RELOOK
+# Must ensure that the CGROUP parameter, if passed, is the last one
+cgstartparam_pos=0
+i=1
+for param in "$@"
+do
+  [[ "${param:0:1}" != "-" ]] && {
+    cgstartparam_pos=$i
+    break
+  }
+  let i=i+1
+done
+#echo "cgstartparam_pos = $cgstartparam_pos"
+[[ ${cgstartparam_pos} -ne 0 ]] && [[ ${cgstartparam_pos} -lt $# ]] && {
+  echo "The CGROUP parameter must be the last one."
+  echo
+  usage
+  exit 1
+}
+
+# If not starting with '-' the last arg is the Cgroup to show
+if [[ $# -eq 1 ]] ; then
+   lastargnum=1
+else
+   [[ $# -gt 1 ]] && lastargnum=$#  #$(($#-1))
+fi
+#echo "lastargnum=${lastargnum} = ${!lastargnum}"
+lastarg=${!lastargnum}
+
+[[ "${lastarg:0:1}" != "-" ]] && start_cg=${lastarg} #|| die "The last argument..."
+echo "start_cg=${start_cg}"
+
 OPTARG=""
 # if the arg requires a param following it (like, -d 2), put a ':' after the arg letter!
 while getopts ":hvd:pt" arg; do
@@ -285,33 +344,37 @@ done
 #echo "verbose=${VERBOSE} depth=${DEPTH}"
 #exit 0
 
-title "All cgroupv2 files"
-runcmd "ls ${CGROUP_MOUNT}"
+# TODO
+#show_common
 
-title "All currently defined cgroups (includes /)"
-runcmd "find ${CGROUP_MOUNT} -maxdepth 1 -type d|sort"
-
-title "All cgroup controllers (enabled within kernel)"
-runcmd "cat ${CGROUP_MOUNT}/cgroup.controllers"
-title "All controllers being applied to immd children"
-runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
-
-title "Cgroups (v2) on this system [verbose mode: ${VERBOSE}]"
+#title "Cgroups (v2) on this system [verbose mode: ${VERBOSE}]"
 
 if [[ ${DEPTH} -ne 0 ]] ; then
-   ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth ${DEPTH} -type d|sort)
+   ALL_CGROUPS=$(find ${start_cg} -maxdepth ${DEPTH} -type d|sort)
+   depth_str=${DEPTH}
    #ALL_CGROUPS=$(find ${CGROUP_MOUNT} -maxdepth ${DEPTH} -type d)
 else
-   ALL_CGROUPS=$(find ${CGROUP_MOUNT} -type d|sort)
+   ALL_CGROUPS=$(find ${start_cg} -type d|sort)
+   depth_str='full'
    #ALL_CGROUPS=$(find ${CGROUP_MOUNT} -type d)
 fi
+
+#cg=/sys/fs/cgroup/user.slice/user-1000.slice/session-10.scope
+#  show_cg_dtl "${cg}"
+#exit
+
+printf "\n==================== cgroups v2 hierarchy ====================\n"
+printf "<< From ${start_cg} recursively >>\n"
+printf "Settings: depth=${depth_str}, verbose=${VERBOSE}\n"
+printf "Settings: show-processes=${SHOW_PROCESS_NAMES}, show-threads=${SHOW_THREAD_NAMES}\n"
+echo
 
 i=0
 IFS=$'\n'
 for cg in ${ALL_CGROUPS}
 do
-  # Skip first one, the root cgroup
-  [[ $i -eq 0 ]] && {
+  # First iteration: if no specific starting CG passed, skip first one as it's the root cgroup
+  [[ $i -eq 0 ]] && [[ "${start_cg}" = "${CGROUP_MOUNT}" ]] && {
     printf "/ \n"
     i=1
     continue
@@ -337,7 +400,6 @@ do
   }
 done
 
-[[ ${DEPTH} -eq 0 ]] && DEPTH="-unlimited-"
 echo "
-Parsed $i Cgroups (v2; with max depth set to ${DEPTH})"
+Parsed $i CGROUPs (v2)"
 exit 0
