@@ -122,11 +122,15 @@ core_cg_files_show()
   # Show frozen..
   printf "    %-41s   : %s         [2]\n" "cg frozen?" $(cat ${cg}/cgroup.freeze)
 
-  # Show the process belonging to this cg
+  # Show the process(es) belonging to this cg
   local procs="$(cat ${cg}/cgroup.procs | tr '\n' ' ')"
   local num_procs=$(echo "${procs}" | wc -w)
   printf "    %-41s   : (%4d) : " "Process PIDs" ${num_procs}
-  [[ ! -z "${procs}" ]] && echo "${procs}" || echo "-"
+  [[ ! -z "${procs}" ]] && echo -n "${procs}" || echo -n "- "
+  # Careful, even if no processes show up here, they could well be underneath!
+  local num_descendants=$(grep "^nr_descendants" ${cg}/cgroup.stat  |cut -d' ' -f2)
+  [[ ${num_descendants} -ge 1 ]] && printf "(Has %d descendants)" ${num_descendants}
+  echo
 
   # Show process name(s)
   [[ ${SHOW_PROCESS_NAMES} -eq 1 ]] && [[ ! -z "${procs}" ]] && {
@@ -298,6 +302,7 @@ for CGROUP; it must be the last one).
 is shown. The 'depth' value can be:
  1       => show only a very top-level overview of the hierarchy
  2,3,... => show to 2,3,... level(s) of the cgroup v2 hierarchy, whatever's specified.
+ Must immediately follow the -d (f.e. pass as '-d2' and not as '-d 2').
 
  Practically speaking, most distros (i tested on Ubuntu/Fedora) will max out at 6 or 7
  levels of depth. (On mainstream distros, systemd typically sets up the Cgroup v2 hierarchy
