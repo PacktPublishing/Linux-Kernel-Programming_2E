@@ -378,7 +378,7 @@ fi
 #echo "lastargnum=${lastargnum} val=${!lastargnum}"
 lastarg=${!lastargnum}
 
-[[ "${lastarg:0:1}" != "-" ]] && start_cg=${lastarg} #|| die "The last argument..."
+[[ $# -gt 1 ]] && [[ "${lastarg:0:1}" != "-" ]] && start_cg=${lastarg} #|| die "The last argument..."
 #echo "start_cg=${start_cg}"
 
 #-- getopts
@@ -426,6 +426,8 @@ else
    #ALL_CGROUPS=$(find ${CGROUP_MOUNT} -type d)
 fi
 
+[[ -z "${ALL_CGROUPS}" ]] && die "Didn't find any cgroups starting from ${start_cg}, aborting..."
+
 printf "${name}: settings: depth=${depth_str}, verbose=${VERBOSE}, show-processes=${SHOW_PROCESS_NAMES}, show-threads=${SHOW_THREAD_NAMES}\n"
 [[ ${VERBOSE} -eq 1 ]] && show_common
 
@@ -439,8 +441,8 @@ IFS=$'\n'
 for cg in ${ALL_CGROUPS}
 do
   # First iteration: if no specific starting CG passed, skip first one as it's the root cgroup
-  [[ $i -eq 0 ]] && [[ "${start_cg}" = "${CGROUP_MOUNT}" ]] && {
-    printf "/ \n"
+  [[ $i -eq 0 ]] && {
+    printf "%s \n" ${start_cg}
     i=1
     continue
   }
