@@ -12,6 +12,10 @@
 # This script is part of the Cgroups v2 demo: trying out setting constraints
 # on CPU usage on a prime number generator app by leveraging the power of
 # systemd!
+# Tip: when running it, do so like this, f.e.:
+#  ./setup_svc svc1_primes_normal.service
+# and not like this:
+#  ./setup_svc ./svc1_primes_normal.service
 #
 # For details, pl refer to the book Ch 11.
 name=$(basename $0)
@@ -20,7 +24,8 @@ name=$(basename $0)
   exit 1
 }
 
-DEFAULT_TGT=multi-user.target
+DEFAULT_TGT=graphical.target   #multi-user.target
+KEEP_PROGRAM_ENABLED_ON_BOOT=0
 
 die()
 {
@@ -28,22 +33,28 @@ die()
 }
 
 UNITFILE=$1
-[ ! -f ${UNITFILE} ] && die "${UNITFILE} not found"
+[[ ! -f ${UNITFILE} ]] && die "${UNITFILE} not found"
 sudo cp ${UNITFILE} /lib/systemd/system/
 
 # Copy the boot script, service units and app where they can be located
 # automatically by systemd (via the default ExecSearchPath=)
-sudo mkdir /usr/local/bin/systemd_svcunit_demo
-sudo cp run_primegen svc*.service /usr/local/bin/systemd_svcunit_demo
+sudo mkdir /usr/local/bin/systemd_svcunit_demo 2>/dev/null
+sudo cp run_primegen svc*.service /usr/local/bin/systemd_svcunit_demo/ || exit 1
 (
 cd ../primegen || exit 1
 make || exit 1
 )
-sudo cp ../primegen/primegen /usr/local/bin/systemd_svcunit_demo
+sudo cp ../primegen/primegen /usr/local/bin/systemd_svcunit_demo || exit 1
 
 echo "${name}: enable and run the \"${UNITFILE}\" service unit NOW"
 sudo systemctl enable --now ${UNITFILE} || die "enabling svc failed"
 #journalctl -k -f
-ls -l /lib/systemd/system/${DEFAULT_TGT}.wants/${UNITFILE} >/dev/null 2>&1
-[[ $? -ne 0 ]] && ls -l /etc/systemd/system/${DEFAULT_TGT}.wants/${UNITFILE}
+
+if [[ ${KEEP_PROGRAM_ENABLED_ON_BOOT} -eq 0 ]] ; then
+   echo "${name}: asked to disable program on boot, disabling..."
+   sudo systemctl disable ${UNITFILE} || die "disabling svc failed"
+else
+   echo "${name}: the primegen program is now enabled on boot..."
+   #ls -l /etc/systemd/system/${DEFAULT_TGT}.wants/${UNITFILE}
+fi
 exit 0
