@@ -1,17 +1,25 @@
 #!/bin/bash
-# Explore a bit into the system's Cgroups v2 hierarchy
+# cgroupsv2_explore
+# ***************************************************************
+# This program is part of the source code released for the book
+#  "Linux Kernel Programming" 2E
+#  (c) Author: Kaiwan N Billimoria
+#  Publisher:  Packt
+#  GitHub repository:
+#  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
+# ****************************************************************
+# Brief Description:
+#
+# Explore the system's Cgroups v2 hierarchy.
 # This script's written looking at the official kernel doc on Cgroups v2:
 # https://docs.kernel.org/admin-guide/cgroup-v2.html
 # Please refer to it!
 #
-# Part of the code for
-#  Linux Kernel Programming, 2 Ed, Kaiwan NB, Packt
-#  Ch 11, The CPU Scheduler - Part 2
-# (c) Kaiwan N Billimoria
-#
 # TODO
 #  [ ] Controller interface files - display
 #  [ ] color / bold
+#
+# For details, pl refer to the book Ch 11.
 
 # Turn on unofficial Bash 'strict mode'! V useful
 # "Convert many kinds of hidden, intermittent, or subtle bugs into immediate, glaringly obvious errors"
