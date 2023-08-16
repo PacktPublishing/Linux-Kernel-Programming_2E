@@ -11,10 +11,6 @@ Description=My test prime numbers generator app to launch at boot (memory constr
 After=mount.target
 
 [Service]
-# The script that launches the app
-# UPDATE the /path/to/executable !
-#ExecStart=/usr/local/bin/systemd_svcunit_demo/run_primegen
-
 #--- Stress memory ---
 # See the man page systemd.resource-control(5) for details
 # Set mem high to 512M
@@ -27,11 +23,24 @@ MemoryMax=756M
 # Run the stressor allocing upto 400 MB with 1 worker for upto 10s
 #ExecStart=/usr/bin/stress-ng --malloc-bytes 400M --malloc 1 --timeout 10
 
-# Bad case: triggers the OOM killer!
+# Bad case: typically triggers the OOM killer!
 # Run the stressor allocing upto 300 GB with 50 workers for upto 100s
 # 'Should' typically cause the kernel OOM killer - or via systemd-oomd if
 # enabled - to kill off all processes within the cgroup!
+# (Of course, the OOM killer getting invoked depends on your system,
+# how much RAM you have).
 ExecStart=/usr/bin/stress-ng --malloc-bytes 300G --malloc 50 --timeout 100
+
+# For security; also see systemd.exec(5) section 'SANDBOXING'
+NoNewPrivileges=true
+
+# Optional: Apply 'better' cpu sched settings for this process
+CPUSchedulingPolicy=fifo
+CPUSchedulingPriority=83
+# So that the child process - primegen - runs with these sched settings!
+# (well it's anyway the default)
+CPUSchedulingResetOnFork=false
+#Nice=-20
 
 # If this user is there, it runs as him/her user else as root
 #User=osboxes
@@ -39,5 +48,7 @@ ExecStart=/usr/bin/stress-ng --malloc-bytes 300G --malloc 50 --timeout 100
 # When I did, I got this error:
 # "svc1.service: Failed to determine user credentials: No such process" yada yada... :-)
 
+# UPDATE to your preference
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target
+#WantedBy=multi-user.target
