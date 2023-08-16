@@ -59,7 +59,7 @@ runcmd sudo apt install -y \
 	libnuma-dev linux-headers-$(uname -r) linux-tools-$(uname -r) \
 	man-db net-tools numactl openjdk-18-jre  \
 	perf-tools-unstable procps psmisc python3-distutils  \
-	rt-tests smem sparse stress sysfsutils \
+	rt-tests smem sparse stress stress-ng sysfsutils \
 	tldr-py trace-cmd tree tuna virt-what yad
 echo "-----------------------------------------------------------------------"
 #runcmd sudo apt install -y bc bpfcc-tools bsdmainutils clang cmake cppcheck cscope curl \
