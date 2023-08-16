@@ -1,0 +1,49 @@
+#!/bin/bash
+# setup_service
+# ***************************************************************
+# This program is part of the source code released for the book
+#  "Linux Kernel Programming" 2E
+#  (c) Author: Kaiwan N Billimoria
+#  Publisher:  Packt
+#  GitHub repository:
+#  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
+# ****************************************************************
+# Brief Description:
+# This script is part of the Cgroups v2 demo: trying out setting constraints
+# on CPU usage on a prime number generator app by leveraging the power of
+# systemd!
+#
+# For details, pl refer to the book Ch 11.
+name=$(basename $0)
+[ $# -ne 1 ] && {
+  echo "Usage: ${name} systemd-unit-file"
+  exit 1
+}
+
+DEFAULT_TGT=multi-user.target
+
+die()
+{
+  echo "$*" 1>&2; exit 1
+}
+
+UNITFILE=$1
+[ ! -f ${UNITFILE} ] && die "${UNITFILE} not found"
+sudo cp ${UNITFILE} /lib/systemd/system/
+
+# Copy the boot script, service units and app where they can be located
+# automatically by systemd (via the default ExecSearchPath=)
+sudo mkdir /usr/local/bin/systemd_svcunit_demo
+sudo cp run_primegen svc*.service /usr/local/bin/systemd_svcunit_demo
+(
+cd ../primegen || exit 1
+make || exit 1
+)
+sudo cp ../primegen/primegen /usr/local/bin/systemd_svcunit_demo
+
+echo "${name}: enable and run the \"${UNITFILE}\" service unit NOW"
+sudo systemctl enable --now ${UNITFILE} || die "enabling svc failed"
+#journalctl -k -f
+ls -l /lib/systemd/system/${DEFAULT_TGT}.wants/${UNITFILE} >/dev/null 2>&1
+[[ $? -ne 0 ]] && ls -l /etc/systemd/system/${DEFAULT_TGT}.wants/${UNITFILE}
+exit 0

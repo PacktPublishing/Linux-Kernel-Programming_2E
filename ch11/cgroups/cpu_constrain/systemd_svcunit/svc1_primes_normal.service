@@ -1,0 +1,25 @@
+# svc1_primes_normal.service
+# NORMAL version, no artifical CPU (or other) constraints applied
+[Unit]
+Description=My test prime numbers generator app to launch at boot (normal version)
+#---------------------
+# After=<xxx.target>
+# See all targets with 
+#  ls /lib/systemd/system/*.target
+# See all dependencies on a given target with
+#  systemctl list-dependencies <target>
+After=mount.target
+
+[Service]
+# The script that launches the app
+# UPDATE the /path/to/executable !
+ExecStart=/usr/local/bin/systemd_svcunit_demo/run_primegen
+
+# If this user is there, it runs as him/her user else as root
+#User=kaiwan
+#--- Hey, DON'T keep a comment or anything on the right of a statement!
+# When I tried that, I got this error:
+# "svc1.service: Failed to determine user credentials: No such process" yada yada... :-)
+
+[Install]
+WantedBy=multi-user.target

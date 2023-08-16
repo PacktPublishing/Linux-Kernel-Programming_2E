@@ -1,0 +1,28 @@
+#!/bin/bash
+# run_primegen
+# ***************************************************************
+# This program is part of the source code released for the book
+#  "Linux Kernel Programming" 2E
+#  (c) Author: Kaiwan N Billimoria
+#  Publisher:  Packt
+#  GitHub repository:
+#  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
+# ****************************************************************
+# Brief Description:
+# A sample systemd service unit.
+# This script is part of the Cgroups v2 demo: trying out setting constraints
+# on CPU usage on a prime number generator app by leveraging the power of
+# systemd!
+#
+# Test : run the svc1_primes_<foo>.service service unit via systemd at boot;
+#  where <foo> is one of normal, lowcpu, lowmem.
+#
+# For details, pl refer to the book Ch 11.
+
+# If all's running well, the echo (stdout/stderr) automatically goes to the syslog !
+echo "$0: am running!"
+
+# !!! CAREFUL !!! UPDATE path/to/executable !
+# Our prep script (setup_service) copies the app into this location
+/usr/local/bin/systemd_svcunit_demo/primegen 100000
+exit 0
