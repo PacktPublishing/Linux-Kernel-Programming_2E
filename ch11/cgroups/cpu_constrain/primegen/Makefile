@@ -2,7 +2,7 @@
 ALL := primegen
 
 CC=${CROSS_COMPILE}gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -O3
 CFLAGS_DBG=-g -ggdb -gdwarf-4 -O0 -Wall -Wextra
 CFLAGS_DBG_ASAN=${CFLAGS_DBG} -fsanitize=address
 CFLAGS_DBG_MSAN=-fsanitize=memory -fPIE -pie

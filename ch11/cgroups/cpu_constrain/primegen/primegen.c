@@ -12,8 +12,8 @@
  *
  * This program is part of the Cgroups v2 demo: trying out setting constraints
  * on CPU usage on this app, a very simple prime number generator. It generates
- * primes from 2 to the number requested. It operates on a 1 second timeout;
- * after 1s it's simply killed.
+ * primes from 2 to the number requested. It operates on a given timeout;
+ * after the specified # of seconds have elapsed it's simply killed.
  *
  * The CPU constraint is imposed in 2 ways:
  * 1) by leveraging the power of systemd service units
@@ -36,7 +36,8 @@
 #include <sys/types.h>
 #include <signal.h>
 
-#define MAX    10000000		// 10 million
+#define MAX	    10000000		// 10 million
+#define MAX_TIME          60		// seconds
 
 static void simple_primegen(int limit)
 {
@@ -60,43 +61,58 @@ static void simple_primegen(int limit)
 			 * to wrap at.
 			 */
 #define WRAP    16
-			if (num % WRAP == 0)
+			if (num % WRAP == 0) {
+				fflush(stdout);
 				printf("\n");
+			}
 		}
 	}
 	printf("\n");
+	fflush(stdout);
 }
 
 static void buzz(int signo)
 {
 	printf("%s:%s()\n", __FILE__, __func__);
-	kill(getpid(), SIGTERM);
+	fflush(stdout);
+	raise(SIGTERM);
 }
 
 int main(int argc, char **argv)
 {
-	int limit;
+	int limit, time_allowed = 1;
 
-	if (argc < 2) {
+	if (argc < 3) {
 		fprintf(stderr,
-			"Usage: %s limit-to-generate-primes-upto (in 1s)\n"
-			" max is %d\n", argv[0], MAX);
+			"Usage: %s limit-to-generate-primes-upto time-allowed-to-run(in seconds)\n"
+			" max allowed value for:\n"
+			"  first parameter is %d #s\n"
+			"  second parameter is %ds\n"
+			, argv[0], MAX, MAX_TIME);
 		exit(EXIT_FAILURE);
 	}
 
 	limit = atoi(argv[1]);
 	if (limit < 4 || limit > MAX) {
 		fprintf(stderr,
-			"%s: invalid value (%d); pl pass a value within "
+			"%s: param 1, invalid value (%d); pl pass a value within "
 			"the range [4 - %d].\n", argv[0], limit, MAX);
 		exit(EXIT_FAILURE);
 	}
+	time_allowed = atoi(argv[2]);
+	if (time_allowed < 1 || time_allowed > MAX_TIME) {
+		fprintf(stderr,
+			"%s: param 2, invalid value (%d); pl pass a value within "
+			"the range [1 - %d].\n", argv[0], time_allowed, MAX_TIME);
+		exit(EXIT_FAILURE);
+	}
+
 	if (signal(SIGALRM, buzz) < 0) {
 		perror("signal");
 		exit(EXIT_FAILURE);
 	}
 
-	alarm(1);
+	alarm(time_allowed);
 	simple_primegen(limit);
 	exit(EXIT_SUCCESS);
 }
