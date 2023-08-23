@@ -22,6 +22,7 @@ CPUSchedulingPriority=83
 # So that the child process - primegen - runs with these sched settings!
 # (well it's anyway the default)
 CPUSchedulingResetOnFork=false
+# Nice value applies for only the default 'other/normal' cpu sched policy
 #Nice=-20
 
 # If this user is there, it runs as him/her user else as root
