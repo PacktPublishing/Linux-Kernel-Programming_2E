@@ -1,5 +1,5 @@
 #!/bin/bash
-# ch11/cgroups/cgroups_v2_cpu_eg/cgv2_cpu_ctrl.sh
+# ch11/cgroups/cpu_constrain/cpu_manual/cgv2_cpu_ctrl.sh
 # ***************************************************************
 # This program is part of the source code released for the book
 #  "Linux Kernel Programming" 2E
@@ -10,10 +10,12 @@
 # ****************************************************************
 # Brief Description:
 # A quick test case for cgroups v2 CPU controller.
+# We execute our prime number generator program under specified CPU
+# constraints.
 #
 # For details, pl refer to the book Ch 11.
 #
-# Additional Ref:
+# Ref:
 # https://docs.kernel.org/admin-guide/cgroup-v2.html#cpu
 name=$(basename $0)
 TDIR=test_group
@@ -24,7 +26,6 @@ die()
 }
 
 # cleanup
-# TODO - rm in the cgv2 manner...
 remove_our_cgroup()
 {
 [[ -d ${CGV2_MNT}/${TDIR} ]] && {
@@ -64,37 +65,15 @@ PRGPID=$(ps -A|grep ${PRGNAME}|head -n1|awk '{print $1}')
 ps -A|grep ${PRGNAME}
 
 echo "[+] Insert the ${PRGPID} process into our new CPU ctrl cgroup"                                   
-#--- Put j1 there
 echo "${PRGPID}" > ${CGV2_MNT}/${TDIR}/cgroup.procs
 
 echo "cat ${CGV2_MNT}/${TDIR}/cgroup.procs"
 cat ${CGV2_MNT}/${TDIR}/cgroup.procs
-#--- Put j2 there
-#echo "${j2pid}" > ${CGV2_MNT}/${TDIR}/cgroup.procs
 sleep 1
-
-# Verify     TODO
-#echo "Verifying it's presence..."
-#cat /proc/${j1pid}/cgroup
-#grep "^0::/${TDIR}" /proc/${PRGPID}/cgroup || echo "Warning! Job not in our new cgroup v2 ${TDIR}" \
-# && echo "Job is in our new cgroup v2 ${TDIR}"
-#cat /proc/${j2pid}/cgroup
-#grep "^0::/${TDIR}" /proc/${j2pid}/cgroup || echo "Warning! Job j2 not in our new cgroup v2 ${TDIR}" \
-# && echo "Job j2 is in our new cgroup v2 ${TDIR}"
 } # end cpu_resctrl_try()
                                                                        
 setup_our_cgv2_cpu()
 {
-#echo "+cpu" > ${CGV2_MNT}/cgroup.subtree_control || {
-#  echo "Adding cpu controller failed, aborting. status=$?.
-#Note:
-#a) the presence of any RT process in this group will cause the 'cpu' controller addition to fail.
-#b) (Older) Pl verify that you're exclusively running cgroups v2 (except for the systemd cgroup)
-#This is usually achieved by passing the kernel parameter
-#\"cgroup_no_v1=all\" at boot."
-#  exit 1
-#}
-
 echo "[+] Creating a cgroup here: ${CGV2_MNT}/${TDIR}"
 if [[ ! -d ${CGV2_MNT}/${TDIR} ]]; then
    mkdir ${CGV2_MNT}/${TDIR} || {
@@ -143,12 +122,12 @@ echo "[+] Checking for cgroup v2 kernel support"
   zcat /proc/config.gz |grep -q -i cgroup || die "cgroup support not builtin to kernel?? Aborting..."
 }
 
-mount |grep -q cgroup2 || die "cgroup2 filesystem not mounted? Pl mount one first; aborting..."
+mount |grep -q cgroup2 || die "cgroup2 filesystem not mounted? Pl mount it first; aborting..."
 export CGV2_MNT=$(mount |grep cgroup2 |awk '{print $3}')
 [[ -z "${CGV2_MNT}" ]] && die "cgroup v2 filesystem not acquired, aborting..." || \
  echo "${name}: detected cgroup2 fs here: ${CGV2_MNT}"
 grep -w "cpu" ${CGV2_MNT}/cgroup.controllers >/dev/null || die "cpu controller not supported?
-(didn't find 'cpu' in ${CGV2_MNT}/cgroup.controllers; configure the kernel correctly)."
+(didn't find 'cpu' in ${CGV2_MNT}/cgroup.controllers; configure the kernel to include the 'cpu' controller)."
 }
 
 
@@ -162,9 +141,9 @@ PERIOD=1000000         # 1 million
 
 [[ $# -ne 1 ]] && {
   echo "Usage: ${name} max-to-utilize(us)
- This value (microseconds) is the max amount of time the processes in the sub-control
+ This value (microseconds) is the max amount of time the processes in the control
  group we create will be allowed to utilize the CPU; it's relative to the period,
- which is the value ${PERIOD};
+ which is set to the value ${PERIOD}.
  So, f.e., passing the value 300,000 (out of 1,000,000) implies a max CPU utiltization
  of 0.3 seconds out of 1 second (i.e., 30% utilization).
  The valid range for the \$MAX value is [${MIN_BANDWIDTH_US}-${PERIOD}]."
