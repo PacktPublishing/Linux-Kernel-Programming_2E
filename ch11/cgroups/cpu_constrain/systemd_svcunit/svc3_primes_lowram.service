@@ -28,9 +28,9 @@ MemoryMax=756M
 # 'Should' typically cause the kernel OOM killer - or via systemd-oomd if
 # enabled - to kill off all processes within the cgroup!
 #
-# Of course, the OOM killer getting invoked depends on your system,
-# how much RAM you have. Also, if systemd-oomd is running, *it* handles the
-# OOM situation and reports it in the log.
+# Of course, the OOM killer (or systemd-oomd) getting invoked depends on your
+# system config, on how much RAM you have. If systemd-oomd is running,
+# *it* handles the OOM situation and reports it in the log.
 ExecStart=/usr/bin/stress-ng --malloc-bytes 300G --malloc 50 --timeout 100
 
 # For security; also see systemd.exec(5) section 'SANDBOXING'
