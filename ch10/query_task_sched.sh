@@ -18,8 +18,15 @@
 # - The tuna(8) program performs this and much more! check it out...
 #
 # For details, pl refer to the book Ch 10.
+
+# Added:
+# Turn on unofficial Bash 'strict mode'! V useful
+# "Convert many kinds of hidden, intermittent, or subtle bugs into immediate, glaringly obvious errors"
+# ref: http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+
 i=1
-printf "  PID       TID            Name                     Sched Policy  Prio *RT  CPU-affinity-mask\n"
+printf "  PID       TID            Name                     Sched Policy  Prio *RT   Nice  CPU-affinity-mask\n"
 prev_pid=1
 
 IFS=$'\n'
@@ -40,6 +47,8 @@ do
   rec2_line2=$(echo "${rec2}" |tail -n1)
   policy=$(echo ${rec2_line1} |awk -F: '{print $2}')
   prio=$(echo ${rec2_line2} |awk -F: '{print $2}')
+  # nice value
+  nice_val=$(ps -p ${pid} -o nice | tail -n1)
 
   # ... print it!
   [ ${pid} -ne 0 ] && {
@@ -65,14 +74,15 @@ do
 	    fi
      fi
 
-	 # CPU affinity
+	 # Nice value and CPU affinity mask
 	 cpuaffinity=$(taskset -p ${pid} 2>/dev/null |cut -d':' -f2)
 	 if [ ${rt3} -eq 1 -o ${rt1} -eq 1 ]; then
-		printf "       ${cpuaffinity}"
+	    printf "    %3s" ${nice_val}
+		printf "             ${cpuaffinity}"
 	 else
+	    printf "          %3s" ${nice_val}
 		printf "             ${cpuaffinity}"
 	 fi
-	 #[ ${rt1} -eq 1 ] && printf "       ${cpuaffinity}"
   }
   printf "\n"
   prev_pid=${pid}
