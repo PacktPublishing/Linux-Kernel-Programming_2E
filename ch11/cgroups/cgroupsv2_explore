@@ -368,6 +368,14 @@ cgstartparam_pos=0
 i=1
 for param in "$@"
 do
+  # If it's the '-d n' parameter, then don't bother...(the space is what matters)
+  [[ "${param}" = "-d" ]] && {
+   nextp=$((i+1))
+   depthval=${!nextp}
+   #echo "depthval=$depthval"
+   [[ ${depthval} =~ ^[0-9]+$ ]] && break
+  }
+
   [[ "${param:0:1}" != "-" ]] && {
     cgstartparam_pos=$i
     break
@@ -376,12 +384,13 @@ do
 done
 #echo "cgstartparam_pos = $cgstartparam_pos"
 [[ ${cgstartparam_pos} -ne 0 ]] && [[ ${cgstartparam_pos} -lt $# ]] && {
-  echo "The CGROUP parameter must be the last one."
+  echo "ERROR: the CGROUP parameter must be the last one."
   echo
   usage
   exit 1
 }
 
+#---
 # If not starting with '-' the last arg is the Cgroup to show
 if [[ $# -eq 1 ]] ; then
    lastargnum=1
@@ -391,14 +400,25 @@ fi
 #echo "lastargnum=${lastargnum} val=${!lastargnum}"
 lastarg=${!lastargnum}
 
-[[ $# -ge 1 ]] && [[ "${lastarg:0:1}" != "-" ]] && start_cg=${lastarg} #|| die "The last argument..."
+# ... unless the user passed depth like this: -d n (where n is the depth, with a space!)
+if [[ $# -ge 1 ]] && [[ "${lastarg:0:1}" != "-" ]] ; then
+   if [[ ${lastarg} =~ ^[0-9]+$ ]] ; then
+     #echo "its a digit"
+     true
+   else
+     start_cg=${lastarg}
+   fi
+fi
 #echo "start_cg=${start_cg}"
+
+# Valid cgroup?
+[[ ! -f ${start_cg}/cgroup.controllers ]] && die "The CGROUP passed \"${start_cg}\" appears to be invalid? Aborting..."
 
 #-- getopts
 OPTARG=""
 # if the arg requires a param following it (like, -d 2), put a ':' after the arg letter!
 while getopts ":d:vpth" arg; do
-#	echo "arg = $arg"
+	#echo "arg = $arg"
   case $arg in
    d) DEPTH=${OPTARG}
 	#echo "arg = $arg; OPTARG=$OPTARG"
@@ -419,12 +439,14 @@ while getopts ":d:vpth" arg; do
       ;;
   esac
 done
+[[ 0 -eq 1 ]] && {
 # arg debugging
-#echo "
-#Params: # = $# : $*
-#"
-#echo "verbose=${VERBOSE} depth=${DEPTH}"
+echo "
+Params: # = $# : $*
+"
+echo "verbose=${VERBOSE} depth=${DEPTH}"
 #exit 0
+}
 #---
 
 
