@@ -119,10 +119,10 @@ cgroupv2_support_verify()
 {
 echo "[+] Checking for cgroup v2 kernel support"
 [[ -f /proc/config.gz ]] && {
-  zcat /proc/config.gz |grep -q -i cgroup || die "cgroup support not builtin to kernel?? Aborting..."
+  zcat /proc/config.gz |grep -i cgroup >/dev/null || die "cgroup support not builtin to kernel?? Aborting..."
 }
 
-mount |grep -q cgroup2 || die "cgroup2 filesystem not mounted? Pl mount it first; aborting..."
+mount |grep cgroup2 >/dev/null || die "cgroup2 filesystem not mounted? Pl mount it first; aborting..."
 export CGV2_MNT=$(mount |grep cgroup2 |awk '{print $3}')
 [[ -z "${CGV2_MNT}" ]] && die "cgroup v2 filesystem not acquired, aborting..." || \
  echo "${name}: detected cgroup2 fs here: ${CGV2_MNT}"
