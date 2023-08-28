@@ -138,22 +138,27 @@ which bc >/dev/null || die "the 'bc' utility is  missing; pl install and retry"
 
 MIN_BANDWIDTH_US=1000
 PERIOD=1000000         # 1 million
+RUN_CGV2_EXPLORE=0
 
-[[ $# -ne 1 ]] && {
-  echo "Usage: ${name} max-to-utilize(us)
- This value (microseconds) is the max amount of time the processes in the control
- group we create will be allowed to utilize the CPU; it's relative to the period,
- which is set to the value ${PERIOD}.
- So, f.e., passing the value 300,000 (out of 1,000,000) implies a max CPU utiltization
- of 0.3 seconds out of 1 second (i.e., 30% utilization).
- The valid range for the \$MAX value is [${MIN_BANDWIDTH_US}-${PERIOD}]."
+[[ $# -eq 0 ]] && {
+  echo "
+Usage: ${name} max-to-utilize(us) [run-cgroupsv2_explore-script]
+max-to-utilize : REQUIRED: This value (microseconds) is the max amount of time
+  the processes in the control group we create will be allowed to utilize the
+  CPU; it's relative to the period, which is set to the value ${PERIOD}.
+  So, f.e., passing the value 300,000 (out of 1,000,000) implies a max CPU utiltization
+  of 0.3 seconds out of 1 second (i.e., 30% utilization).
+  The valid range for the \$MAX value is [${MIN_BANDWIDTH_US}-${PERIOD}].
+run-cgroupsv2_explore-script : OPTIONAL: OFF by default.
+  Passing 1 here has the script invoke our cgroupsv2_explore bash script, passing
+  the new cgroup as the one to show details of."
  exit 1
 }
 MAX=$1
 if [[ ${MAX} -lt ${MIN_BANDWIDTH_US} ]] || [[ ${MAX} -gt ${PERIOD} ]] ; then
   die "your value for MAX (${MAX}) is invalid; must be in the range [${MIN_BANDWIDTH_US}-${PERIOD}]"
 fi
-
+[[ $2 -eq 1 ]] && RUN_CGV2_EXPLORE=1
 TD=$(pwd)
 
 remove_our_cgroup
@@ -164,6 +169,8 @@ SLEEP_TIME_ALLOW=$((${MAX_TIME}+1)) # seconds
 echo "
 ............... sleep for ${SLEEP_TIME_ALLOW} s, allowing the program to execute ................
 "
+
+[[ ${RUN_CGV2_EXPLORE} -eq 1 ]] && ../../cgroupsv2_explore -p ${CGV2_MNT}/${TDIR}
 sleep ${SLEEP_TIME_ALLOW}
 
 sleep 1
