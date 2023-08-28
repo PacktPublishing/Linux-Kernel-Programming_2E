@@ -239,14 +239,14 @@ show_cg_dtl()
   local cg=$1
 
   #--- Core interface files: cgroup.events
-  # Is it populated?
+  # Is it populated? Yes, if >=1 live processes within it, else no.
   # core interface file: cgroup.events
   local pop=$(grep "populated" ${cg}/cgroup.events |awk '{print $2}')
   if [[ ${pop} -ne 0 ]] ; then
      printf "\n<<---------------  %-45s -----------------------------\n" $cg
   else
      printf "  %-45s : " $cg
-     echo "unpopulated"
+     echo "unpopulated (no live processes)"
      set +e
      let num_unpop=num_unpop+1
      return -1
