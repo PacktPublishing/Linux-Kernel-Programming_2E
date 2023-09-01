@@ -62,6 +62,10 @@ runcmd sudo apt install -y \
 	rt-tests smem sparse stress stress-ng sysfsutils \
 	tldr-py trace-cmd tree tuna virt-what yad
 echo "-----------------------------------------------------------------------"
+
+# FYI, on Fedora-type systems:
+#  Install the 'realtime-tests' pkg (in place of rt-tests)
+
 #runcmd sudo apt install -y bc bpfcc-tools bsdmainutils clang cmake cppcheck cscope curl \
 # dwarves exuberant-ctags fakeroot flawfinder git gnome-system-monitor gnuplot \
 # hwloc indent kernelshark libnuma-dev libjson-c-dev linux-tools-$(uname -r) \
