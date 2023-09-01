@@ -1,0 +1,38 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+# This program is part of the source code released for the book
+#  "Linux Kernel Programming"
+#  (c) Author: Kaiwan N Billimoria
+#  Publisher:  Packt
+#  GitHub repository:
+#  https://github.com/PacktPublishing/Linux-Kernel-Programming
+#
+# For details, refer the book, Ch 11.
+#----------------------------------------------------------------------
+name=$(basename $0)
+LAT=.  #~/booksrc/ch11/latency_tests
+TIMEOUT_HOURS=1
+
+[ ! -f ${LAT}/latency_test.sh ] && {
+   echo "${name}: latency_test.sh script not present? aborting..."
+   exit 1
+}
+which cyclictest >/dev/null 2>&1 || {
+   echo "${name}: install: on Debian-based 'rt-tests' package, on Fedora-type 'realtime-tests' package, and retry; aborting..."
+   exit 1
+}
+which stress >/dev/null 2>&1 || {
+   echo "${name}: install the 'stress' package and retry; aborting..."
+   exit 1
+}
+
+echo "================================================================="
+${LAT}/latency_test.sh "running 'stress'" &
+CMD="stress --cpu 6 --io 2 --hdd 4 --hdd-bytes 1MB --vm 2 --vm-bytes 128M --timeout ${TIMEOUT_HOURS}h"
+(cd ${KSRC}
+sync ; date
+echo "${CMD}"
+eval "${CMD}"
+date ; sync)
+sudo pkill cyclictest
+date
