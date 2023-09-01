@@ -43,7 +43,7 @@ runcmd sudo apt install -y \
 # packages typically required for kernel build
 runcmd sudo apt install -y \
 	asciidoc binutils-dev bison build-essential flex libncurses5-dev ncurses-dev \
-	libelf-dev libssl-dev pahole tar util-linux xz-utils zstd
+	libelf-dev libssl-dev openssl pahole tar util-linux xz-utils zstd
 
 echo "-----------------------------------------------------------------------"
 
@@ -63,15 +63,14 @@ runcmd sudo apt install -y \
 	tldr-py trace-cmd tree tuna virt-what yad
 echo "-----------------------------------------------------------------------"
 
-# FYI, on Fedora-type systems:
-#  Install the 'realtime-tests' pkg (in place of rt-tests)
-
-#runcmd sudo apt install -y bc bpfcc-tools bsdmainutils clang cmake cppcheck cscope curl \
-# dwarves exuberant-ctags fakeroot flawfinder git gnome-system-monitor gnuplot \
-# hwloc indent kernelshark libnuma-dev libjson-c-dev linux-tools-$(uname -r) \
-# net-tools numactl openjdk-16-jre openssh-server perf-tools-unstable psmisc \
-# python3-distutils rt-tests smem sparse stress sysfsutils tldr-py trace-cmd \
-# tree tuna virt-what
+#--- FYI, on Fedora-type systems:
+#    Debian/Ubuntu pkg           Fedora/RedHat/CentOS equivalent pkg
+#  --------------------------    -----------------------------------
+#  rt-tests                        realtime-tests
+#  ncurses-dev/libncurses5-dev     ncurses-devel
+#  libssl-dev                      openssl-devel
+#  libelf-dev                      elfutils-libelf-devel
+#---
 
 # Add yourself to the vboxsf group (to gain access to VirtualBox shared folders);
 # will require you to log out and back in (or even reboot) to take effect
