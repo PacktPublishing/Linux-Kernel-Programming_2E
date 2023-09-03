@@ -517,6 +517,8 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 ## Chapter 11, The CPU Scheduler, Part 2 - Further Reading
 
+- [Using the kernel's cgroups v2 cpusets: kernel doc](https://docs.kernel.org/admin-guide/cgroup-v2.html#cpuset)
+
 - Ftrace
     - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
 
@@ -559,16 +561,23 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - Detailed slides on cyclictest, good for understanding latency and it's measurement: ['Using and Understanding the Real-Time Cyclictest Benchmark', Rowand, Oct 2013](https://events.static.linuxfound.org/sites/events/files/slides/cyclictest.pdf)
     - ['Intro to Real-Time Linux for Embedded Developers', an interview with Steven Rostedt](https://www.linuxfoundation.org/blog/2013/03/intro-to-real-time-linux-for-embedded-developers/)
 
+- [Playlist: RealTime Linux Summit: presentations at EOSS, Prague, 2023](https://www.youtube.com/watch?v=NWVWXtfOzXM&list=PLbzoR-pLrL6oEVSWhTJHb8fYaL88tACo8&index=1)
+
 - [e]BPF tools for measuring scheduler / runqueue latencies (plus other stuff):
     - [Very useful summary diagram of Linux [e]BPF tracing tools, Brendan Gregg](http://www.brendangregg.com/BPF/bcc_tracing_tools_early2019.png)
     - [Linux Extended BPF (eBPF) Tracing Tools, Brendan Gregg](http://www.brendangregg.com/ebpf.html)
     - [BPF Compiler Collection (BPFCC) on GitHub](https://github.com/iovisor/bcc)
 
+- [rtla timerlat: Debugging Real-time Linux Scheduling Latency, Daniel Bristot de Oliveira, Red Hat, ELC Eur 2023](https://youtu.be/oLTRVcJ7_as)
 - Three article series on the formal verification (plus analysis) on the Realtime Linux kernel, by Daniel Bristot de Oliveira, Red Hat
     - [A thread model for the real-time Linux kernel, Oct 2020](https://research.redhat.com/blog/article/a-thread-model-for-the-real-time-linux-kernel/)
     - [Efficient runtime verification for the Linux kernel, Feb 2021](https://research.redhat.com/blog/article/efficient-runtime-verification-for-the-linux-kernel/)
     - [Demystifying real-time Linux scheduling latency, May 2021](https://research.redhat.com/blog/article/demystifying-real-time-linux-scheduling-latency/)
     - [Related: Video of Oliveira's presentation at the EOSS, June 2023: rtla timerlat: Debugging Real-time Linux Scheduling Latency - Daniel Bristot de Oliveira, Red Hat](https://www.youtube.com/watch?v=oLTRVcJ7_as)
+
+- Ubuntu series:
+    - [Technical deep-dive into a real-time kernel, Edoardo Barbieri, June 2023](https://ubuntu.com/blog/real-time-kernel-technical)
+    - [Tuning a real-time kernel, Edoardo Barbieri, June 2023](https://ubuntu.com/blog/real-time-kernel-tuning)
 
 - The still amazing and very relevant book on software engineering: *'The Mythical Man Month: Essays on Software Engineering'*, Frederick P Brooks, 1975, 1995
     - [On Amazon (Anniversary Edition)](https://www.amazon.com/Mythical-Man-Month-Anniversary-Software-Engineering-ebook/dp/B00B8USS14/ref=sr_1_1?crid=3R2CNHTX5LYIC&keywords=mythical+man+month&qid=1562226712&s=digital-text&sprefix=mythical+%2Cdigital-text%2C376&sr=1-1)
