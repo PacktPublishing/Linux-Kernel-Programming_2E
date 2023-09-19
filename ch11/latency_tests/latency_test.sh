@@ -46,10 +46,11 @@ loops=100000000
 # alternatively: run cyclictest by duration
 #duration=12h
 duration=1h
+#duration=30s
 echo "sudo cyclictest --duration=${duration} -m -S -p90 -i200 -h400 -q >output"
 sudo cyclictest --duration=${duration} -m -S -p90 -i200 -h400 -q >output
 
-# 2. Get maximum latency
+# 2. Extract the min/avg/max latencies detected by cyclictest
 min=$(grep "Min Latencies" output | tr " " "\n" | grep "^[0-9]" | sort -n | head -1 | sed s/^0*//)
 max=$(grep "Max Latencies" output | tr " " "\n" | sort -n | tail -1 | sed s/^0*//)
 avg=$(grep "Avg Latencies" output | tr " " "\n" | grep "^[0-9]" | sed s/^0*// |awk '{sum += $1} END {print sum/NR}')
