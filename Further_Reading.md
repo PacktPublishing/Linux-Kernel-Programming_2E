@@ -380,6 +380,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 - Linux (physical) memory models
     - [Official kernel doc: Physical Memory Model](https://docs.kernel.org/mm/memory-model.html#physical-memory-model)
     - [Memory: the flat, the discontiguous, and the sparse, LWN, M Rapoport, May 2019](https://lwn.net/Articles/789304/)
+    - [struct page, the Linux physical page frame data structure, Mathhew Wilcox, Oct 2020](https://blogs.oracle.com/linux/post/struct-page-the-linux-physical-page-frame-data-structure)
 - Blog article: [In defence of swap: common misconceptions, Chris Down, Jan 2018](https://chrisdown.name/2018/01/02/in-defence-of-swap.html)
 <br>
 
@@ -405,8 +406,9 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - An example diagram of CPU (cache) hierarchy: ["Memory hierarchy of an AMD Bulldozer server"](https://en.wikipedia.org/wiki/CPU_cache#/media/File:Hwloc.png)
 
 - Slab layer - performance, etc
-    -   ['Toward a more efficient slab allocator', LWN, Jon Corbet, Jan 2015](https://lwn.net/Articles/629152/)
-    -   Blog article ['INTERESTING NUMBERS'](https://kaiwantech.wordpress.com/2015/05/01/interesting-numbers/); see the section on *Networking* for some information on how the network subsystem has time critical code paths (and the resource links that follow)
+    - [Linux SLUB Allocator Internals and Debugging, Part 1 of 4, Imran Khan, Dec 2022](https://blogs.oracle.com/linux/post/linux-slub-allocator-internals-and-debugging-1)
+    - ['Toward a more efficient slab allocator', LWN, Jon Corbet, Jan 2015](https://lwn.net/Articles/629152/)
+    - Blog article ['INTERESTING NUMBERS'](https://kaiwantech.wordpress.com/2015/05/01/interesting-numbers/); see the section on *Networking* for some information on how the network subsystem has time critical code paths (and the resource links that follow)
 
 - GNUplot
     - Must-See [Demos for gnuplot version 5.4 (pngcairo terminal)](http://gnuplot.sourceforge.net/demo/index.html)
@@ -474,6 +476,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 - OOM and VM Overcommit
     - [Better tools for out-of-memory debugging, Jon Corbet, May 2022, LWN](https://lwn.net/Articles/894546/)
     - [Per-file OOM badness, Jon Corbet, June 2022, LWN](https://lwn.net/Articles/896738/)
+    - [Chris Siebenmann's excellent blog articles; (search for 'overcommit' within them)](https://utcc.utoronto.ca/~cks/space/blog/__IndexChron)
     - [Toward more predictable and reliable out-of-memory handling, LWN, Jon Corbet, December 2015](https://lwn.net/Articles/668126/)
     - [Quora: What are the disadvantages of disabling memory overcommit in Linux?](https://www.quora.com/What-are-the-disadvantages-of-disabling-memory-overcommit-in-Linux)
     - [Relevant Linux kernel documentation](https://www.kernel.org/doc/Documentation/vm/overcommit-accounting)
@@ -523,20 +526,18 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
 
 - Control Groups (cgroups)
+    - [The must-read: official Linux kernel doc: Control Group v2](https://docs.kernel.org/admin-guide/cgroup-v2.html)
     - Four-part series on cgroups and systemd, Red Hat, Steve Ovens
-         - [A Linux sysadmin's introduction to cgroups, Steve Ovens, Sept 2020](https://www.redhat.com/sysadmin/cgroups-part-one)
+        - [A Linux sysadmin's introduction to cgroups, Steve Ovens, Sept 2020](https://www.redhat.com/sysadmin/cgroups-part-one)
         - [How to manage cgroups with CPUShares, Steve Ovens, Oct 2020](https://www.redhat.com/sysadmin/cgroups-part-two)
         - [Managing cgroups the hard way-manually, Steve Ovens, Oct 2020](https://www.redhat.com/sysadmin/cgroups-part-three)
         - [Managing cgroups with systemd, Steve Ovens, Oct 2020](https://www.redhat.com/sysadmin/cgroups-part-four)
-
-    - [The must-read: official Linux kernel doc: Control Group v2](https://docs.kernel.org/admin-guide/cgroup-v2.html)
-
+    - [How I think you set up fair share scheduling under systemd, C Siebenmann, May 2016](https://utcc.utoronto.ca/~cks/space/blog/linux/SystemdFairshareScheduling)
+    - [The basics of Linux fair share CPU scheduling in cgroup v2 ('unified cgroups'), C Siebenmann, May 2022](https://utcc.utoronto.ca/~cks/space/blog/linux/CgroupV2FairShareScheduling)
     - [Understanding cgroups, Grant, Nov 2018](https://www.grant.pizza/blog/understanding-cgroups/)
     - Good introductory article (focussed on cgroups1): ['Control Groups in Linux', Feb 2017](http://blog.brew.com.hk/control-groups-in-linux/)
     - ['Understanding the new control groups API', Rami Rosen, LWN, Mar 2016](https://lwn.net/Articles/679786/)
-    - ['Control Group v2' : Linux kernel 'official' documentation](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html#control-group-v2)
     - man page (informational): ['cgroups - Linux control groups'](http://man7.org/linux/man-pages/man7/cgroups.7.html) (man 7 cgroups)
-
     - [Managing resources with cgroups in systemd, David Both, Oct 2020](https://opensource.com/article/20/10/cgroups)
     - RedHat System Design Guide (RHEL 8); focus on cgroups v1: ['SETTING LIMITS FOR APPLICATIONS'](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/system_design_guide/setting-limits-for-applications_system-design-guide)
     - FB: Includes an interesting case study on how Facebook uses Linux's cgroups2 to perform equitable resource distribution on (some of) it's servers: ['Maximizing Resource Utilization with cgroup2'](https://facebookmicrosites.github.io/cgroup2/docs/overview.html)
@@ -561,24 +562,6 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - Detailed slides on cyclictest, good for understanding latency and it's measurement: ['Using and Understanding the Real-Time Cyclictest Benchmark', Rowand, Oct 2013](https://events.static.linuxfound.org/sites/events/files/slides/cyclictest.pdf)
     - ['Intro to Real-Time Linux for Embedded Developers', an interview with Steven Rostedt](https://www.linuxfoundation.org/blog/2013/03/intro-to-real-time-linux-for-embedded-developers/)
 
-- [Playlist: RealTime Linux Summit: presentations at EOSS, Prague, 2023](https://www.youtube.com/watch?v=NWVWXtfOzXM&list=PLbzoR-pLrL6oEVSWhTJHb8fYaL88tACo8&index=1)
-
-- [e]BPF tools for measuring scheduler / runqueue latencies (plus other stuff):
-    - [Very useful summary diagram of Linux [e]BPF tracing tools, Brendan Gregg](http://www.brendangregg.com/BPF/bcc_tracing_tools_early2019.png)
-    - [Linux Extended BPF (eBPF) Tracing Tools, Brendan Gregg](http://www.brendangregg.com/ebpf.html)
-    - [BPF Compiler Collection (BPFCC) on GitHub](https://github.com/iovisor/bcc)
-
-- [rtla timerlat: Debugging Real-time Linux Scheduling Latency, Daniel Bristot de Oliveira, Red Hat, ELC Eur 2023](https://youtu.be/oLTRVcJ7_as)
-- Three article series on the formal verification (plus analysis) on the Realtime Linux kernel, by Daniel Bristot de Oliveira, Red Hat
-    - [A thread model for the real-time Linux kernel, Oct 2020](https://research.redhat.com/blog/article/a-thread-model-for-the-real-time-linux-kernel/)
-    - [Efficient runtime verification for the Linux kernel, Feb 2021](https://research.redhat.com/blog/article/efficient-runtime-verification-for-the-linux-kernel/)
-    - [Demystifying real-time Linux scheduling latency, May 2021](https://research.redhat.com/blog/article/demystifying-real-time-linux-scheduling-latency/)
-    - [Related: Video of Oliveira's presentation at the EOSS, June 2023: rtla timerlat: Debugging Real-time Linux Scheduling Latency - Daniel Bristot de Oliveira, Red Hat](https://www.youtube.com/watch?v=oLTRVcJ7_as)
-
-- Ubuntu series:
-    - [Technical deep-dive into a real-time kernel, Edoardo Barbieri, June 2023](https://ubuntu.com/blog/real-time-kernel-technical)
-    - [Tuning a real-time kernel, Edoardo Barbieri, June 2023](https://ubuntu.com/blog/real-time-kernel-tuning)
-
 - The still amazing and very relevant book on software engineering: *'The Mythical Man Month: Essays on Software Engineering'*, Frederick P Brooks, 1975, 1995
     - [On Amazon (Anniversary Edition)](https://www.amazon.com/Mythical-Man-Month-Anniversary-Software-Engineering-ebook/dp/B00B8USS14/ref=sr_1_1?crid=3R2CNHTX5LYIC&keywords=mythical+man+month&qid=1562226712&s=digital-text&sprefix=mythical+%2Cdigital-text%2C376&sr=1-1)
     - [Quotes](https://en.wikiquote.org/wiki/Fred_Brooks)
@@ -596,6 +579,12 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
         - [A "kill" button for control groups (May 3, 2021)](https://lwn.net/Articles/855049/)
         - [Cleaning up dying control groups, 2022 edition (May 19, 2022)](https://lwn.net/Articles/895431/)
 
+- ghOSt
+    - 'ghOSt: Fast & Flexible User-Space Delegation of Linux Scheduling', J T Humphries et al, ACM Digital Library, Oct 2021
+        - [Paper](https://dl.acm.org/doi/10.1145/3477132.3483542)
+        - [Video talk](https://www.youtube.com/watch?v=j4ABe4dsbIY)
+    - [ghOSt user space repo on GitHub](https://github.com/google/ghost-userspace)
+    - [ghOSt kernel-space repo on GitHub](https://github.com/google/ghost-kernel)
 <br>
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
