@@ -53,7 +53,7 @@ echo "-----------------------------------------------------------------------"
 
 runcmd sudo apt install -y \
 	bc bpfcc-tools bsdextrautils \
-	clang cppcheck cscope curl exuberant-ctags \
+	clang coreutils cppcheck cscope curl exuberant-ctags \
 	fakeroot flawfinder \
 	git gnome-system-monitor gnuplot hwloc indent kmod \
 	libnuma-dev linux-headers-$(uname -r) linux-tools-$(uname -r) \
