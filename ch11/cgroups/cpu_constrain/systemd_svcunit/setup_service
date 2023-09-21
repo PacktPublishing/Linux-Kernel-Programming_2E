@@ -34,6 +34,14 @@ die()
 
 UNITFILE=$1
 [[ ! -f ${UNITFILE} ]] && die "${UNITFILE} not found"
+[[ "${UNITFILE}" = *"lowram"* ]] && {
+	echo "
+*** !WARNING! Running this 'lowram' service uses enormous amounts of memory and can hang your system ***
+"
+	echo -n "Proceed?
+Press [Enter] for yes, or ^C to abort ... "
+	read
+}
 sudo cp ${UNITFILE} /lib/systemd/system/
 
 # Copy the boot script, service units and app where they can be located
@@ -46,6 +54,7 @@ make || exit 1
 )
 sudo cp ../primegen/primegen /usr/local/bin/systemd_svcunit_demo || exit 1
 
+UNITFILE=$(basename ${UNITFILE}) # eliminate any './' ...
 echo "${name}: enable and run the \"${UNITFILE}\" service unit NOW"
 sudo systemctl enable --now ${UNITFILE} || die "enabling svc failed"
 #journalctl -k -f
