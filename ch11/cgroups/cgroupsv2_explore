@@ -225,7 +225,10 @@ mem_ctrl_show()
     printf "      %-39s   : %s (%s)\n" "mem.low" "${mem_low}" "${mem_low_human}"
 
     local mem_high_human=$(memory_size_to_readable ${mem_high})
-    printf "      %-39s   : %s (%s)\n" "mem.high" "${mem_high}" "${mem_high_human}"
+    [[ -z "${mem_high_human}" ]] && \
+		printf "      %-39s   : %s\n" "mem.high" "${mem_high}" \
+		|| \
+		printf "      %-39s   : %s (%s)\n" "mem.high" "${mem_high}" "${mem_high_human}"
 
     SHOW_FOOTNOTE_5=1
   fi
