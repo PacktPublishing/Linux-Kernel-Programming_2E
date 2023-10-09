@@ -92,7 +92,7 @@ all:
 	make -C $(KDIR) M=$(PWD) modules
 #	Strip: only strip debug symbols else it won't load correctly
 	if [ "${MYDEBUG}" != "y" ]; then \
-		sudo ${STRIP} --strip-debug ${FNAME_C}.ko ; \
+		${STRIP} --strip-debug ${FNAME_C}.ko ; \
 	fi
 install:
 	@echo
