@@ -16,7 +16,7 @@ After=mount.target
 # Set mem high to 512M
 MemoryHigh=512M
 # set mem max to 756M
-MemoryMax=756M
+#MemoryMax=756M
 #---
 
 # Still good case:
@@ -31,6 +31,11 @@ MemoryMax=756M
 # Of course, the OOM killer (or systemd-oomd) getting invoked depends on your
 # system config, on how much RAM you have. If systemd-oomd is running,
 # *it* handles the OOM situation and reports it in the log.
+<<<<<<< HEAD
+#ExecStart=/usr/bin/stress-ng --malloc-bytes 128T --malloc 50 --timeout 100
+#ExecStart=/usr/bin/stress-ng --malloc-bytes 100G --malloc-touch --malloc 10
+ExecStart=stress-ng --oomable --pathological --vm 1 --vm-bytes 100% --vm-populate -t 5m
+=======
 #ExecStart=/usr/bin/stress-ng --malloc-bytes 100G --malloc-touch --malloc 10
 #  stress-ng : --malloc-touch        touch pages force pages to be populated
 #   Force the allocation of RAM this way and get it to splat faster!
