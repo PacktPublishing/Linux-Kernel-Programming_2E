@@ -225,7 +225,10 @@ mem_ctrl_show()
     printf "      %-39s   : %s (%s)\n" "mem.low" "${mem_low}" "${mem_low_human}"
 
     local mem_high_human=$(memory_size_to_readable ${mem_high})
-    printf "      %-39s   : %s (%s)\n" "mem.high" "${mem_high}" "${mem_high_human}"
+    [[ -z "${mem_high_human}" ]] && \
+		printf "      %-39s   : %s\n" "mem.high" "${mem_high}" \
+		|| \
+		printf "      %-39s   : %s (%s)\n" "mem.high" "${mem_high}" "${mem_high_human}"
 
     SHOW_FOOTNOTE_5=1
   fi
@@ -335,7 +338,8 @@ CGROUP_MOUNT=$(mount|grep -w cgroup2 2>/dev/null|awk '{print $3}' 2>/dev/null)
 
 # Footnotes
 SHOW_FOOTNOTE_1=0
-FOOTNOTE_1="[1] No sub-controllers in a cgroup implies no controllers are enabled; in effect, no cgroup constraints apply to it"
+FOOTNOTE_1="[1] No sub-controllers in a cgroup implies no controllers are enabled; in effect, no cgroup constraints apply to it.
+    CAREFUL: If the parent cgroup has some controllers enabled, then the constraints imposed do apply on it's child(ren) cgroup(s)"
 SHOW_FOOTNOTE_2=1
 FOOTNOTE_2="[2] See cgroup.freeze (and cgroup.events) under https://docs.kernel.org/admin-guide/cgroup-v2.html#core-interface-files"
 SHOW_FOOTNOTE_3=1
