@@ -16,7 +16,7 @@ After=mount.target
 # Set mem high to 512M
 MemoryHigh=512M
 # set mem max to 756M
-MemoryMax=756M
+#MemoryMax=756M
 #---
 
 # Still good case:
@@ -31,17 +31,16 @@ MemoryMax=756M
 # Of course, the OOM killer (or systemd-oomd) getting invoked depends on your
 # system config, on how much RAM you have. If systemd-oomd is running,
 # *it* handles the OOM situation and reports it in the log.
-ExecStart=/usr/bin/stress-ng --malloc-bytes 300G --malloc 50 --timeout 100
+#ExecStart=/usr/bin/stress-ng --malloc-bytes 128T --malloc 50 --timeout 100
+#ExecStart=/usr/bin/stress-ng --malloc-bytes 100G --malloc-touch --malloc 10
+ExecStart=stress-ng --oomable --pathological --vm 1 --vm-bytes 100% --vm-populate -t 5m
 
 # For security; also see systemd.exec(5) section 'SANDBOXING'
-NoNewPrivileges=true
+#NoNewPrivileges=true
 
 # Optional: Apply 'better' cpu sched settings for this process
-CPUSchedulingPolicy=fifo
-CPUSchedulingPriority=83
-# So that the child process - primegen - runs with these sched settings!
-# (well it's anyway the default)
-CPUSchedulingResetOnFork=false
+#CPUSchedulingPolicy=fifo
+#CPUSchedulingPriority=83
 # Nice value applies for only the default 'other/normal' cpu sched policy
 #Nice=-20
 
