@@ -125,7 +125,7 @@ void llkd_sysinfo(void)
 {
 	char msg[128];
 
-	memset(msg, 0, strlen(msg));
+	memset(msg, 0, 128);
 	snprintf(msg, 47, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
 	/* Strictly speaking, all this #if... is considered ugly and should be
