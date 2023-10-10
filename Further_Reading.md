@@ -191,6 +191,8 @@ Miscellaneous:
     - Slide presentation (PDF): [A Dive Into Kbuild, Cao Jin, Fujitsu, Aug 2018](https://events19.linuxfoundation.org/wp-content/uploads/2017/11/A-Dive-into-Kbuild-Cao-Jin-Fujitsu.pdf)
 
 - Article: [How to compile a Linux kernel in the 21st century, S Kenlon, Aug 2019](https://opensource.com/article/19/8/linux-kernel-21st-century)
+- [Boot config: official kernel doc](https://elixir.bootlin.com/linux/v6.1.25/source/Documentation/admin-guide/bootconfig.rst)
+- [GCC plugins: official kernel doc](https://elixir.bootlin.com/linux/v6.1.25/source/Documentation/kbuild/gcc-plugins.rst)
 - Interesting: [Meet the contributor of the 1-millionth commit: Ricardo Neri, Swapnil Bharatiya, Sept 2020](https://www.linux.com/featured/meet-the-one-millionth-committer-to-linux-ricardo-neri/)
 
 <br>
@@ -257,7 +259,7 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
 ## Chapter 5, Writing your first Kernel Module-LKMs Part 2 - Further Reading
 
 - Blog article: [WORKING ON THE CONSOLE WITH THE RASPBERRY PI, kaiwanTECH](https://kaiwantech.wordpress.com/2018/12/16/working-on-the-console-with-the-raspberry-pi/)
-
+- [Cross compiling a kernel module, embear](https://embear.ch/blog/compiling-a-kernel-module)
 - Licensing
     - [Being honest with MODULE_LICENSE, Jon Corbet, LWN, Apr 2004](https://lwn.net/Articles/82305/)
     - [Multi-licensing](https://en.wikipedia.org/wiki/Multi-licensing)
