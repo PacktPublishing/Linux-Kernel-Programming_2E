@@ -67,14 +67,15 @@ void llkd_sysinfo2(void)
 #endif
 #endif
 #ifdef CONFIG_ARM
-	strlcat(msg, "ARM-32, ", MSGLEN);
+	strlcat(msg, "AArch32 (ARM-32), ", MSGLEN);
 #endif
 #ifdef CONFIG_ARM64
-	strlcat(msg, "Aarch64, ", MSGLEN);
+	strlcat(msg, "AArch64 (ARM-64), ", MSGLEN);
 #endif
 #ifdef CONFIG_MIPS
 	strlcat(msg, "MIPS, ", MSGLEN);
 #endif
+
 #ifdef CONFIG_PPC
 	strlcat(msg, "PowerPC, ", MSGLEN);
 #endif
