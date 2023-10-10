@@ -25,9 +25,17 @@
 # For details, please refer the book, Ch 5, section
 # 'A "better" Makefile template for your kernel modules'.
 
-# To support cross-compiling for kernel modules:
+#--- To support cross-compiling for kernel modules
 # For architecture (cpu) 'arch', invoke make as:
 #  make ARCH=<arch> CROSS_COMPILE=<cross-compiler-prefix>
+# F.e. to cross-compile for the AArch64:
+#  make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
+#
+# Alternately:
+#  export ARCH=<arch>
+#  export CROSS_COMPILE=<cross-compiler-prefix>
+#  make
+#
 # The KDIR var is set to a sample path below; you're expected to update it on
 # your box to the appropriate path to the kernel source tree for that arch.
 ifeq ($(ARCH),arm)
@@ -46,6 +54,7 @@ else
   # on a Raspberry Pi implies that it's the host)
   KDIR ?= /lib/modules/$(shell uname -r)/build
 endif
+#---
 
 # Compiler
 CC     := $(CROSS_COMPILE)gcc
@@ -92,7 +101,7 @@ all:
 	make -C $(KDIR) M=$(PWD) modules
 #	Strip: only strip debug symbols else it won't load correctly
 	if [ "${MYDEBUG}" != "y" ]; then \
-		${STRIP} --strip-debug ${FNAME_C}.ko ; \
+	   ${STRIP} --strip-debug ${FNAME_C}.ko ; \
 	fi
 install:
 	@echo
@@ -106,7 +115,7 @@ install:
 #	Strip: only strip debug symbols else it won't load correctly
 	@echo " [If !debug, stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
 	if [ "${MYDEBUG}" != "y" ]; then \
-		sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko ; \
+	   sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko ; \
 	fi
 nsdeps:
 	@echo "--- nsdeps (namespace dependencies resolution; for possibly importing ns's) ---"
@@ -205,7 +214,7 @@ endif
 	@echo
 	cppcheck -v --force --enable=all -i .tmp_versions/ -i *.mod.c -i bkp/ --suppress=missingIncludeSystem .
 
-# Packaging; just tar.xz as of now
+# Packaging: just generates a tar.xz of the source as of now
 tarxz-pkg:
 	rm -f ../${FNAME_C}.tar.xz 2>/dev/null
 	make clean
