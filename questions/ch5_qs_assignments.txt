@@ -12,3 +12,7 @@ is:
 	int product(int a, int b); 
 and will return the value (a*b).
 
+Assignment 5.2: modstacking2
+Write two kernel modules, named core_module and user_module. They must reside
+in distinct folders (with the same name) under the modstacking2/ folder.
+Code in the user_module must be able to invoke exported code in the core_module.
