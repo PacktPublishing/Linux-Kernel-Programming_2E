@@ -25,6 +25,17 @@
 # For details, please refer the book, Ch 5, section
 # 'A "better" Makefile template for your kernel modules'.
 
+#------------------------------------------------------------------
+# IMPORTANT : Set FNAME_C to the kernel module name source filename (without .c).
+# This enables you to use this Makefile as a template; just update this variable!
+# As well, the MYDEBUG variable (see it below) can be set to 'y' or 'n' (no being
+# the default)
+FNAME_C := lkm_template
+ifeq (,$(FNAME_C))
+	$(error ERROR: you Must set the FNAME_C variable in the Makefile)
+endif
+#------------------------------------------------------------------
+
 #--- To support cross-compiling for kernel modules
 # For architecture (cpu) 'arch', invoke make as:
 #  make ARCH=<arch> CROSS_COMPILE=<cross-compiler-prefix>
@@ -60,9 +71,6 @@ endif
 CC     := $(CROSS_COMPILE)gcc
 #CC    := clang
 STRIP := ${CROSS_COMPILE}strip
-
-# IMPORTANT :: Set FNAME_C to the kernel module name source filename (without .c)
-FNAME_C := lkm_template
 
 PWD            := $(shell pwd)
 obj-m          += ${FNAME_C}.o
@@ -181,6 +189,7 @@ endif
 	@echo "--- static analysis with sparse ---"
 	@echo
 # if you feel it's too much, use C=1 instead
+# If you feel it's too much, use C=1 instead
 # NOTE: deliberately IGNORING warnings from kernel headers!
 	make -Wsparse-all C=2 CHECK="/usr/bin/sparse --os=linux --arch=$(ARCH)" -C $(KDIR) M=$(PWD) modules 2>&1 |egrep -v "^\./include/.*\.h|^\./arch/.*\.h"
 
@@ -232,6 +241,7 @@ help:
 	@echo
 	@echo 'TIP: Type make <tab><tab> to show all valid targets'
 	@echo
+	@echo 'FYI: KDIR=${KDIR} ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} ccflags-y="${ccflags-y}" MYDEBUG=${MYDEBUG} DBG_STRIP=${DBG_STRIP}'
 
 	@echo '--- 'usual' kernel LKM targets ---'
 	@echo 'typing "make" or "all" target : builds the kernel module object (the .ko)'
