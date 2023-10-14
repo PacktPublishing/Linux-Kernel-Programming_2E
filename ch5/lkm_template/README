@@ -8,14 +8,16 @@ checks on your code, via code-style checking, static and dynamic analysis tools.
 
 The output of the 'make help' below shows the targets:
 
-$ make help 
+$ make help
 === Makefile Help : additional targets available ===
 
 TIP: Type make <tab><tab> to show all valid targets
+FYI: KDIR=/lib/modules/6.5.6-200.fc38.x86_64/build ARCH= CROSS_COMPILE= ccflags-y="-UDEBUG -DDYNAMIC_DEBUG_MODULE" MYDEBUG=n DBG_STRIP=n
 
 --- usual kernel LKM targets ---
 typing "make" or "all" target : builds the kernel module object (the .ko)
-install     : installs the kernel module(s) to INSTALL_MOD_PATH (default here: /lib/modules/5.19.0-50-generic/)
+install     : installs the kernel module(s) to INSTALL_MOD_PATH (default here: /lib/modules/6.5.6-200.fc38.x86_64/).
+            : Takes care of performing debug-only symbols stripping iff MYDEBUG=n and not using module signature
 nsdeps      : namespace dependencies resolution; for possibly importing namespaces
 clean       : cleanup - remove all kernel objects, temp files/dirs, etc
 
@@ -44,14 +46,6 @@ tarxz-pkg  : tar and compress the LKM source files as a tar.xz into the dir abov
 help       : this help target
 $ 
 
-FYI, the checkpatch.pl Perl script is part of the Linux kernel source; you can
-always download it from here:
-https://github.com/torvalds/linux/blob/master/scripts/checkpatch.pl
-... or access it on your local system via
- ${KDIR}/scripts/checkpatch.pl
- ; where KDIR is the location of your local kernel source tree (could even
- point to the kernel headers tree).
-
 ----------------------------------------------------------------------------------
 A few generic important rules / a quick Checklist for the Programmer
 ----------------------------------------------------------------------------------
@@ -71,3 +65,12 @@ DID YOU REMEMBER TO
 
 Also see:
 LOW-LEVEL SOFTWARE DESIGN: https://kaiwantech.wordpress.com/2017/01/03/low-level-software-design/
+
+
+FYI, the checkpatch.pl Perl script used here is part of the Linux kernel source;
+you can always download it from here:
+https://github.com/torvalds/linux/blob/master/scripts/checkpatch.pl
+... or access it on your local system via
+ ${KDIR}/scripts/checkpatch.pl
+; where KDIR is the location of your local kernel source tree (could even
+point to the kernel headers tree).
