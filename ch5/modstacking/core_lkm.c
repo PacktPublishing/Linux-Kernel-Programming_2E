@@ -25,7 +25,6 @@
 #include <linux/init.h>
 #include <linux/module.h>
 
-#define MODNAME   "core_lkm"
 #define THE_ONE   0xfedface
 MODULE_LICENSE("Dual MIT/GPL");
 

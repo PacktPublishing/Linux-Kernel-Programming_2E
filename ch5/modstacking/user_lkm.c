@@ -25,7 +25,6 @@
 #include <linux/init.h>
 #include <linux/module.h>
 
-#define MODNAME     "user_lkm"
 #if 1
 MODULE_LICENSE("Dual MIT/GPL");
 #else
