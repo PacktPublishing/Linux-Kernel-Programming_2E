@@ -258,7 +258,6 @@ help:
 	@echo '=== Makefile Help : additional targets available ==='
 	@echo
 	@echo 'TIP: Type make <tab><tab> to show all valid targets'
-	@echo
 	@echo 'FYI: KDIR=${KDIR} ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} ccflags-y="${ccflags-y}" MYDEBUG=${MYDEBUG} DBG_STRIP=${DBG_STRIP}'
 
 	@echo
