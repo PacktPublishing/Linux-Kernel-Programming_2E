@@ -24,6 +24,11 @@
 #
 # For details, please refer the book, Ch 5, section
 # 'A "better" Makefile template for your kernel modules'.
+#
+# AUTHOR : Kaiwan N Billimoria
+# DESCRIPTION : A simple kernel module 'better' Makefile template
+# LICENSE : Dual MIT/GPL
+# VERSION : 0.2
 
 #------------------------------------------------------------------
 # IMPORTANT : Set FNAME_C to the kernel module name source filename (without .c).
