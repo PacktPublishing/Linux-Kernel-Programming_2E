@@ -141,7 +141,7 @@ install:
 	@echo " [Now for the 'sudo make install' ]"
 	sudo make -C $(KDIR) M=$(PWD) modules_install
 	sudo depmod
-	@echo " [If !debug, stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
+	@echo " [If !debug and !(module signing), stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
 	if [ "${DBG_STRIP}" = "y" ]; then \
            sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko ; \
 	fi
