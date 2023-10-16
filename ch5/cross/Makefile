@@ -24,6 +24,21 @@
 #
 # For details, please refer the book, Ch 5, section
 # 'A "better" Makefile template for your kernel modules'.
+# AUTHOR : Kaiwan N Billimoria
+# DESCRIPTION : A simple kernel module 'better' Makefile template
+# LICENSE : Dual MIT/GPL
+# VERSION : 0.2
+
+#------------------------------------------------------------------
+# IMPORTANT : Set FNAME_C to the kernel module name source filename (without .c).
+# This enables you to use this Makefile as a template; just update this variable!
+# As well, the MYDEBUG variable (see it below) can be set to 'y' or 'n' (no being
+# the default)
+FNAME_C := lkm_template
+ifeq (,$(FNAME_C))
+	$(error ERROR: you Must set the FNAME_C variable in the Makefile)
+endif
+#------------------------------------------------------------------
 
 # To support cross-compiling for kernel modules:
 # For architecture (cpu) 'arch', invoke make as:
@@ -57,9 +72,6 @@ CC     := $(CROSS_COMPILE)gcc
 #CC    := clang
 STRIP := ${CROSS_COMPILE}strip
 
-# IMPORTANT :: Set FNAME_C to the kernel module name source filename (without .c)
-FNAME_C := lkm_template
-
 PWD            := $(shell pwd)
 obj-m          += ${FNAME_C}.o
 
@@ -74,29 +86,43 @@ obj-m          += ${FNAME_C}.o
 # macro is turned on by many CONFIG_*DEBUG* options; hence, we use a different
 # macro var name, MYDEBUG).
 MYDEBUG := n
+DBG_STRIP := y
 ifeq (${MYDEBUG}, y)
 # https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#compilation-flags
 # EXTRA_CFLAGS deprecated; use ccflags-y
   ccflags-y   += -DDEBUG -g -ggdb -gdwarf-4 -Wall -fno-omit-frame-pointer -fvar-tracking-assignments
 else
-  INSTALL_MOD_STRIP := 1
   ccflags-y   += -UDEBUG
 endif
 # We always keep the dynamic debug facility enabled; this allows us to turn
 # dynamically turn on/off debug printk's later... To disable it simply comment
 # out the following line
 ccflags-y   += -DDYNAMIC_DEBUG_MODULE
-
 KMODDIR ?= /lib/modules/$(shell uname -r)
+
+# Gain access to kernel configs
+include $(KDIR)/.config
+
+# Strip the module? Note:
+# a) Only strip debug symbols else it won't load correctly
+# b) WARNING! Don't strip modules when using CONFIG_MODULE_SIG* crytographic security
+ifdef CONFIG_MODULE_SIG
+  DBG_STRIP := n
+endif
+ifdef CONFIG_MODULE_SIG_ALL
+  DBG_STRIP := n
+endif
+ifdef CONFIG_MODULE_SIG_FORCE
+  DBG_STRIP := n
+endif
 
 all:
 	@echo
-	@echo '--- Building : KDIR=${KDIR} ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} ccflags-y="${ccflags-y}" MYDEBUG=${MYDEBUG} ---'
+	@echo '--- Building : KDIR=${KDIR} ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} ccflags-y="${ccflags-y}" MYDEBUG=${MYDEBUG} DBG_STRIP=${DBG_STRIP} ---'
 	@${CC} --version|head -n1
 	@echo
 	make -C $(KDIR) M=$(PWD) modules
-#	Strip: only strip debug symbols else it won't load correctly
-	if [ "${MYDEBUG}" != "y" ]; then \
+	if [ "${DBG_STRIP}" = "y" ]; then \
 		${STRIP} --strip-debug ${FNAME_C}.ko ; \
 	fi
 install:
@@ -108,9 +134,8 @@ install:
 	@echo " [Now for the 'sudo make install' ]"
 	sudo make -C $(KDIR) M=$(PWD) modules_install
 	sudo depmod
-#	Strip: only strip debug symbols else it won't load correctly
 	@echo " [If !debug, stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
-	if [ "${MYDEBUG}" != "y" ]; then \
+	if [ "${DBG_STRIP}" = "y" ]; then \
 		sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko ; \
 	fi
 nsdeps:
@@ -227,8 +252,9 @@ help:
 	@echo '=== Makefile Help : additional targets available ==='
 	@echo
 	@echo 'TIP: Type make <tab><tab> to show all valid targets'
-	@echo
+	@echo 'FYI: KDIR=${KDIR} ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} ccflags-y="${ccflags-y}" MYDEBUG=${MYDEBUG} DBG_STRIP=${DBG_STRIP}'
 
+	@echo
 	@echo '--- 'usual' kernel LKM targets ---'
 	@echo 'typing "make" or "all" target : builds the kernel module object (the .ko)'
 	@echo 'install     : installs the kernel module(s) to INSTALL_MOD_PATH (default here: /lib/modules/$(shell uname -r)/)'
