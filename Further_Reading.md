@@ -292,8 +292,8 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
 
 - [Linux Kernel Security](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#kernel_sec)
 	- The [Kernel Self Protection Project](https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project)  (KSPP, Kees Cook)
-	- Regular updates on the state of kernel secuirty: [codeblog, by Kees Cook](https://outflux.net/blog/)
-	- [Mitigating Hackers with Hardening on Linux – An Overview for Developers, Focus on BoF, Kaiwan Billimoria (for the Embedded IOT Summit, Prague, June 2023)](https://www.youtube.com/watch?v=KQa_XEiLGMc)
+	- Regular updates on the state of kernel security: [codeblog, by Kees Cook](https://outflux.net/blog/)
+	- [YouTube Linux Foundation channel: 'Mitigating Hackers with Hardening on Linux – An Overview for Developers, Focus on BoF', Kaiwan Billimoria (Embedded IOT Summit, Prague, June 2023)](https://www.youtube.com/watch?v=KQa_XEiLGMc)
 	- Arch Linux wiki: ["Security / Kernel hardening"](https://wiki.archlinux.org/index.php/security#Kernel_hardening)
 	- ["The status of kernel hardening", LWN, Nov 2016](https://lwn.net/Articles/705262/)
 	- Blog article: ["Effectively bypassing kptr_restrict on Android"](http://bits-please.blogspot.com/2015/08/effectively-bypassing-kptrrestrict-on.html)
@@ -302,6 +302,10 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
 	- ["Hardened GNU/Linux - Linux kernel mitigation checklist"](https://hardenedlinux.github.io/system-security/2016/12/13/kernel_mitigation_checklist.html)
 	- ["Loading signed kernel modules", LWN, Dec 2011](https://lwn.net/Articles/470906/)
     - ["Is My IoT Device Secure? 7 Questions You Should Be Asking Yourself Today", Jan 2020, DZone](https://dzone.com/articles/is-my-iot-device-secure-7-questions-you-should-be)
+    - Kernel Lockdown LSM
+        - [Linux Kernel Finally Gets Its Lockdown, Oct 2019](https://thenewstack.io/linux-kernel-finally-gets-its-lockdown/)
+        - [kernel_lockdown(7) — Linux manual page](https://man7.org/linux/man-pages/man7/kernel_lockdown.7.html)
+        - [Securing the Linux kernel with lockdown mode, 2020](https://www.linux-magazine.com/Issues/2020/239/Lockdown-Mode/(offset)/3)
 
 - [The Eudyptula Challenge](http://eudyptula-challenge.org/): "The Eudyptula Challenge was a series of programming exercises for the Linux kernel, that started from a very basic "Hello world" kernel module, moving on up in complexity to getting patches accepted into the main Linux kernel source tree." It's really cool but NOT active as of this writing though.
 
