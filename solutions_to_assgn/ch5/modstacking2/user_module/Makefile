@@ -65,8 +65,8 @@ STRIP := ${CROSS_COMPILE}strip
 #FNAME_C := core_module
 
 PWD            := $(shell pwd)
-obj-m          := ../core_module/core_module.o
-obj-m          += user_module.o
+obj-m          := user_module.o
+obj-m          += ../core_module/core_module.o
 
 #--- Debug or production mode?
 # Set the MYDEBUG variable accordingly to y/n resp. We keep it off (n) by default.
