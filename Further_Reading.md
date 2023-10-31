@@ -598,16 +598,30 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 ## Chapter 12, Kernel Synchronization, Part 1 - Further Reading
 
-- An excellent read: ['What every systems programmer should know about concurrency', M Kline, May 2018](https://assets.bitbashing.io/papers/concurrency-primer.pdf)
+- In-depth, execellent: [Is Parallel Programming Hard, And, If So, What Can You Do About It?, Paul McKenny, 2023 (maintained)](https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.html)
+
+- Deeper details on the LKMM: [Explanation of the Linux-Kernel Memory Model](https://github.com/aparri/memory-model/blob/master/Documentation/explanation.txt)
+
+- [Who's afraid of a big bad optimizing compiler? Article contributed by Jade Alglave, Will Deacon, Boqun Feng, David Howells, Daniel Lustig, Luc Maranget, Paul E. McKenney, Andrea Parri, Nicholas Piggin, Alan Stern, Akira Yokosawa, and Peter Zijlstra, LWN, July 2019](https://lwn.net/Articles/793253/)
+
+- [Why kernel code should use READ_ONCE and WRITE_ONCE for shared memory accesses, Google wiki](https://github.com/google/kernel-sanitizers/blob/master/other/READ_WRITE_ONCE.md#why-kernel-code-should-use-read_once-and-write_once-for-shared-memory-accesses). *CAUTION! Module/driver devs, don't blindly do this!*
+
+- Daniel Vetter’s excellent blog posts here:
+    - [Locking Engineering Principles, Daniel Vetter, July 2022](https://blog.ffwll.ch/2022/07/locking-engineering.html) (In this post, he says, among other stuff: “… 1. Make it Dumb: Since this is the key principle …”. IOW, keep it simple)
+    - [Locking Engineering Hierarchy, Daniel Vetter, August 2022](https://blog.ffwll.ch/2022/08/locking-hierarchy.html) :  A ‘pile’ of locking patterns and designs, from the easiest to hardest
+    - Here's Paul E. McKenny’s follow-up post: [Stupid SMP Tricks: A Review of Locking Engineering Principles and Hierarchy, Aug 2022](https://paulmck.livejournal.com/67832.html?utm_source=3userpost)
+
+- A good read: ['What every systems programmer should know about concurrency', M Kline, May 2018](https://assets.bitbashing.io/papers/concurrency-primer.pdf)
 
 - Chip Overclock blog: [Peeking under the Hood, Sloan, May 2012](https://coverclock.blogspot.com/2012/05/peeking-under-hood.html)
+
 - [Measuring context switching and memory overheads for Linux threads, Eli Bendersky, Sept 2018](https://eli.thegreenplace.net/2018/measuring-context-switching-and-memory-overheads-for-linux-threads/)
+
 - Compiler Explorer website, Matt Godbolt; very useful: [See the live disassembly of your code on a large choice of compilers and compiler flags](https://godbolt.org/)
 
 - This presentation covers deadlock scenarios: ['Lockdep: how to read it's cryptic output', Steve Rostedt, Linux Plumbers Conf 2011](https://blog.linuxplumbersconf.org/2011/ocw/sessions/153)
 
 -  ['Mutexes and Semaphores Demystified', Micheal Barr, May 2016](https://barrgroup.com/Embedded-Systems/How-To/RTOS-Mutex-Semaphore)
-
 
 - The Mars Pathfinder mission and Priority Inversion
 	- ['What really happened on Mars ?' Glenn Reeves](https://cs.unc.edu/~anderson/teach/comp790/papers/mars_pathfinder_long_version.html)
@@ -626,7 +640,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 ## Chapter 13, Kernel Synchronization, Part 2 - Further Reading
 
-- Deeper details on the LKMM: [Explanation of the Linux-Kernel Memory Model](https://github.com/aparri/memory-model/blob/master/Documentation/explanation.txt)
+
 - Reference Counting API: [kernsec: a summary](https://kernsec.org/wiki/index.php/Kernel_Protections/refcount_t)
 
 - An extremely detailed take on concurrency topics, both hardware and software-wise: [Is Parallel Programming Hard, And, If So, What Can You Do About It?, Paul E.McKenney, December 2019](https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.2019.12.22a.pdf)
