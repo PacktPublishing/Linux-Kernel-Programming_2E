@@ -157,7 +157,9 @@ clean:
 	rm -f *~
 
 # Any usermode programs to build? Insert the build target(s) below
-
+#--- special case: target to build our user mode test app
+rdwr_test_secret: ../rdwr_test_secret.c
+	${CROSS_COMPILE}gcc ../rdwr_test_secret.c -o ../rdwr_test_secret -Os -Wall
 
 #--------------- More (useful) targets! -------------------------------
 INDENT := indent
