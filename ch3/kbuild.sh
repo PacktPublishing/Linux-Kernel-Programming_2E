@@ -97,7 +97,7 @@ build_kernel()
    echo
    date
  } || die "make <kernel> *failed*"
- [[ ! -f arch/x86/boot/bzImage ]] && die "make <kernel> *failed*? arch/x86/boot/bzImage not generated"
+ [[ ! -f arch/x86/boot/bzImage ]] && die "make <kernel> *failed*? arch/x86/boot/bzImage not generated" || true
 }
 
 install_modules()
