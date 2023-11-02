@@ -227,7 +227,7 @@ static ssize_t write_miscdrv_rdwr(struct file *filp, const char __user *ubuf,
 	 * new 'secret' into our driver 'context' structure, and unlock.
 	 */
 	spin_lock(&ctx->spinlock);
-	strlcpy(ctx->oursecret, kbuf, (count > MAXBYTES ? MAXBYTES : count));
+	strscpy(ctx->oursecret, kbuf, (count > MAXBYTES ? MAXBYTES : count));
 #if 0
 	print_hex_dump_bytes("ctx ", DUMP_PREFIX_OFFSET,
 				ctx, sizeof(struct drv_ctx));
@@ -320,8 +320,8 @@ static int __init miscdrv_init_refcount(void)
 	/* Retrieve the device pointer for this device */
 	ctx->dev = llkd_miscdev.this_device;
 
-	strlcpy(ctx->oursecret, "initmsg", 8);
-		/* Why don't we protect the above strlcpy() with the mutex / spinlock?
+	strscpy(ctx->oursecret, "initmsg", 8);
+		/* Why don't we protect the above strscpy() with the mutex / spinlock?
 		 * It's working on shared writable data, yes?
 		 * No; this is the init code; it's guaranteed to run in exactly
 		 * one context (typically the insmod(8) process), thus there is
