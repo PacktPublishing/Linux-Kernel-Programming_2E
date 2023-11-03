@@ -598,6 +598,8 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 ## Chapter 12, Kernel Synchronization, Part 1 - Further Reading
 
+- The official kernel documentation on Locking: [Locking](https://docs.kernel.org/locking/index.html)
+
 - In-depth, execellent: [Is Parallel Programming Hard, And, If So, What Can You Do About It?, Paul McKenny, 2023 (maintained)](https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.html)
 
 - Deeper details on the LKMM: [Explanation of the Linux-Kernel Memory Model](https://github.com/aparri/memory-model/blob/master/Documentation/explanation.txt)
@@ -633,6 +635,11 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
  - Spinlock internal implementation
     - ['Peeking Under the Hood', John Sloan, Chip Overclock blog, May 2012](https://coverclock.blogspot.com/2012/05/peeking-under-hood.html)
     - ['spin_lock implementation in ARM linux', linuxforthenew blog, Apr 2013](http://linuxforthenew.blogspot.com/2013/04/spinlock-implementation-in-arm-linux.html)
+    - [Synchronization primitives in the Linux kernel. Part 1, linux-insides online book](https://0xax.gitbooks.io/linux-insides/content/SyncPrim/linux-sync-1.html)
+
+- The w/w - wait/wound - mutex:
+    - [ww-mutex-design.txt, Jon Corbet, LWN, April 2013](https://lwn.net/Articles/548921/)
+    - Official kernel doc (based upon the above one, actually) [Wound/Wait Deadlock-Proof Mutex Design](https://docs.kernel.org/locking/ww-mutex-design.html#wound-wait-deadlock-proof-mutex-design)
 
 <br>
 
