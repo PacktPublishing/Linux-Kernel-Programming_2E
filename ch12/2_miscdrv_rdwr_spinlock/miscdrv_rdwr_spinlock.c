@@ -258,9 +258,8 @@ static ssize_t write_miscdrv_rdwr(struct file *filp, const char __user *ubuf,
 		/* We're still holding the spinlock! */
 		set_current_state(TASK_INTERRUPTIBLE);
 		schedule_timeout(1*HZ);  /* ... and this is a blocking call!
-							* Congratulations! you've just engineered a bug */
+			  * Congratulations! you've just engineered a bug */
 	}
-
 	spin_unlock(&ctx->spinlock);
 out_cfu:
 	kvfree(kbuf);
