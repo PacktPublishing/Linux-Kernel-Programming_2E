@@ -80,11 +80,8 @@ static int showthrds(void)
 	 *  [...]
 	 *  read_unlock(&tasklist_lock);
 	 * BUT, tasklist_lock isn't exported and is thus unavailable to modules.
-	 * So, using an RCU read lock is indicated here...
-	 * FYI: a) Ch 12 and Ch 13 cover the details on kernel synchronization.
-	 *      b) Read Copy Update (RCU) is a complex synchronization mechanism; it's
-	 * conceptually explained really well in this blog article:
-	 *  https://reberhardt.com/blog/2020/11/18/my-first-kernel-module.html
+	 * So, using an RCU read lock is indicated here... read about RCU and
+	 * it's usage in Ch 13.
 	 */
 	rcu_read_lock();
 	do_each_thread(p, t) {	/* 'p' : process ptr; 't': thread ptr */
