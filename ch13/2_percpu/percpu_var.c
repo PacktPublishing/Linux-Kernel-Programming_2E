@@ -11,6 +11,19 @@
  * From: Ch 13 : Kernel Synchronization, Part 2
  ****************************************************************
  * Brief Description:
+ *
+ * An LKM to demo using per-CPU variables.
+ *
+ * Extract from the text, Ch 13:
+ * "As an interesting way to help demo per-CPU variables, let's do this: we
+ * shall arrange for our demo kernel module to spawn off a couple of kernel
+ * threads. Let's call them thrd_0 and thrd_1. Furthermore, once created, we
+ * shall make use of the task structure’s CPU affinity mask feature by leveraging
+ * the sched_setaffinity() API to affine our thrd_0 kernel thread on CPU 0 and
+ * our thrd_1 kernel thread on CPU 1 (hence, they will be scheduled to run on
+ * only these cores; of course, we must test this code on a system (VM or
+ * native) with at least two CPU cores)."
+ *
  * FYI: we use a very hack-y approach to accessing the unexported symbol
  * sched_setaffinity(); details follow. We get away with it here, but
  * DON'T use this approach in production.
@@ -131,7 +144,7 @@ static long set_cpuaffinity(unsigned int cpu)
 }
 
 /* Our kernel thread worker routine.
- * The parameter is the thread number; it shoud be 0 or 1.
+ * The parameter is the thread number; it will be 0 or 1.
  */
 static int thrd_work(void *arg)
 {
