@@ -24,7 +24,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/slab.h>
-#include <linux/list.h>
+#include <linux/list.h> /* the 'famous' header! */
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("A simple Linux kernel linked list usage demo");
@@ -33,9 +33,9 @@ MODULE_VERSION("0.1");
 
 LIST_HEAD(head_node);
 struct node {
-	struct list_head list; /* first member should be this one; it has
-				* the pointers to next and prev
-				*/
+	struct list_head list;	/* first member should be this one; it has
+				 * the pointers to next and prev
+				 */
 	int ival1, ival2;
 	s8 letter;
 };
@@ -68,15 +68,16 @@ static void showlist(void)
 		return;
 
 	pr_info("   val1   |   val2   | letter\n");
+
+	/* Two ways to display; the more complex (first one) and the simpler way (2nd one) */
 #if 0
 	list_for_each(ptr, &head_node) {
-		curr = list_entry(ptr, struct node, list); // wrapper over container_of()
+		curr = list_entry(ptr, struct node, list);	// wrapper over container_of()
 #else
 	// simpler: internally invokes __container_of() to get the ptr to curr struct
 	list_for_each_entry(curr, &head_node, list) {
 #endif
-		pr_info("%9d %9d   %c\n",
-			curr->ival1, curr->ival2, curr->letter);
+		pr_info("%9d %9d   %c\n", curr->ival1, curr->ival2, curr->letter);
 	}
 }
 
@@ -95,8 +96,8 @@ static void findinlist_letter(s8 char2locate)
 		if (curr->letter == char2locate) {
 			found = true;
 			pr_info("found '%c' @ node #%d:\n"
-			"%9d %9d   _%c_\n",
-			char2locate, i, curr->ival1, curr->ival2, curr->letter);
+				"%9d %9d   _%c_\n",
+				char2locate, i, curr->ival1, curr->ival2, curr->letter);
 		}
 		i++;
 	}
@@ -113,37 +114,42 @@ static void freelist(void)
 
 	pr_info("freeing list items...\n");
 	list_for_each_entry(curr, &head_node, list)
-		kfree(curr);
+	    kfree(curr);
 }
 
 static int __init list_init(void)
 {
-#if 0
-	struct module mymod;
-#endif
-
 	/* Add a few nodes to the tail of the list */
-	add2tail(1, 2, 'l');
-	add2tail(5, 1000, 'i');
-	add2tail(3, 1415, 's');
-	add2tail(jiffies, jiffies+msecs_to_jiffies(300), 't');
+	if (add2tail(1, 2, 'l') < 0)
+		pr_info("WARNING! failed to add item to list (1)\n");
+	if (add2tail(5, 1000, 'k') < 0)
+		pr_info("WARNING! failed to add item to list (1)\n");
+	if (add2tail(3, 1415, 'p') < 0)
+		pr_info("WARNING! failed to add item to list (1)\n");
+	if (add2tail(jiffies, jiffies + msecs_to_jiffies(300), '2') < 0)
+		pr_info("WARNING! failed to add item to list (1)\n");
+	if (add2tail(jiffies, jiffies + msecs_to_jiffies(300), 'E') < 0)
+		pr_info("WARNING! failed to add item to list (1)\n");
 
-	// display the list items
+	// Display the list items
 	showlist();
 
-	// search for some items in the list
-	findinlist_letter('s');
-	findinlist_letter('z');
+	// Search for some items in the list
+	findinlist_letter('p');
+	findinlist_letter('e');
 
-	/* Iterate over all modules?
-	 * Fails as struct module is not available (!exported) to module authors!
+	/* Iterate over all modules currently in memory?
+	 * Here's the code But it fails as struct module is not available
+	 * (!exported) to module authors!
 	 */
 #if 0
-		list_for_each_entry(module.list, THIS_MODULE, list)
-			pr_info("module: %s\n", mymod->name);
+	struct module mymod;
+
+	list_for_each_entry(module.list, THIS_MODULE, list)
+	    pr_info("module: %s\n", mymod->name);
 #endif
 
-	return 0;	/* success */
+	return 0;		/* success */
 }
 
 static void __exit list_exit(void)
