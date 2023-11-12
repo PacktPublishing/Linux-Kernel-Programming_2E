@@ -15,6 +15,18 @@
  * linked list macros and routines.
  * Ref: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#list-management-functions
  *
+ *---------------------------------------------------------------------
+ * ! NOTE NOTE NOTE !
+ * The list is NOT protected against concurrent readers/writers. We deliberately
+ * don't do so here for two reasons:
+ * 1. To keep it very simple, and to keep the focus on the list routines
+ * 2. We do protect against concurrency when we come to it; Chapter 12 and
+ *    Chapter 13 go into these aspects in detail. Particularly, in Ch 13, we
+ *    rewrite this same demo protecting against concurrent access in two ways:
+ *    one, via the reader-writer spinlock and two, via (superior lock-free)
+ *    RCU synchronization. Check it out there!
+ *---------------------------------------------------------------------
+ *
  * For details, please refer the book, Ch 6.
  * License: Dual MIT/GPL
  */
