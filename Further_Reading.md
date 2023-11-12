@@ -600,7 +600,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - The official kernel documentation on Locking: [Locking](https://docs.kernel.org/locking/index.html)
 
-- In-depth, execellent: [Is Parallel Programming Hard, And, If So, What Can You Do About It?, Paul McKenny, 2023 (maintained)](https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.html)
+- In-depth, execellent: [Is Parallel Programming Hard, And, If So, What Can You Do About It?, Paul E. McKenney, 2023 (maintained)](https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.html)
 
 - Deeper details on the LKMM: [Explanation of the Linux-Kernel Memory Model](https://github.com/aparri/memory-model/blob/master/Documentation/explanation.txt)
 
@@ -611,7 +611,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 - Daniel Vetter’s excellent blog posts here:
     - [Locking Engineering Principles, Daniel Vetter, July 2022](https://blog.ffwll.ch/2022/07/locking-engineering.html) (In this post, he says, among other stuff: “… 1. Make it Dumb: Since this is the key principle …”. IOW, keep it simple)
     - [Locking Engineering Hierarchy, Daniel Vetter, August 2022](https://blog.ffwll.ch/2022/08/locking-hierarchy.html) :  A ‘pile’ of locking patterns and designs, from the easiest to hardest
-    - Here's Paul E. McKenny’s follow-up post: [Stupid SMP Tricks: A Review of Locking Engineering Principles and Hierarchy, Aug 2022](https://paulmck.livejournal.com/67832.html?utm_source=3userpost)
+    - Here's Paul E. McKenney’s follow-up post: [Stupid SMP Tricks: A Review of Locking Engineering Principles and Hierarchy, Aug 2022](https://paulmck.livejournal.com/67832.html?utm_source=3userpost)
 
 - A good read: ['What every systems programmer should know about concurrency', M Kline, May 2018](https://assets.bitbashing.io/papers/concurrency-primer.pdf)
 
@@ -647,19 +647,13 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 ## Chapter 13, Kernel Synchronization, Part 2 - Further Reading
 
-
+- [LWN Kernel Index on Reference counting](https://lwn.net/Kernel/Index/#Reference_counting)
+- [Official kernel doc: Reference counting (interfaces/APIs)](https://docs.kernel.org/driver-api/basics.html#reference-counting)
 - Reference Counting API: [kernsec: a summary](https://kernsec.org/wiki/index.php/Kernel_Protections/refcount_t)
-
-- An extremely detailed take on concurrency topics, both hardware and software-wise: [Is Parallel Programming Hard, And, If So, What Can You Do About It?, Paul E.McKenney, December 2019](https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.2019.12.22a.pdf)
 
 - False Sharing
     - ['Avoiding and Identifying False Sharing Among Threads', Intel, Nov 2011](https://software.intel.com/en-us/articles/avoiding-and-identifying-false-sharing-among-threads)
     - Blog article: ['Understanding False Sharing', Mar 2017](https://parallelcomputing2017.wordpress.com/2017/03/17/understanding-false-sharing/)
-
-
-- Per-CPU variables:
-    - Blog article: [A brief introduction to per-cpu variables, Chen, May 2014](http://thinkiii.blogspot.com/2014/05/a-briefintroduction-to-per-cpu.html)
-    - [How are percpu pointers implemented in the Linux kernel?, Stack Overflow, June 2013](https://stackoverflow.com/questions/16978959/how-are-percpu-pointersimplemented-in-the-linux-kernel)
 
 
 - Lock-free (or lockless) programming:
@@ -667,10 +661,31 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - Excellent "lock-free 101" articles:
         - [Fear and Loathing in Lock-Free Programming, T. Neely, Medium](https://medium.com/@tylerneely/fear-and-loathing-in-lock-freeprogramming-7158b1cdd50c)
         - [An Introduction to Lock-Free Programming, Preshing on Programming blog, June 2012](https://preshing.com/20120612/an-introduction-to-lock-free-programming/)
-    - Good article series: ['Introduction to Lock-free Algorithms'](http://www.1024cores.net/home/lock-free-algorithms/introduction)
+    - Good articles, series: ['Introduction to Lock-free Algorithms'](http://www.1024cores.net/home/lock-free-algorithms/introduction)
         - Presentation: ['Lock-Free Programming', Geoff Langdale](https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf)
         - Blog article: ['Some notes on lock-free and wait-free algorithms'](http://www.rossbencina.com/code/lockfree?q=~rossb/code/lockfree/)
         - ['CppCon 2014: Herb Sutter "Lock-Free Programming (or, Juggling Razor Blades), Part I', Herb Sutter, YouTube video](https://www.youtube.com/watch?v=c1gO9aB9nbs)
+        - [1024cores: Dmitry Vyukov's blog articles etc](https://www.1024cores.net/)
+        - []()
+
+- Per-CPU variables:
+    - Blog article: [A brief introduction to per-cpu variables, Chen, May 2014](http://thinkiii.blogspot.com/2014/05/a-briefintroduction-to-per-cpu.html)
+    - [How are percpu pointers implemented in the Linux kernel?, Stack Overflow, June 2013](https://stackoverflow.com/questions/16978959/how-are-percpu-pointersimplemented-in-the-linux-kernel)
+
+- RCU - Read-Copy-Update - in the Linux kernel
+    - Official kernel doc (includes FAQs): [RCU Concepts](https://docs.kernel.org/RCU/rcu.html#rcu-concepts)
+    - A superb playlist of YouTube video tutorials on RCU (by S.T. Chang)! [RCU](https://www.youtube.com/playlist?list=PLIlI4QbmdBqH9-L1QOq6O5Yxt-YVjRsFZ)
+        - Do see the first one first [12 what is RCU Paul E. McKenney at IISc (Bangalore, 2013)](https://www.youtube.com/watch?v=obDzjElRj9c&list=PLIlI4QbmdBqH9-L1QOq6O5Yxt-YVjRsFZ)
+    - The excellent and extensive kernel community documentation: [RCU](https://www.kernel.org/doc/Documentation/RCU/00-INDEX)
+    - [My First Kernel Module: A Debugging Nightmare, Ryan Eberhardt. Nov 2020](https://reberhardt.com/blog/2020/11/18/my-first-kernel-module.html); see the section entitled 'RCU: Read, Copy, Update', excellent and clear!
+    - A 3 series article to learn RCU: ['What is RCU, Fundamentally?', LWN, Paul E. McKenney, Dec 2007, Part 1 of 3 ](https://lwn.net/Articles/262464/)
+    - ['RCU Usage In the Linux Kernel: One Decade Later', Paul E. McKenney et al (PDF), circa 2013](http://www2.rdrop.com/~paulmck/techreports/RCUUsage.2013.02.24a.pdf)
+    - Code-level examples of RCU usage:
+        - A nice simple 'book library' example: [rcu_example, Jinbum Park](https://github.com/jinb-park/rcu_example/tree/master)
+        - [Linux RCU Usage and internals, Feb 2021](https://sklinuxblog.blogspot.com/2021/02/linux-rcu-usage.html)
+    - [Linux RCU, Lizhou Shan, Oct 2021](http://lastweek.io/notes/linux/linux-rcu/)
+    - ['Make any algorithm lock-free with this one crazy trick', May 2016](https://www.the-paper-trail.org/post/2016-05-25-make-any-algorithm-lock-free-with-this-one-crazy-trick/)
+    - ['The lockless page cache', LWN, Jon Corbet, July 2008](https://lwn.net/Articles/291826/) (an interesting article)
 
 
 - kdump and crash:
@@ -690,16 +705,6 @@ Paul E. McKenney, IBM LTC, June 2010](http://www.rdrop.com/~paulmck/scalability/
         - ['Lockdep: how to read it's cryptic output', Steve Rostedt, Linux Plumbers Conf 2011](https://blog.linuxplumbersconf.org/2011/ocw/sessions/153)
         - ['LOCKDEP, AN INSIDE OUT PERSPECTIVE', Nahim El Atmani, Nov 2016](https://www.lse.epita.fr/data/lt/2016-11-08/lt-2016-11-08-Nahim_El_Atmani-lockdep-an-inside-out-perspective.pdf)
         - (until it gets merged :-) : ['[PATCH 16/28] locking/lockdep: Add explanation to lock usage rules in lockdep design doc', Yuyang Du](https://lkml.org/lkml/2019/4/24/333), Apr 2019
-
-
-- RCU in the Linux kernel
-    - The excellent and extensive kernel community documentation: [RCU](https://www.kernel.org/doc/Documentation/RCU/00-INDEX)
-    - [My First Kernel Module: A Debugging Nightmare, Ryan Eberhardt. Nov 2020](https://reberhardt.com/blog/2020/11/18/my-first-kernel-module.html); see the section entitled 'RCU: Read, Copy, Update', excellent and clear!
-    - ['RCU Usage In the Linux Kernel: One Decade Later', McKenny et al (PDF), circa 2013](http://www2.rdrop.com/~paulmck/techreports/RCUUsage.2013.02.24a.pdf)
-    - [Linux RCU, Lizhou Shan, Oct 2021](http://lastweek.io/notes/linux/linux-rcu/)
-    - A 3 series article to learn RCU: ['What is RCU, Fundamentally?', LWN, Paul McKenney, Dec 2007, Part 1 of 3 ](https://lwn.net/Articles/262464/)
-    - ['Make any algorithm lock-free with this one crazy trick', May 2016](https://www.the-paper-trail.org/post/2016-05-25-make-any-algorithm-lock-free-with-this-one-crazy-trick/)
-    - ['The lockless page cache', LWN, Jon Corbet, July 2008](https://lwn.net/Articles/291826/) (an interesting article)
 
 
 
