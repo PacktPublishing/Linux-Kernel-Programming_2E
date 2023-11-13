@@ -1,0 +1,30 @@
+#!/bin/bash
+# Test script for the ch13/3_list_demo_rcu work
+
+die()
+{
+echo >&2 "FATAL: $@"
+exit 1
+}
+
+#--- 'main'
+KMOD=list_demo_rcu_lkm
+lsmod |grep ${KMOD} >/dev/null || {
+    [[ ! -f ${KMOD}.ko ]] && die "Build the module first"
+    sudo dmesg -C
+    sudo insmod ${KMOD}.ko || die "insmod failed"
+}
+
+DEV=/dev/lkp_miscdrv_list_rcu
+[[ ! -c ${DEV} ]] && die "Device file ${DEV} not found.Module not inserted successfully?"
+
+# The I/O
+#sudo dmesg -C
+echo "Write to the device; this will have some nodes inserted to the tail of the list"
+echo "abc" > ${DEV}
+
+echo "Read from the device; this will have the nodes on the list displayed"
+dd if=${DEV} bs=1k count=1
+
+sudo dmesg
+exit 0
