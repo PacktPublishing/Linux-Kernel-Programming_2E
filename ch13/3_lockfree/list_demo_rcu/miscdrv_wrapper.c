@@ -45,7 +45,7 @@
 #endif
 
 #include <linux/spinlock.h>
-#include "../../convenient.h"
+#include "../../../convenient.h"
 
 /* Function prototypes of funcs in the list.c file */
 int add2tail(int v1, int v2, s8 achar, spinlock_t *lock);
