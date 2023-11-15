@@ -21,7 +21,7 @@ DEV=/dev/lkp_miscdrv_list_rcu
 # The I/O
 #sudo dmesg -C
 echo "Write to the device; this will have some nodes inserted to the tail of the list"
-echo "abc" > ${DEV}
+echo "RCU" > ${DEV}
 
 echo "Read from the device; this will have the nodes on the list displayed"
 dd if=${DEV} bs=1k count=1
