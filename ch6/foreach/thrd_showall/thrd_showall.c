@@ -83,7 +83,8 @@ static int showthrds(void)
 	 * So, using an RCU read lock is indicated here... read about RCU and
 	 * it's usage in Ch 13.
 	 */
-	rcu_read_lock();
+	rcu_read_lock(); /* This triggers off an RCU read-side critical section; ensure
+			  * you are non-blocking within it! */
 	do_each_thread(p, t) {	/* 'p' : process ptr; 't': thread ptr */
 		get_task_struct(t);	/* take a reference to the task struct */
 

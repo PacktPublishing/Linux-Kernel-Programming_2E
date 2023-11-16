@@ -11,21 +11,17 @@
  * From: Ch 13 : Kernel Synchronization - Part 2
  ****************************************************************
  * Brief Description:
- * This driver is built upon the LKP Part 2 book's first chapter 'misc' driver here:
- * https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2/tree/main/ch1/miscdrv_rdwr
  *
- TODO -updt
- * The key difference: we use a spinlock in place of the mutex locks (this isn't
- * the case everywhere in the driver though; we keep the mutex as well for some
- * portions of the driver).
- * The functionality (the get and set of the 'secret') remains identical to the
- * original implementation.
+ * This module is based upon our earlier Ch 6 demo for manipulating lists
+ * (via the kernel's builtin list.h routines): ch6/list_demo.
+ * There, it was unprotected from concurrent access (which is just wrong).
+ * So here, we protect against concurrent access by employing the reader-writer
+ * spinlock.
  *
- * Note: also do
- *  make rdwr_test_secret
- * to build the user space app for testing...
+ * (This driver is built upon the LKP Part 2 book's first chapter 'misc' driver here:
+ * https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2/tree/main/ch1/miscdrv_rdwr ).
  *
- * For details, please refer both books, LKP Ch 12 (2nd Ed) and LKP-Part 2 Ch 1 resp.
+ * For details, please refer Ch 13 of the book.
  */
 #define pr_fmt(fmt) "%s:%s(): " fmt, KBUILD_MODNAME, __func__
 

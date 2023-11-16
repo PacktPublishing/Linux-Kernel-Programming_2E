@@ -7,18 +7,14 @@
  *  Publisher:  Packt
  *  GitHub repository:
  *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
- *
- * ORIGINALLY from: Ch 6: Kernel Internals Essentials - Processes and Threads
- * Now:
- * Ch 13: Kernel Synchronization - Part 2
  ****************************************************************
  * Brief Description:
- * A simple module to demo the basics of using the kernel's 'famous'
- * linked list macros and routines.
- * Ref: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#list-management-functions
  *
- * *** UPDATED to include kernel synchronization via the reader-writer
- * spinlock primitives ***
+ * This module is based upon our earlier Ch 6 demo for manipulating lists
+ * (via the kernel's builtin list.h routines): ch6/list_demo.
+ * There, it was unprotected from concurrent access (which is just wrong).
+ * So here, we protect against concurrent access by employing the reader-writer
+ * spinlock.
  *
  * For details, please refer the book, Ch 13.
  * License: Dual MIT/GPL

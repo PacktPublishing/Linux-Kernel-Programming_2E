@@ -8,15 +8,14 @@
  *  GitHub repository:
  *  https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
  *
- * ORIGINALLY from: Ch 6: Kernel Internals Essentials - Processes and Threads
- * Now:
- * Ch 13: Kernel Synchronization - Part 2
  ****************************************************************
  * Brief Description:
  * A simple module to demo the basics of using the kernel's 'famous'
  * linked list macros and routines.
  * Ref: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#list-management-functions
  *
+ * Refactored from the ch13/2_list_demo_rdwrlock module to use RCU instead of
+ * the reader-writer spinlock.
  * *** UPDATED to include RCU synchronization (and a spinlock to protect writers
  * from stepping on each other) ***
  *

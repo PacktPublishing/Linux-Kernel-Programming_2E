@@ -32,12 +32,16 @@ DEV=/dev/lkp_miscdrv_list_rdwrlock
 
 # The I/O
 #sudo dmesg -C
+# Here, to (try and) expose the 'writer-can-starve' issue with the reader-writer
+# spinlock, we very deliberately delay the read critical section and run the
+# reader several times in parallel.
 MAX=6
 for i in $(seq 1 ${MAX})
 do
 	reader &
-#	[[ $(($i % 3)) -eq 0 ]] && writer
 done
+# Then we run one writer instance; it will of course have to wait upon all
+# readers performing their unlock
 writer
 
 sudo dmesg
