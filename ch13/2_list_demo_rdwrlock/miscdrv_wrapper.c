@@ -45,7 +45,7 @@
 #endif
 
 #include <linux/rwlock.h>	// reader-writer spinlock
-#include "../../convenient.h"
+//#include "../../convenient.h"
 
 /* Function prototypes of funcs in the list.c file */
 int add2tail(int v1, int v2, s8 achar, rwlock_t *rwlock);
@@ -91,7 +91,7 @@ static int open_miscdrv_rdwr(struct inode *inode, struct file *filp)
 static ssize_t read_miscdrv_rdwr(struct file *filp, char __user *ubuf,
 				size_t count, loff_t *off)
 {
-	PRINT_CTX();
+//	PRINT_CTX();
 	pr_info("%s wants to read (upto) %zu bytes\n", current->comm, count);
 	showlist(&rwlock);
 
@@ -110,7 +110,7 @@ static ssize_t read_miscdrv_rdwr(struct file *filp, char __user *ubuf,
 static ssize_t write_miscdrv_rdwr(struct file *filp, const char __user *ubuf,
 				size_t count, loff_t *off)
 {
-	PRINT_CTX();
+//	PRINT_CTX();
 
 	/* Add a few nodes to the tail of the list */
 	add2tail(1, 2, 'R', &rwlock);
