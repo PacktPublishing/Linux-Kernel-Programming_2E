@@ -1,5 +1,6 @@
 #!/bin/bash
-# Test script for the ch13/3_list_demo_rdwrlock work
+# Test script
+name=$(basename $0)
 KMOD=miscdrv_rdwr_nolocks
 DEV=/dev/lkp_miscdrv_nolocks
 
@@ -23,6 +24,12 @@ writer()
 
 
 #--- 'main'
+[[ $# -ne 1 ]] && {
+  echo "Usage: ${name} number-of-readers-to-concurrently-run"
+  exit 
+}
+MAX=$1
+
 sudo rmmod ${KMOD} 2>/dev/null
 lsmod |grep ${KMOD} >/dev/null || {
     [[ ! -f ${KMOD}.ko ]] && die "Build the module first"
@@ -33,7 +40,6 @@ lsmod |grep ${KMOD} >/dev/null || {
 
 # The I/O
 sudo dmesg -C
-MAX=1000
 for i in $(seq 1 ${MAX})
 do
 	reader &
