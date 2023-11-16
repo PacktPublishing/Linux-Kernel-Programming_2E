@@ -1,0 +1,45 @@
+#!/bin/bash
+# Test script for the ch13/3_list_demo_rdwrlock work
+KMOD=miscdrv_rdwr_nolocks
+DEV=/dev/lkp_miscdrv_nolocks
+
+die()
+{
+echo >&2 "FATAL: $@"
+exit 1
+}
+
+reader()
+{
+	echo "$i: Read from the device"
+	dd if=${DEV} bs=1k count=1
+}
+writer()
+{
+	echo "$i: Write to the device"
+	dd if=${KMOD}.c of=${DEV} bs=1k count=1
+	#echo "write (no locks) $i" > ${DEV}
+}
+
+
+#--- 'main'
+sudo rmmod ${KMOD} 2>/dev/null
+lsmod |grep ${KMOD} >/dev/null || {
+    [[ ! -f ${KMOD}.ko ]] && die "Build the module first"
+    sudo dmesg -C
+    sudo insmod ${KMOD}.ko || die "insmod failed"
+}
+[[ ! -c ${DEV} ]] && die "Device file ${DEV} not found.Module not inserted successfully?"
+
+# The I/O
+sudo dmesg -C
+MAX=1000
+for i in $(seq 1 ${MAX})
+do
+	reader &
+	[[ $(($i % 10)) -eq 0 ]] && writer
+done
+writer
+
+sudo dmesg
+exit 0

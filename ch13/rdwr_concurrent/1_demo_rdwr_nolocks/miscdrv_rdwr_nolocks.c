@@ -11,25 +11,29 @@
  * From: Ch 13 : Kernel Synchronization - Part 2
  ****************************************************************
  * Brief Description:
+ * This driver is built upon the LKP Part 2 book's first chapter 'misc' driver here:
+ * https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2/tree/main/ch1/miscdrv_rdwr
  *
- * This module is based upon our earlier Ch 6 demo for manipulating lists
- * (via the kernel's builtin list.h routines): ch6/list_demo.
- * There, it was unprotected from concurrent access (which is just wrong).
- * So here, we protect against concurrent access by employing the reader-writer
- * spinlock.
+ TODO -updt
+ * The key difference: we use a spinlock in place of the mutex locks (this isn't
+ * the case everywhere in the driver though; we keep the mutex as well for some
+ * portions of the driver).
+ * The functionality (the get and set of the 'secret') remains identical to the
+ * original implementation.
  *
- * (This driver is built upon the LKP Part 2 book's first chapter 'misc' driver here:
- * https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2/tree/main/ch1/miscdrv_rdwr ).
+ * Note: also do
+ *  make rdwr_test_secret
+ * to build the user space app for testing...
  *
- * For details, please refer Ch 13 of the book.
+ * For details, please refer both books, LKP Ch 12 (2nd Ed) and LKP-Part 2 Ch 1 resp.
  */
 #define pr_fmt(fmt) "%s:%s(): " fmt, KBUILD_MODNAME, __func__
 
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/miscdevice.h>
-#include <linux/slab.h>         // k[m|z]alloc(), k[z]free(), ...
-#include <linux/mm.h>           // kvmalloc()
+#include <linux/slab.h>		// k[m|z]alloc(), k[z]free(), ...
+#include <linux/mm.h>		// kvmalloc()
 #include <linux/fs.h>		// the fops structure
 
 // copy_[to|from]_user()
@@ -40,26 +44,53 @@
 #include <asm/uaccess.h>
 #endif
 
-#include <linux/rwlock.h>	// reader-writer spinlock
-//#include "../../convenient.h"
-
-/* Function prototypes of funcs in the list.c file */
-int add2tail(int v1, int v2, s8 achar, rwlock_t *rwlock);
-void showlist(rwlock_t *rwlock);
-void freelist(rwlock_t *rwlock);
+#include "../../../convenient.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
-MODULE_DESCRIPTION(
-"LKP2E book:ch13/2_list_demo_rdwrlock: simple misc char driver rewritten with list usage protected via a reader-writer spinlock");
+MODULE_DESCRIPTION
+    ("LKP2E book:ch13/miscdrv_rdwr_nolocks: simple misc char driver demo: concurrent reads/writes with NO locking!");
 MODULE_LICENSE("Dual MIT/GPL");
-MODULE_VERSION("0.2");
+MODULE_VERSION("0.1");
 
 static int buggy;
 module_param(buggy, int, 0600);
 MODULE_PARM_DESC(buggy,
-"If 1, cause an error by issuing a blocking call within an reader-writer spinlock critical section");
+		 "If 1, cause an error by issuing a blocking call within an reader-writer spinlock critical section");
 
-DEFINE_RWLOCK(rwlock); /* this reader-writer spinlock protects the list */
+#define	SHOW_DATA() do {   \
+ pr_info("gd: gps_lock=%d, (lat,long,alt)=(%lu,%lu,%lu), issue_in_l6=%d\n", \
+	gd->gps_lock, gd->lat, gd->longit, gd->alt, gd->issue_in_l6);       \
+} while(0)
+
+static struct global_data {
+	bool gps_lock;
+	long lat, longit, alt;
+	int issue_in_l6;
+} *gd;
+
+static int reader(struct global_data *gd)
+{
+	long x, y, z;
+	int stat = gd->issue_in_l6;
+
+	if (gd->gps_lock) {
+		x = gd->lat;
+		y = gd->longit;
+		z = gd->alt;
+	}
+	return stat;
+}
+
+static void writer(struct global_data *gd)
+{
+	long x = 177564, y = 773540, z = 920;
+
+	gd->lat = x;
+	gd->longit = y;
+	gd->alt = z;
+	gd->issue_in_l6 = 1;
+}
+
 
 /*--- The driver 'methods' follow ---*/
 /*
@@ -72,7 +103,7 @@ DEFINE_RWLOCK(rwlock); /* this reader-writer spinlock protects the list */
  */
 static int open_miscdrv_rdwr(struct inode *inode, struct file *filp)
 {
-	//PRINT_CTX();		// displays process (or intr) context info
+	//PRINT_CTX();          // displays process (or intr) context info
 	return 0;
 }
 
@@ -85,11 +116,12 @@ static int open_miscdrv_rdwr(struct inode *inode, struct file *filp)
  * on failure; here, we display (read) the nodes on the list.
  */
 static ssize_t read_miscdrv_rdwr(struct file *filp, char __user *ubuf,
-				size_t count, loff_t *off)
+				 size_t count, loff_t *off)
 {
-//	PRINT_CTX();
-	pr_info("%s wants to read (upto) %zu bytes\n", current->comm, count);
-	showlist(&rwlock);
+	//PRINT_CTX();
+	//pr_info("%s wants to read (upto) %zu bytes\n", current->comm, count);
+	reader(gd);
+	SHOW_DATA();
 
 	return count;
 }
@@ -104,14 +136,11 @@ static ssize_t read_miscdrv_rdwr(struct file *filp, char __user *ubuf,
  * value to it.
  */
 static ssize_t write_miscdrv_rdwr(struct file *filp, const char __user *ubuf,
-				size_t count, loff_t *off)
+				  size_t count, loff_t *off)
 {
-//	PRINT_CTX();
-
-	/* Add a few nodes to the tail of the list */
-	add2tail(1, 2, 'R', &rwlock);
-	add2tail(3, 1415, 'C', &rwlock);
-	add2tail(jiffies, jiffies+msecs_to_jiffies(300), 'U', &rwlock);
+	PRINT_CTX();
+	//pr_info("%s wants to write (upto) %zu bytes\n", current->comm, count);
+	writer(gd);
 
 	return count;
 }
@@ -124,7 +153,7 @@ static ssize_t write_miscdrv_rdwr(struct file *filp, const char __user *ubuf,
  */
 static int close_miscdrv_rdwr(struct inode *inode, struct file *filp)
 {
-	//PRINT_CTX();		// displays process (or intr) context info
+	//PRINT_CTX();          // displays process (or intr) context info
 	return 0;
 }
 
@@ -133,7 +162,7 @@ static const struct file_operations lkp_misc_fops = {
 	.open = open_miscdrv_rdwr,
 	.read = read_miscdrv_rdwr,
 	.write = write_miscdrv_rdwr,
-	.llseek = no_llseek,    // dummy, we don't support lseek(2)
+	.llseek = no_llseek,	// dummy, we don't support lseek(2)
 	.release = close_miscdrv_rdwr,
 	/* As you learn more reg device drivers (refer this book's companion guide
 	 * 'Linux Kernel Programming (Part 2): Writing character device drivers: Learn
@@ -146,14 +175,14 @@ static const struct file_operations lkp_misc_fops = {
 };
 
 static struct miscdevice lkp_miscdev = {
-	.minor = MISC_DYNAMIC_MINOR, // kernel dynamically assigns a free minor#
-	.name = "lkp_miscdrv_list_rdwrlock",
-	    // populated within /sys/class/misc/ and /sys/devices/virtual/misc/
-	.mode = 0666,       /* ... dev node perms set as specified here */
-	.fops = &lkp_misc_fops,     // connect to 'functionality'
+	.minor = MISC_DYNAMIC_MINOR,	// kernel dynamically assigns a free minor#
+	.name = "lkp_miscdrv_nolocks",
+	// populated within /sys/class/misc/ and /sys/devices/virtual/misc/
+	.mode = 0666,		/* ... dev node perms set as specified here */
+	.fops = &lkp_misc_fops,	// connect to 'functionality'
 };
 
-static int __init list_demo_rdwrlock_init(void)
+static int __init miscdrv_rdwr_nolocks_init(void)
 {
 	int ret;
 
@@ -162,18 +191,25 @@ static int __init list_demo_rdwrlock_init(void)
 		pr_notice("misc device registration failed, aborting\n");
 		return ret;
 	}
-	pr_info("LKP misc driver for rwlock demo (major # 10) registered, minor# = %d,"
-		" dev node is /dev/%s\n", lkp_miscdev.minor, lkp_miscdev.name);
+	gd = kzalloc(sizeof(struct global_data), GFP_KERNEL);
+	if (!gd)
+		return -ENOMEM;
+	gd->gps_lock = 1;
+
+	pr_info
+	    ("LKP misc driver for rdwr with no locking demo (major # 10) registered, minor# = %d,"
+	     " dev node is /dev/%s\n", lkp_miscdev.minor, lkp_miscdev.name);
 
 	return 0;		/* success */
 }
 
-static void __exit list_demo_rdwrlock_exit(void)
+static void __exit miscdrv_rdwr_nolocks_exit(void)
 {
-	freelist(&rwlock);
+	kfree(gd);
 	misc_deregister(&lkp_miscdev);
-	pr_info("LKP misc driver %s for rwlock demo deregistered, bye\n", lkp_miscdev.name);
+	pr_info("LKP misc driver %s rdwr with no locking demo deregistered, bye\n",
+		lkp_miscdev.name);
 }
 
-module_init(list_demo_rdwrlock_init);
-module_exit(list_demo_rdwrlock_exit);
+module_init(miscdrv_rdwr_nolocks_init);
+module_exit(miscdrv_rdwr_nolocks_exit);
