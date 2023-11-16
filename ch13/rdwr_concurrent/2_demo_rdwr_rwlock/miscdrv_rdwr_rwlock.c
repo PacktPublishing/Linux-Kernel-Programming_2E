@@ -1,5 +1,5 @@
 /*
- * ch13/3_list_demo_rdwrlock/list_demo_rdwrlock.c
+ * ch13/rdwr_concurrent/1_demo_rdwr_nolocks/miscdrv_rdwr_rwlock.c
  ***************************************************************
  * This program is part of the source code released for the book
  *  "Linux Kernel Programming" 2E
@@ -14,18 +14,22 @@
  * This driver is built upon the LKP Part 2 book's first chapter 'misc' driver here:
  * https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2/tree/main/ch1/miscdrv_rdwr
  *
- TODO -updt
- * The key difference: we use a spinlock in place of the mutex locks (this isn't
- * the case everywhere in the driver though; we keep the mutex as well for some
- * portions of the driver).
- * The functionality (the get and set of the 'secret') remains identical to the
- * original implementation.
+ * This code is 'Case 2: Use the reader-writer spinlock' of a three case demo,
+ * showing some ways to use locking/sync constructs in a read-mostly scenario.
+ * (It's like this:
+ *      Case 1                 Case 2                  Case 3
+ * No locks; just wrong    Use the read-writer     Use RCU sync!
+ *                          spinlock                  Best.
+ *                         ^^^^^^^^^^^^^^^^^^^^
+ *                            <this code demo>
  *
- * Note: also do
- *  make rdwr_test_secret
- * to build the user space app for testing...
+ * The demo has reader and writer threads running, concurrently reading
+ * and writing a global data structure, IOW, shared state.
+ * This of course is simply wrong; we'll end up with data races, data
+ * corruption.
+ * So, here, we protect the critical sections using a reader-writer spinlock.
  *
- * For details, please refer both books, LKP Ch 12 (2nd Ed) and LKP-Part 2 Ch 1 resp.
+ * For details, please refer both books, LKP 2E Ch 13 and LKP-Part 2, Ch 1.
  */
 #define pr_fmt(fmt) "%s:%s(): " fmt, KBUILD_MODNAME, __func__
 
@@ -49,7 +53,7 @@
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION(
-"LKP2E book:ch13/2_list_demo_rdwrlock: simple misc char driver rewritten with list usage protected via a reader-writer spinlock");
+"LKP2E book:ch13/rdwr_concurrent/miscdrv_rdwr_nolocks: simple misc char driver demo: concurrent reads/writes protected via a reader-writer spinlock");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.1");
 
@@ -57,8 +61,6 @@ static int buggy;
 module_param(buggy, int, 0600);
 MODULE_PARM_DESC(buggy,
 "If 1, cause an error by issuing a blocking call within an reader-writer spinlock critical section");
-
-//DEFINE_RWLOCK(rwlock); /* this reader-writer spinlock protects the list */
 
 #define	SHOW_DATA() do {   \
  pr_info("gd: gps_lock=%d, (lat,long,alt)=(%lu,%lu,%lu), issue_in_l6=%d\n", \
