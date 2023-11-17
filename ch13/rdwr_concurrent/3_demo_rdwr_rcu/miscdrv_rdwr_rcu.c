@@ -121,7 +121,7 @@ static int writer(void)
 		return -ENOMEM;
 
 	*gd_new = *gd;	  // copy the content...
-	gd_new->lat = x;  // ...and update as required
+	gd_new->lat = x;  // ...and update it as required
 	gd_new->longit = y;
 	gd_new->alt = z;
 	gd_new->issue_in_l6 = 1;

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test script for the ch13/3_list_demo_rdwrlock work
+# Test script
 name=$(basename $0)
 KMOD=miscdrv_rdwr_rcu
 DEV=/dev/lkp_miscdrv_rdwr_rcu
