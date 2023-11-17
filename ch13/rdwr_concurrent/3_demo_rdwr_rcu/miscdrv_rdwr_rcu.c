@@ -10,22 +10,28 @@
  *
  * From: Ch 13 : Kernel Synchronization - Part 2
  ****************************************************************
- * Brief Description:
+  * Brief Description:
  * This driver is built upon the LKP Part 2 book's first chapter 'misc' driver here:
  * https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2/tree/main/ch1/miscdrv_rdwr
  *
- TODO -updt
- * The key difference: we use a spinlock in place of the mutex locks (this isn't
- * the case everywhere in the driver though; we keep the mutex as well for some
- * portions of the driver).
- * The functionality (the get and set of the 'secret') remains identical to the
- * original implementation.
+ * This code is 'Case 3: Use RCU' of a three case demo, showing some ways to
+ * use locking/sync constructs in a read-mostly scenario.
+ * (It's like this:
+ *      Case 1                 Case 2                  Case 3
+ * No locks; just wrong    Use the read-writer     Use RCU sync!
+ *                          spinlock                  Best.
+ *                                                 ^^^^^^^^^^^^^^
+ *                                                <this code demo>
  *
- * Note: also do
- *  make rdwr_test_secret
- * to build the user space app for testing...
+ * The demo has reader and writer threads running, concurrently reading
+ * and writing a global data structure, IOW, shared state.
+ * This of course is simply wrong; we'll end up with data races, data
+ * corruption.
+ * So, here, we protect via RCU as follows:
+ * - Protect the RCU read-side critical section via RCU 'locking'
+ * - Protect the write-side critical section via a simple spinlock.
  *
- * For details, please refer both books, LKP Ch 12 (2nd Ed) and LKP-Part 2 Ch 1 resp.
+ * For details, please refer both books, LKP 2E Ch 13 and LKP-Part 2, Ch 1.
  */
 #define pr_fmt(fmt) "%s:%s(): " fmt, KBUILD_MODNAME, __func__
 
@@ -49,7 +55,7 @@
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION(
-"LKP2E book:ch13/rdwr_concurrent/3_demo_rdwr_rcu/miscdrv_rdwr_rcu.c: simple misc char driver rewritten with simple concurrent data reads/writes protected via RCU");
+"LKP2E book:ch13/rdwr_concurrent/miscdrv_rdwr_rcu: simple misc char driver demo: concurrent reads/writes protected via RCU");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.1");
 
@@ -68,12 +74,18 @@ static struct global_data {
 	long lat, longit, alt;
 	int issue_in_l6;
 } *gdata;
-static spinlock_t gdata_lock; /* spinlock to protect the writers
+static spinlock_t gdata_lock; /* spinlock to protect writers.
 	* Why not keep it inside the structure?
-	* It's a bit subtle: we need the spinlock in the write; however, it's
-	* in the writer that we create a copy of the data and modify/update it.
-	* If the copy includes the spinlock it doesn't work, as then we're not
-	* unlocking the original spinlock we took, creating a bug!
+	* It's a bit subtle: we need the spinlock during the write critical section;
+	* however, it's in here that we create a copy of the data object and
+	* modify/update it.
+	* If the copy includes the spinlock (which it will) it won't work, as
+	* we then violate the contract, using different locks...
+	* Trying this, in fact, createsan interesting bug!
+	* ...
+	* pvqspinlock: lock 0xffff9e... has corrupted value 0x0!
+	* ...
+	* (The pvqspinlock is a paravirt one (as I ran it on a guest)).
 	*/
 /* There is no 'read' RCU lock object; readers are meant to run
  * concurrently with each other *and* with writers. It's a 'socially
