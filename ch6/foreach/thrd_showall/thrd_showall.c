@@ -11,8 +11,9 @@
  * From: Ch 6 : Kernel Internals Essentials - Processes and Threads
  ****************************************************************
  * Brief Description:
- * This kernel module iterates over the task structures of all *threads*
- * currently alive on the box, printing out some details.
+ * This kernel module iterates over the kernel task list, over the task
+ * structures of all *threads* currently alive on the box, printing out
+ * some details.
  * We use the do_each_thread() { ... } while_each_thread() macros to do
  * so.
  *
@@ -44,13 +45,12 @@ static inline void disp_idle_thread(void)
 
 	/* We know that the swapper is a kernel thread */
 	pr_info("%8d %8d  0x%px 0x%px [%16s]\n",
-		//"%8d %8d  0x%px 0x%px",
 		t->pid, t->pid, t, t->stack, t->comm);
 }
 
 static int showthrds(void)
 {
-	struct task_struct *p = NULL, *t = NULL;	/* 'p' : process ptr; 't': thread ptr */
+	struct task_struct *p = NULL, *t = NULL; /* 'p' : process ptr; 't': thread ptr */
 	int nr_thrds = 1, total = 1;	/* total init to 1 for the idle thread */
 	/* Not using dynamic allocation here as we haven't covered it yet... :-/
 	 * Careful - don't overflow the small kernel space stack!
@@ -80,11 +80,15 @@ static int showthrds(void)
 	 *  [...]
 	 *  read_unlock(&tasklist_lock);
 	 * BUT, tasklist_lock isn't exported and is thus unavailable to modules.
-	 * So, using an RCU read lock is indicated here... read about RCU and
+	 *
+	 * As you'll learn in Chapter 13, Kernel Synchronization, Part 2, we could use a
+	 * reader-writer spinlock to protect the critical section But it has downsides.
+	 * So, using an RCU read lock is best here... read about RCU and
 	 * it's usage in Ch 13.
 	 */
-	rcu_read_lock(); /* This triggers off an RCU read-side critical section; ensure
-			  * you are non-blocking within it! */
+	rcu_read_lock(); /* This triggers an RCU read-side critical section, which
+			  * spans from the rcu_read_lock() to the rcu_read_unlock().
+			  * Ensure you are non-blocking within it! */
 	do_each_thread(p, t) {	/* 'p' : process ptr; 't': thread ptr */
 		get_task_struct(t);	/* take a reference to the task struct */
 
