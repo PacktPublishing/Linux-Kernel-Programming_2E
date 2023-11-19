@@ -72,25 +72,24 @@ static int showthrds(void)
 	 * (The stuff mentioned on locking here can be skipped on first reading; you can check
 	 * it out once you read the materials on kernel synchronization / locking, Ch 12 and
 	 * Ch 13; will leave it to you...).
+	 *
 	 * The do_each_thread() / while_each_thread() is a pair of macros that iterates over
 	 * _all_ task structures in memory.
 	 * The task structs are global of course; this implies we should hold a lock of some
-	 * sort while working on them (even if only reading!). So, doing
+	 * sort while working on them (even if only reading!). So, using the reader-writer
+	 * spinlock tasklist_lock seems the right approach:
 	 *  read_lock(&tasklist_lock);
 	 *  [...]
 	 *  read_unlock(&tasklist_lock);
 	 * BUT, tasklist_lock isn't exported and is thus unavailable to modules.
 	 *
-	 * As you'll learn in Chapter 13, Kernel Synchronization, Part 2, we could use a
-	 * reader-writer spinlock to protect the critical section But it has downsides.
-	 * So, using an RCU read lock is best here... read about RCU and
-	 * it's usage in Ch 13.
+	 * So, here, we use the task_{un}lock() routines to provide protection.
+	 * Worry not, you'll learn several approaches to kernel synchronization in
+	 * the book's last two chapters.
 	 */
-	rcu_read_lock(); /* This triggers an RCU read-side critical section, which
-			  * spans from the rcu_read_lock() to the rcu_read_unlock().
-			  * Ensure you are non-blocking within it! */
 	do_each_thread(p, t) {	/* 'p' : process ptr; 't': thread ptr */
 		get_task_struct(t);	/* take a reference to the task struct */
+		task_lock(t);
 
 		/* Grab the following fields from the task struct:
 		 * tgid, pid, task_struct addr, kernel-mode stack addr
@@ -101,7 +100,7 @@ static int showthrds(void)
 		/* One might question why we don't use the get_task_comm() to obtain
 		 * the task's name here; the short reason: it causes a deadlock! We
 		 * shall explore this (and how to avoid it) in some detail in Ch 13 -
-		 * Kernel Synchronization Part 2. For now, we just do it the simple way
+		 * Kernel Synchronization, Part 2. For now, we just do it the simple way.
 		 */
 		if (!p->mm)	// kernel thread?
 			snprintf(tmp2, TMPMAX - 1, " [%16s]", t->comm);
@@ -127,9 +126,9 @@ static int showthrds(void)
 		memset(tmp2, 0, sizeof(tmp2));
 		memset(tmp3, 0, sizeof(tmp3));
 
+		task_unlock(t);
 		put_task_struct(t);	/* release reference to the task struct */
 	} while_each_thread(p, t);
-	rcu_read_unlock();
 
 	return total;
 }
