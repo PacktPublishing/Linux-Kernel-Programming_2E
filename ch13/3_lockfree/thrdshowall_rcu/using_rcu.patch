@@ -1,0 +1,99 @@
+--- ../../4_lockdep/fixed_thrdshow_eg/thrd_showall_fixed.c	2023-11-20 10:07:37.541117473 +0530
++++ thrd_showall_rcu.c	2023-11-20 10:08:18.791021075 +0530
+@@ -1,5 +1,5 @@
+ /*
+- * ch13/3_lockdep/buggy_thrdshow_eg/thrd_showall_buggy.c
++ * ch13/3_lockfree/thrdshowall_rcu/thrd_showall_rcu.c
+  ***************************************************************
+  * This program is part of the source code released for the book
+  *  "Linux Kernel Programming" 2E
+@@ -11,15 +11,17 @@
+  * From: Ch 13 : Kernel Synchronization, Part 2
+  ****************************************************************
+  * Brief Description:
+- * This kernel module is based upon our earlier kernel module from Ch 6:
+- *  ch6/foreach/thrd_showall/thrd_showall.c. 
+- * Earlier (in the buggy version), we refactored it to use the
+- * get_task_comm() routine to retrieve the name of the thread, it's buggy!
+- * The bug turns out to be a recursive locking issue, *detected by lockdep*.
++ * This kernel module is based upon our earlier kernel module here:
++ *  ch13/4_lockdep/fixed_thrdshow_eg/
++ * We had "fixed it" by using the task_{un}lock() pair of APIs to provide
++ * synchronization. However, this wasn't an ideal solution as it introduced
++ * the possibility of a race, plus, the task_{un}lock() routines employ a
++ * spinlock that’s effective for only some of the task structure members.
+  *
+- * So now let's fix it.
+- * Here, we fix the deadlock by first unlocking the relevant lock (struct
+- * task_struct alloc_lock), then calling get_task_comm() and then locking it.
++ * So, here, we do a proper fix by employing lockfree RCU! It's as-is very
++ * efficient for read-mostly situations, which this certainly qualifies as.
++ * Moreover, here, as we don’t ever modify any task structure's content,
++ * we even eliminate the need for write protection via a spinlock.
+  *
+  * For details, please refer the book, Ch 13.
+  */
+@@ -34,8 +36,8 @@
+ #endif
+ 
+ MODULE_AUTHOR("Kaiwan N Billimoria");
+-MODULE_DESCRIPTION("LKP 2E book: ch13/4_lockdep/fixed_thrdshow_eg/:"
+-" FIX to the earlier buggy demo to display all threads by iterating over the task list");
++MODULE_DESCRIPTION("LKP 2E book: ch13/3_lockfree/thrdshowall_rcu/:"
++" Proper fix to the earlier buggy demos to display all threads by iterating over the task list, using RCU");
+ MODULE_LICENSE("Dual MIT/GPL");
+ MODULE_VERSION("0.2");
+ 
+@@ -52,9 +54,12 @@
+ "--------------------------------------------------------------------------------\n";
+ 
+ 	pr_info("%s", hdr);
++
++	rcu_read_lock(); /* This triggers off an RCU read-side critical section; ensure
++			  * you are non-blocking within it!
++			  */
+ 	do_each_thread(g, t) {     /* 'g' : process ptr; 't': thread ptr */
+ 		get_task_struct(t);	/* take a reference to the task struct */
+-		task_lock(t);  /*** task lock taken here! ***/
+ 
+ 		snprintf(buf, BUFMAX-1, "%6d %6d ", g->tgid, t->pid);
+ 		/* task_struct addr and kernel-mode stack addr */
+@@ -63,17 +68,6 @@
+ 		snprintf(tmp, TMPMAX-1, "  0x%px", t->stack);
+ 		strncat(buf, tmp, TMPMAX);
+ 
+-        /* In the 'buggy' ver of this code, LOCKDEP did catch a deadlock here !!
+-         * (at the point that get_task_comm() was invoked).
+-         * The reason's clear: get_task_comm() attempts to take the very same lock
+-         * that we just took above via task_lock(t);  !! This is obvious self-deadlock...
+-         * So, we fix it here by first unlocking it, calling get_task_comm(), and
+-         * then re-locking it.
+-         */
+-                task_unlock(t);
+-                get_task_comm(tasknm, t);
+-                task_lock(t);
+-
+ 		if (!g->mm)	// kernel thread
+ 			snprintf(tmp, sizeof(tasknm)+3, " [%16s]", tasknm);
+ 		else
+@@ -100,9 +94,9 @@
+ 		total++;
+ 		memset(buf, 0, sizeof(buf));
+ 		memset(tmp, 0, sizeof(tmp));
+-		task_unlock(t);
+ 		put_task_struct(t);	/* release reference to the task struct */
+ 	} while_each_thread(g, t);
++	rcu_read_unlock();
+ 
+ 	return total;
+ }
+@@ -113,8 +107,7 @@
+ 
+ 	pr_info("inserted\n");
+ 	total = showthrds_buggy();
+-	pr_info("total # of threads on the system: %d\n",
+-		total);
++	pr_info("total # of threads on the system: %d\n", total);
+ 
+ 	return 0;		/* success */
+ }
