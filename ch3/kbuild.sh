@@ -58,7 +58,7 @@ usage()
 {
 echo "Usage: ${name} [-c] path-to-kernel-src-tree-to-build
  -c : configure the kernel to a default state (via the 'localmodconfig' approach)
- NOTE: this will overwrite your existing .config !"
+      NOTE: selecting this will OVERWRITE your existing .config !"
 }
 
 configure_kernel_localmodconfig()
