@@ -52,18 +52,6 @@ static int showthrds_buggy(void)
 "--------------------------------------------------------------------------------\n";
 
 	pr_info("%s", hdr);
-#if 0
-	/* The tasklist_lock reader-writer spinlock for the task list 'should'
-	 * be used here, but, it's not exported, hence unavailable to our
-	 * kernel module. So, as this qualifies as a mostly-read scenario,
-	 * we should use the best option: RCU! 
-	 * For the sake of a pedantic example, to trigger a (self) deadlock bug
-	 * here, we don't; we use task_lock().
-	 * Read Ch 13 for the details!
-	 */
-	rcu_read_lock(); /* This triggers off an RCU read-side critical section; ensure
-			  * you are non-blocking within it! */
-#endif
 	do_each_thread(g, t) {     /* 'g' : process ptr; 't': thread ptr */
 		get_task_struct(t);	/* take a reference to the task struct */
 		task_lock(t);  /*** task lock taken here! ***/
@@ -115,10 +103,6 @@ static int showthrds_buggy(void)
 		task_unlock(t);
 		put_task_struct(t);	/* release reference to the task struct */
 	} while_each_thread(g, t);
-#if 0
-	/* <same as above, reg the RCU synchronization for the task list> */
-	rcu_read_unlock();
-#endif
 
 	return total;
 }
