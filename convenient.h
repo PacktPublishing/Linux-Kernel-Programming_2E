@@ -310,7 +310,14 @@ void delay_sec(long val)
  * Show the difference between the timestamps passed
  * Parameters:
  *  @later, @earlier : nanosecond-accurate timestamps
- * Expect that @later > @earlier
+ * We expect that @later > @earlier
+ *
+ * Typical usage pattern:
+ *	u64 t1, t2;
+ * 	t1 = ktime_get_real_ns();
+ *	[ ... code whose time u want to measure ... ]
+ *	t2 = ktime_get_real_ns();
+ *	SHOW_DELTA(t2, t1);
  */
 #include <linux/jiffies.h>
 #include <linux/ktime.h>
