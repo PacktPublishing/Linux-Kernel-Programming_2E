@@ -40,7 +40,6 @@ KCONFIGS_ARR=(CONFIG_PREEMPT CONFIG_DEBUG_PREEMPT CONFIG_DEBUG_SLAB \
  CONFIG_DEBUG_WW_MUTEX_SLOWPATH CONFIG_DEBUG_LOCK_ALLOC CONFIG_PREEMPT_COUNT CONFIG_TRACE_IRQFLAGS \
  CONFIG_LOCK_STAT)
 
-#KCONFIGS_ARR=(CONFIG_PREEMPT CONFIG_DEBUG_PREEMPT)
 for KCONF in ${KCONFIGS_ARR[@]} ; do
     EXIST=1 ; YES=0 ; MOD=0 ; NO=0
     printf "checking for %-30s" ${KCONF}
@@ -61,30 +60,5 @@ for KCONF in ${KCONFIGS_ARR[@]} ; do
     [[ ${YES} -eq 1 ]] && printf "   Y\n"
     [[ ${MOD} -eq 1 ]] && printf "   M\n"
     [[ ${NO} -eq 1 ]]  && printf "   N\n"
-    #[[ ${YES} -eq 1 ]] && printf "   [set:y]\n"
-    #[[ ${MOD} -eq 1 ]] && printf "   [set:m]\n"
-    #[[ ${NO} -eq 1 ]]  && printf "   [set:n]\n"
-done
-exit 0
-
-for 
-do
-    grep "${KCONF}=y" ${KCONFIG} >/dev/null 2>&1
-    if [[ $? -ne 0 ]] ; then  # not 'y', check for 'm'
-        grep "${KCONF}=m" ${KCONFIG} >/dev/null 2>&1
-        [[ $? -ne 0 ]] && {
-		grep "^# ${KCONF} is not set$" ${KCONFIG} >/dev/null 2>&1
-		[[ $? -ne 0 ]] && {
-			NO=1
-			continue
-		}
-	}
-	MOD=1
-    else
-        YES=1
-    fi
-    [[ ${YES} -eq 1 ]] && printf "   [set:y]\n"
-    [[ ${MOD} -eq 1 ]] && printf "   [set:m]\n"
-    [[ ${NO} -eq 1 ]] && printf "   [set:n]\n"
 done
 exit 0
