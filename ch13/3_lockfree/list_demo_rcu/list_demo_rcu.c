@@ -10,14 +10,14 @@
  *
  ****************************************************************
  * Brief Description:
+ *
  * A simple module to demo the basics of using the kernel's 'famous'
  * linked list macros and routines.
  * Ref: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#list-management-functions
  *
  * Refactored from the ch13/2_list_demo_rdwrlock module to use RCU instead of
- * the reader-writer spinlock.
- * *** UPDATED to include RCU synchronization (and a spinlock to protect writers
- * from stepping on each other) ***
+ * the reader-writer spinlock. So, here we employ RCU synchronization (and a
+ * spinlock to protect writers).
  *
  * For details, please refer the book, Ch 13.
  * License: Dual MIT/GPL
@@ -35,15 +35,22 @@ struct node {
 	struct list_head list;	/* first member should be this one; it has
 				 * the pointers to next and prev
 				 */
-	int ival1, ival2;
+	u64 ival1, ival2;
 	s8 letter;
 };
 
-int add2tail(int v1, int v2, s8 achar, spinlock_t *lock)
+int add2tail(u64 v1, u64 v2, s8 achar, spinlock_t *lock)
 {
 	struct node *mynode = NULL;
 
-	mynode = kzalloc(sizeof(struct node), GFP_KERNEL);
+	/*
+	 * Should we use GFP_KERNEL or GFP_ATOMIC here?
+	 * The former if in process context, else the latter.
+	 * Yes, BUT we can be in process ctx and still have been called
+	 * from an atomic state. So, bottom lne, only the *caller* knows.
+	 * Here, let's be safe, and use GFP_ATOMIC.
+	 */
+	mynode = kzalloc(sizeof(struct node), GFP_ATOMIC);
 	if (!mynode)
 		return -ENOMEM;
 	mynode->ival1 = v1;
@@ -57,8 +64,12 @@ int add2tail(int v1, int v2, s8 achar, spinlock_t *lock)
 	 */
 	pr_info("list update: using spinlock\n");
 	spin_lock(lock);
-	// void list_add_tail(struct list_head *new, struct list_head *head)
-	list_add_tail(&mynode->list, &head_node);
+	/* signature: void list_add_tail_rcu(struct list_head *new, struct list_head *head)
+	 * '... caller must take whatever precautions are necessary (such as holding
+	 * appropriate locks) to avoid racing with another list-mutation primitive...'
+	 * Internally uses rcu_assign_pointer() ...
+	 */
+	list_add_tail_rcu(&mynode->list, &head_node);
 	spin_unlock(lock);
 	pr_info("Added a node (with letter '%c') to the list...\n", achar);
 
@@ -73,16 +84,21 @@ void showlist(void)
 	if (list_empty(&head_node))
 		return;
 
-	pr_info("   val1   |   val2   | letter\n");
+	pr_info("          val1     |      val2    | letter\n");
 /**
-	list_for_each(ptr, &head_node) {
-		curr = list_entry(ptr, struct node, list); // wrapper over container_of()
+	list_for_each_rcu(ptr, &head_node) {
+		curr = list_entry_rcu(ptr, struct node, list); // wrapper over container_of()
 **/
-	// simpler: internally invokes __container_of() to get the ptr to curr struct
-
+	/* list_for_each_entry_rcu() is simpler than list_for_each_rcu();
+	 * it internally invokes __container_of() to get the ptr to curr struct.
+	 * Also, this is the RCU-safe ver: from it's comments:
+	 * '... This list-traversal primitive may safely run concurrently with
+	 * the _rcu list-mutation primitives such as list_add_rcu()
+	 * as long as the traversal is guarded by rcu_read_lock(). ...'
+	 */
 	rcu_read_lock();
-	list_for_each_entry(curr, &head_node, list) {
-		pr_info("%9d %9d   %c\n", curr->ival1, curr->ival2, curr->letter);
+	list_for_each_entry_rcu(curr, &head_node, list) {
+		pr_info("%16llu %16llu      %c\n", curr->ival1, curr->ival2, curr->letter);
 	}
 	rcu_read_unlock();
 }
@@ -98,20 +114,22 @@ void findinlist_letter(s8 char2locate)
 		return;
 
 	pr_info("Searching list for letter '%c'...\n", char2locate);
-	list_for_each_entry(curr, &head_node, list) {
+	rcu_read_lock();
+	list_for_each_entry_rcu(curr, &head_node, list) {
 		if (curr->letter == char2locate) {
 			found = true;
 			pr_info("found '%c' @ node #%d:\n"
-				"%9d %9d   _%c_\n",
+				"%16llu %16llu   _%c_\n",
 				char2locate, i, curr->ival1, curr->ival2, curr->letter);
 		}
 		i++;
 	}
+	rcu_read_unlock();
 	if (!found)
 		pr_info("Didn't find '%c' in list\n", char2locate);
 }
 
-void freelist(void)
+void freelist(spinlock_t *lock)
 {
 	struct node *curr;
 
@@ -119,6 +137,11 @@ void freelist(void)
 		return;
 
 	pr_info("freeing list items...\n");
-	list_for_each_entry(curr, &head_node, list)
-	    kfree(curr);
+	spin_lock(lock);
+	list_for_each_entry_rcu(curr, &head_node, list) {
+		list_del_rcu(&curr->list);
+		kfree(curr);
+	}
+	spin_unlock(lock);
+	synchronize_rcu();
 }
