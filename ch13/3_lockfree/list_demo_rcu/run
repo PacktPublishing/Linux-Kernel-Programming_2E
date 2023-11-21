@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test script for the ch13/3_list_demo_rcu work
+# Test script for the ch13/3_lockfree/list_demo_rcu demo module
 
 die()
 {
@@ -16,7 +16,7 @@ lsmod |grep ${KMOD} >/dev/null || {
 }
 
 DEV=/dev/lkp_miscdrv_list_rcu
-[[ ! -c ${DEV} ]] && die "Device file ${DEV} not found.Module not inserted successfully?"
+[[ ! -c ${DEV} ]] && die "Device file ${DEV} not found. Module not inserted successfully?"
 
 # The I/O
 #sudo dmesg -C

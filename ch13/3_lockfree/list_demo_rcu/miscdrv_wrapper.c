@@ -1,5 +1,5 @@
 /*
- * ch13/3_list_demo_rcu/list_demo_rcu.c
+ * ch13/3_lockfree/list_demo_rcu/list_demo_rcu.c
  ***************************************************************
  * This program is part of the source code released for the book
  *  "Linux Kernel Programming" 2E
@@ -11,21 +11,19 @@
  * From: Ch 13 : Kernel Synchronization - Part 2
  ****************************************************************
  * Brief Description:
+ *
  * This driver is built upon the LKP Part 2 book's first chapter 'misc' driver here:
  * https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2/tree/main/ch1/miscdrv_rdwr
  *
- TODO -updt
- * The key difference: we use a spinlock in place of the mutex locks (this isn't
- * the case everywhere in the driver though; we keep the mutex as well for some
- * portions of the driver).
- * The functionality (the get and set of the 'secret') remains identical to the
- * original implementation.
+ * A simple module to demo the basics of using the kernel's 'famous'
+ * linked list macros and routines.
+ * Ref: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#list-management-functions
  *
- * Note: also do
- *  make rdwr_test_secret
- * to build the user space app for testing...
+ * Refactored from the ch13/2_list_demo_rdwrlock module to use RCU instead of
+ * the reader-writer spinlock. So, here we employ RCU synchronization (and a
+ * spinlock to protect writers).
  *
- * For details, please refer both books, LKP Ch 12 (2nd Ed) and LKP-Part 2 Ch 1 resp.
+ * For details, please refer both books, LKP Ch 13 (2nd Ed) and LKP-Part 2 Ch 1 resp.
  */
 #define pr_fmt(fmt) "%s:%s(): " fmt, KBUILD_MODNAME, __func__
 
@@ -48,13 +46,13 @@
 #include "../../../convenient.h"
 
 /* Function prototypes of funcs in the list.c file */
-int add2tail(int v1, int v2, s8 achar, spinlock_t *lock);
+int add2tail(u64 v1, u64 v2, s8 achar, spinlock_t *lock);
 void showlist(void);
-void freelist(void);
+void freelist(spinlock_t *lock);
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION(
-"LKP2E book:ch13/3_list_demo_rcu: simple misc char driver rewritten with list usage protected via RCU");
+"LKP2E book:ch13/3_lockfree/list_demo_rcu: simple misc char driver rewritten with demo list usage protected via RCU");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.2");
 
@@ -63,7 +61,7 @@ module_param(buggy, int, 0600);
 MODULE_PARM_DESC(buggy,
 "If 1, cause an error by issuing a blocking call within an RCU read-side critical section");
 
-DEFINE_SPINLOCK(writelock); /* this spinlock protects the global integers ga and gb */
+DEFINE_SPINLOCK(writelock); /* this spinlock allows the RCU writers to run exclusively */
 
 /*--- The driver 'methods' follow ---*/
 /*
@@ -171,10 +169,9 @@ static int __init list_demo_rcu_init(void)
 
 	return 0;		/* success */
 }
-
 static void __exit list_demo_rcu_exit(void)
 {
-	freelist();
+	freelist(&writelock);
 	misc_deregister(&lkp_miscdev);
 	pr_info("LKP misc driver %s deregistered, bye\n", lkp_miscdev.name);
 }
