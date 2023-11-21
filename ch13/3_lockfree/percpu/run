@@ -22,7 +22,7 @@ KMOD=percpu_var
 KFUNC=sched_setaffinity
 KFUNC_PTR=0x$(sudo grep -w "T ${KFUNC}" /proc/kallsyms |awk '{print $1}')
 [[ -z "${KFUNC_PTR}" ]] && {
-  echo "${name}: lookup of kallsyms_lookup_name() failed, aborting..."
+  echo "${name}: lookup of /proc/kallsyms failed, aborting..."
   exit 1
 }
 echo "sched_setaffinity() on $(uname -r): KFUNC_PTR=${KFUNC_PTR}
