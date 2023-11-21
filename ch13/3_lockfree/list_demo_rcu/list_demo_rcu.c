@@ -137,11 +137,15 @@ void freelist(spinlock_t *lock)
 		return;
 
 	pr_info("freeing list items...\n");
+
+	// Wait for any pre-existing RCU readers to cycle off the CPU(s)...
+	synchronize_rcu();
+
+	// ... and now delete and free up the list nodes
 	spin_lock(lock);
 	list_for_each_entry_rcu(curr, &head_node, list) {
 		list_del_rcu(&curr->list);
 		kfree(curr);
 	}
 	spin_unlock(lock);
-	synchronize_rcu();
 }
