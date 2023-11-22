@@ -65,6 +65,7 @@ static unsigned long func_ptr;
 module_param(func_ptr, ulong, 0);
 
 // schedsa_ptr is our function pointer to the sched_setaffinity() function
+// (sa = set affinity!)
 unsigned long (*schedsa_ptr)(pid_t, const struct cpumask *) = NULL;
 
 static struct task_struct *arr_tsk[MAX_KTHRDS];
