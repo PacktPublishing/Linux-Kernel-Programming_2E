@@ -33,6 +33,11 @@ view_lock_stats() {
 
 
 #--- 'main'
+[[ -f /boot/config-$(uname -r) ]] && { # at least on x86[_64]
+  grep -w "CONFIG_LOCK_STAT=y" /boot/config-$(uname -r) >/dev/null 2>&1
+  [[ $? -ne 0 ]] && die "${name}: you're running this on a kernel without lock stats (CONFIG_LOCK_STAT) enabled"
+}
+
 [[ $(id -u) -ne 0 ]] && die "Needs root."
 
 disable_lock_stats
