@@ -1,5 +1,5 @@
 # Further Reading
-*For the book "Linux Kernel Programming", 2nd Ed, Kaiwan N Billimoria, Packt (2023).*
+*For the book "Linux Kernel Programming", 2nd Ed, Kaiwan N Billimoria, Packt (2024).*
 
 *Book GitHub repo*: https://github.com/PacktPublishing/Linux-Kernel-Programming_2E
 
@@ -674,16 +674,19 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - RCU - Read-Copy-Update - in the Linux kernel
     - Official kernel doc (includes FAQs): [RCU Concepts](https://docs.kernel.org/RCU/rcu.html#rcu-concepts)
+    - Excellent (and up-to-date!) collated documentation on RCU, Paul E. McKenney: [Read-Copy Update (RCU) Publications](https://docs.google.com/document/d/1X0lThx8OK0ZgLMqVoXiR4ZrGURHrXK6NyLRbeXe3Xac/edit#heading=h.gidbhbrm8o5x)
+    - [RCU articles on LWN kernel index, from 2004 onward](https://lwn.net/Kernel/Index/#Read-copy-update)
     - A superb playlist of YouTube video tutorials on RCU (by S.T. Chang)! [RCU](https://www.youtube.com/playlist?list=PLIlI4QbmdBqH9-L1QOq6O5Yxt-YVjRsFZ)
-        - Do see the first one first [12 what is RCU Paul E. McKenney at IISc (Bangalore, 2013)](https://www.youtube.com/watch?v=obDzjElRj9c&list=PLIlI4QbmdBqH9-L1QOq6O5Yxt-YVjRsFZ)
-    - The excellent and extensive kernel community documentation: [RCU](https://www.kernel.org/doc/Documentation/RCU/00-INDEX)
+        - Do see the first one first [12 what is RCU, Paul E. McKenney, presentation at IISc Bangalore, 2013](https://www.youtube.com/watch?v=obDzjElRj9c&list=PLIlI4QbmdBqH9-L1QOq6O5Yxt-YVjRsFZ)
+        - Modern-ish take: [Kernel Recipes 2019 - RCU in 2019, Joel Fernandes, Google, Oct 2019](https://www.youtube.com/watch?v=bsyXDAouI6E&list=PLIlI4QbmdBqH9-L1QOq6O5Yxt-YVjRsFZ&index=3)
     - [My First Kernel Module: A Debugging Nightmare, Ryan Eberhardt. Nov 2020](https://reberhardt.com/blog/2020/11/18/my-first-kernel-module.html); see the section entitled 'RCU: Read, Copy, Update', excellent and clear!
     - A 3 series article to learn RCU: ['What is RCU, Fundamentally?', LWN, Paul E. McKenney, Dec 2007, Part 1 of 3 ](https://lwn.net/Articles/262464/)
     - ['RCU Usage In the Linux Kernel: One Decade Later', Paul E. McKenney et al (PDF), circa 2013](http://www2.rdrop.com/~paulmck/techreports/RCUUsage.2013.02.24a.pdf)
     - Code-level examples of RCU usage:
         - A nice simple 'book library' example: [rcu_example, Jinbum Park](https://github.com/jinb-park/rcu_example/tree/master)
-        - [Linux RCU Usage and internals, Feb 2021](https://sklinuxblog.blogspot.com/2021/02/linux-rcu-usage.html)
+        - Another covering rw-lock and (S)RCU: [Linux RCU Usage and internals, Feb 2021](https://sklinuxblog.blogspot.com/2021/02/linux-rcu-usage.html)
     - [Linux RCU, Lizhou Shan, Oct 2021](http://lastweek.io/notes/linux/linux-rcu/)
+    - [Sleepable RCU, Paul E. McKenney, LWN, Oct 2006](https://lwn.net/Articles/202847/)
     - ['Make any algorithm lock-free with this one crazy trick', May 2016](https://www.the-paper-trail.org/post/2016-05-25-make-any-algorithm-lock-free-with-this-one-crazy-trick/)
     - ['The lockless page cache', LWN, Jon Corbet, July 2008](https://lwn.net/Articles/291826/) (an interesting article)
 
