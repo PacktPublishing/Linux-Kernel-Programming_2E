@@ -3,8 +3,8 @@
 name=$(basename $0)
 
 [[ -f /boot/config-$(uname -r) ]] && { # at least on x86[_64]
-  grep -w "CONFIG_PROVE_LOCKING" /boot/config-$(uname -r) >/dev/null 2>&1
-  [[ $? -ne 0 ]] && echo "${name}: WARNING! You're running this on a kernel without lockdep (CONFIG_PROVE_LOCKING)"
+  grep -w "CONFIG_PROVE_LOCKING=y" /boot/config-$(uname -r) >/dev/null 2>&1
+  [[ $? -ne 0 ]] && echo "${name}: WARNING! You're running this on a kernel without lockdep (CONFIG_PROVE_LOCKING) enabled"
 }
 
 DEADLOCK=0
