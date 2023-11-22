@@ -41,7 +41,7 @@ MODULE_DESCRIPTION("LKP 2E book: ch13/3_lockfree/thrdshowall_rcu/:"
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.2");
 
-static int showthrds_buggy(void)
+static int showthrds_rcu(void)
 {
 	struct task_struct *g, *t;  /* 'g' : process ptr; 't': thread ptr */
 	int nr_thrds = 1, total = 0;
@@ -52,23 +52,47 @@ static int showthrds_buggy(void)
 "--------------------------------------------------------------------------------\n"
 "    TGID   PID         current        stack-start      Thread Name   MT? # thrds\n"
 "--------------------------------------------------------------------------------\n";
+	struct task_struct *g_rcu, *t_rcu;  /* 'g_rcu' : process ptr; 't_rcu': thread ptr */
 
 	pr_info("%s", hdr);
 
 	rcu_read_lock(); /* This triggers off an RCU read-side critical section; ensure
 			  * you are non-blocking within it!
 			  */
+	/*
+	 * Interesting: we use the do_each_thread(g, t) to iterate over every
+	 * thread alive. Internally, it becomes:
+	 * include/linux/sched/signal.h:
+	 * ...
+	 * #define do_each_thread(g, t) \
+	 *	for (g = t = &init_task ; (g = t = next_task(g)) != &init_task ; ) do
+	 *
+	 * #define while_each_thread(g, t) \
+	 *	while ((t = next_thread(t)) != g)
+	 *  ...
+	 * Notice how both macros invoke the next_*() macro to iterate to the next
+	 * list member. Now, the implemetation of next_{task|thread}() uses
+	 * include/linux/rculist.h:list_entry_rcu(), which is the RCU protected means
+	 * of access!
+	 * As it's comment says: '...  This primitive may safely run concurrently with
+	 * the _rcu list-mutation primitives such as list_add_rcu() as long as it's
+	 * guarded by rcu_read_lock(). ...'
+	 */
 	do_each_thread(g, t) {     /* 'g' : process ptr; 't': thread ptr */
-		get_task_struct(t);	/* take a reference to the task struct */
+		g_rcu = rcu_dereference(g);
+		t_rcu = rcu_dereference(t);
 
-		snprintf(buf, BUFMAX-1, "%6d %6d ", g->tgid, t->pid);
+		get_task_struct(t_rcu);	/* take a reference to the task struct */
+
+		snprintf(buf, BUFMAX-1, "%6d %6d ", g_rcu->tgid, t_rcu->pid);
 		/* task_struct addr and kernel-mode stack addr */
-		snprintf(tmp, TMPMAX-1, "  0x%px", t);
+		snprintf(tmp, TMPMAX-1, "  0x%px", t_rcu);
 		strncat(buf, tmp, TMPMAX);
-		snprintf(tmp, TMPMAX-1, "  0x%px", t->stack);
+		snprintf(tmp, TMPMAX-1, "  0x%px", t_rcu->stack);
 		strncat(buf, tmp, TMPMAX);
+		get_task_comm(tasknm, t_rcu);
 
-		if (!g->mm)	// kernel thread
+		if (!g_rcu->mm)	// kernel thread
 			snprintf(tmp, sizeof(tasknm)+3, " [%16s]", tasknm);
 		else
 			snprintf(tmp, sizeof(tasknm)+3, "  %16s ", tasknm);
@@ -81,8 +105,8 @@ static int showthrds_buggy(void)
 		 * If so, display the number of threads in the overall process
 		 * to the right..
 		 */
-		nr_thrds = get_nr_threads(g);
-		if (g->mm && (g->tgid == t->pid) && (nr_thrds > 1)) {
+		nr_thrds = get_nr_threads(g_rcu);
+		if (g_rcu->mm && (g_rcu->tgid == t_rcu->pid) && (nr_thrds > 1)) {
 			snprintf(tmp, TMPMAX-1, " %3d", nr_thrds);
 			strncat(buf, tmp, TMPMAX);
 		}
@@ -94,27 +118,27 @@ static int showthrds_buggy(void)
 		total++;
 		memset(buf, 0, sizeof(buf));
 		memset(tmp, 0, sizeof(tmp));
-		put_task_struct(t);	/* release reference to the task struct */
+		put_task_struct(t_rcu);	/* release reference to the task struct */
 	} while_each_thread(g, t);
 	rcu_read_unlock();
 
 	return total;
 }
 
-static int __init thrd_showall_buggy_init(void)
+static int __init thrd_showall_rcu_init(void)
 {
 	int total;
 
 	pr_info("inserted\n");
-	total = showthrds_buggy();
+	total = showthrds_rcu();
 	pr_info("total # of threads on the system: %d\n", total);
 
 	return 0;		/* success */
 }
-static void __exit thrd_showall_buggy_exit(void)
+static void __exit thrd_showall_rcu_exit(void)
 {
 	pr_info("removed\n");
 }
 
-module_init(thrd_showall_buggy_init);
-module_exit(thrd_showall_buggy_exit);
+module_init(thrd_showall_rcu_init);
+module_exit(thrd_showall_rcu_exit);

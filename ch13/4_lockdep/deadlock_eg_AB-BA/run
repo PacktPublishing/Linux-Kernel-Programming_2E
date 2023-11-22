@@ -2,6 +2,20 @@
 # Wrapper script to correctly load up the percpu_var.ko module.
 name=$(basename $0)
 
+[[ -f /boot/config-$(uname -r) ]] && { # at least on x86[_64]
+  grep -w "CONFIG_PROVE_LOCKING" /boot/config-$(uname -r) >/dev/null 2>&1
+  [[ $? -ne 0 ]] && echo "${name}: WARNING! You're running this on a kernel without lockdep (CONFIG_PROVE_LOCKING)"
+}
+
+DEADLOCK=0
+[[ $# -ne 1 ]] && {
+   echo "Usage: ${name} 0|1
+ 0 : run normally, take locks in the right (documented) order
+ 1 : run abnormally, take locks in the WRONG order, causing an AB-BA deadlock"
+   exit 1
+}
+[[ $1 -eq 1 ]] && DEADLOCK=1
+
 # !WARNING! This is considered a hack.
 # As sched_setaffinity() isn't exported, we don't have access to it
 # within this kernel module. So, here we resort to a hack: 
@@ -18,7 +32,7 @@ name=$(basename $0)
 #  the expected function signature - that of sched_setaffinity() - and use it.
 # *Not* pedantically right, but hey, it works. Don't do this in production.
 #
-KMOD=percpu_var
+KMOD=deadlock_eg_AB-BA
 KFUNC=sched_setaffinity
 KFUNC_PTR=0x$(sudo grep -w "T ${KFUNC}" /proc/kallsyms |awk '{print $1}')
 [[ -z "${KFUNC_PTR}" ]] && {
@@ -32,5 +46,10 @@ make clean
 make || exit 1
 sudo rmmod ${KMOD} 2>/dev/null
 sudo dmesg -C
-sudo insmod ./${KMOD}.ko func_ptr=${KFUNC_PTR}
+
+if [[ ${DEADLOCK} -eq 1 ]] ; then
+	sudo insmod ./${KMOD}.ko func_ptr=${KFUNC_PTR} lock_ooo=1
+else
+	sudo insmod ./${KMOD}.ko func_ptr=${KFUNC_PTR}
+fi
 sudo dmesg
