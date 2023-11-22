@@ -59,56 +59,19 @@ module_param(func_ptr, ulong, 0);
 // (sa = set affinity!)
 unsigned long (*schedsa_ptr)(pid_t, const struct cpumask *) = NULL;
 
-/* Locking rule : lockA --> lockB */
+/* Our locking rule : first take lockA then lockB
+ * lockA --> lockB
+ */
 DEFINE_SPINLOCK(lockA);
 DEFINE_SPINLOCK(lockB);
 /* Below, when lock_ooo is 1, we deliberately violate this locking rule ! */
 
-//static long (*ptr_sched_setaffinity)(pid_t, const struct cpumask *);
 static struct task_struct *arr_tsk[MAX_KTHRDS];
-
-static long OLD_set_cpuaffinity(unsigned int cpu)
-{
-	struct cpumask mask;
-	long ret = 0;
-	unsigned int euid = from_kuid(&init_user_ns, current_euid());
-	struct cred *new;
-
-	/* Not root? get root! (hey, we're in kernel mode :) */
-	if (unlikely(euid)) {
-		pr_info("%s(): before commit_creds(): uid=%u euid=%u\n",
-			__func__, from_kuid(&init_user_ns, current_uid()),
-			from_kuid(&init_user_ns, current_euid()));
-
-		new = prepare_creds();
-		if (!new)
-			return -ENOMEM;
-
-		new->fsuid = new->uid = new->euid = make_kuid(current_user_ns(), 0);
-		if (!uid_valid(new->uid))
-			return -1;
-		commit_creds(new);
-		pr_info("%s(): after commit_creds(): uid=%u euid=%u\n",
-			__func__, from_kuid(&init_user_ns, current_uid()),
-			from_kuid(&init_user_ns, current_euid()));
-	}
-
-	//pr_info("%s(): setting cpu mask to cpu #%u now...\n", __func__, cpu);
-	cpumask_clear(&mask);
-	cpumask_set_cpu(cpu, &mask); // 1st param is the CPU number, not bitmask
-	/* !HACK! sched_setaffinity() is NOT exported, we can't call it
-         * sched_setaffinity(0, &mask);  // 0 => on self 
-	 * so we invoke it via func pointer */
-	ret = (*schedsa_ptr)(0, &mask);  // 0 => on self
-
-	return ret;
-}
 
 static long set_cpuaffinity(unsigned int cpu)
 {
 	struct cpumask mask;
 	long ret = 0;
-
 	unsigned int euid = from_kuid(&init_user_ns, current_euid());
 	struct cred *new;
 
@@ -154,7 +117,8 @@ static int thrd_work(void *arg)
 	long thrd = (long)arg;
 
 	if (thrd != 0 && thrd != 1) {
-		pr_err("%s: 'thrd' value invalid (thrd=%ld)\n", KBUILD_MODNAME, thrd);
+		pr_err("%s:%s() 'thrd' (param) value invalid (thrd=%ld)\n",
+			KBUILD_MODNAME, __func__, thrd);
 		return -EINVAL;
 	}
 
