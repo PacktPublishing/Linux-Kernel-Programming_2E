@@ -11,12 +11,13 @@
  * From: Ch 13 : Kernel Synchronization - Part 2
  ****************************************************************
  * Question:
- *  Convert our earlier ch12/2_miscdrv_rdwr_spinlock/miscdrv_rdwr_spinlock.c
+ * Modify our earlier ch12/2_miscdrv_rdwr_spinlock/miscdrv_rdwr_spinlock.c
  * driver code; it has the integers ga and gb , which, when being read or
  * written were protected via a spinlock. Now make them refcount variables
  * (initializing them to some value, say, 42) and use the appropriate
- * refcount_t methods when working on them. (Careful! don't allow their values
- * to go out of the (default) allowed range [1..INT_MAX] !)
+ * refcount_t methods when working on them.
+ * Include a test case where you deliberately make them go outside the valid
+ * allowed range ([1..INT_MAX-1]).
  *
  * For details, please refer the book, Ch 13.
  */
@@ -294,7 +295,7 @@ static int close_miscdrv_rdwr(struct inode *inode, struct file *filp)
 }
 
 /* The driver 'functionality' is encoded via the fops */
-static const struct file_operations llkd_misc_fops = {
+static const struct file_operations lkp_misc_fops = {
 	.open = open_miscdrv_rdwr,
 	.read = read_miscdrv_rdwr,
 	.write = write_miscdrv_rdwr,
@@ -307,25 +308,25 @@ static const struct file_operations llkd_misc_fops = {
 	 */
 };
 
-static struct miscdevice llkd_miscdev = {
+static struct miscdevice lkp_miscdev = {
 	.minor = MISC_DYNAMIC_MINOR,	// kernel dynamically assigns a free minor#
-	.name = "llkd_miscdrv_rdwr_refcount",
+	.name = "lkp_miscdrv_rdwr_refcount",
 	// populated within /sys/class/misc/ and /sys/devices/virtual/misc/
 	.mode = 0666,		/* ... dev node perms set as specified here */
-	.fops = &llkd_misc_fops,	// connect to 'functionality'
+	.fops = &lkp_misc_fops,	// connect to 'functionality'
 };
 
 static int __init miscdrv_init_refcount(void)
 {
 	int ret;
 
-	ret = misc_register(&llkd_miscdev);
+	ret = misc_register(&lkp_miscdev);
 	if (ret < 0) {
 		pr_notice("misc device registration failed, aborting\n");
 		return ret;
 	}
 	pr_info("LLKD misc driver (major # 10) registered, minor# = %d,"
-		" dev node is %s\n", llkd_miscdev.minor, llkd_miscdev.name);
+		" device node is /dev/%s\n", lkp_miscdev.minor, lkp_miscdev.name);
 
 	/*
 	 * A 'managed' kzalloc(): use the 'devres' API devm_kzalloc() for mem
@@ -341,7 +342,7 @@ static int __init miscdrv_init_refcount(void)
 	spin_lock_init(&ctx->spinlock);
 
 	/* Retrieve the device pointer for this device */
-	ctx->dev = llkd_miscdev.this_device;
+	ctx->dev = lkp_miscdev.this_device;
 
 	strscpy(ctx->oursecret, "initmsg", 8);
 	/* Why don't we protect the above strscpy() with the mutex / spinlock?
@@ -359,7 +360,7 @@ static int __init miscdrv_init_refcount(void)
 static void __exit miscdrv_exit_refcount(void)
 {
 	mutex_destroy(&ctx->mutex);
-	misc_deregister(&llkd_miscdev);
+	misc_deregister(&lkp_miscdev);
 	pr_info("LLKD misc driver deregistered, bye\n");
 }
 
