@@ -37,8 +37,8 @@ view_lock_stats() {
   grep -w "CONFIG_LOCK_STAT=y" /boot/config-$(uname -r) >/dev/null 2>&1
   [[ $? -ne 0 ]] && die "${name}: you're running this on a kernel without lock stats (CONFIG_LOCK_STAT) enabled"
 }
-
 [[ $(id -u) -ne 0 ]] && die "Needs root."
+[[ ! -f /proc/lock_stat ]] && die "weird: the /proc/lock_stat file's not present?"
 
 disable_lock_stats
 
@@ -63,10 +63,11 @@ sudo insmod ./${KMOD}.ko func_ptr=${KFUNC_PTR}
 #----------------------------------------------------------------------
 
 disable_lock_stats
+rmmod ${KMOD}
+
 REPFILE=lockstats.txt
 view_lock_stats > ${REPFILE}
 #view_lock_stats |tee ${REPFILE}
-rmmod ${KMOD}
 cd ..
 echo "${name}: done, see the kernel locking stats in ${REPFILE}"
 exit 0
