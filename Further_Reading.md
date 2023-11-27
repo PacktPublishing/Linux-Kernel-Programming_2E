@@ -25,8 +25,10 @@ For your convenience, below are chapter-wise links to the *Further Reading* note
  - [Chapter 13, Kernel Synchronization, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-13-kernel-synchronization-part-2---further-reading)
 
 
-**Don't forget**: The companion book *'Linux Kernel Programming (Part 2): Writing character device drivers: Learn to work with user-kernel interfaces, handle peripheral I/O & hardware interrupts'* is available as well! *(Hey, the ebook is free!)*
-    - It's [opensource GitHub repo is here.](https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2)
+**Friendly Reminder !** <br>
+This book's companion volume *'Linux Kernel Programming (Part 2): Writing character device drivers: Learn to work with user-kernel interfaces, handle peripheral I/O & hardware interrupts'* is available as well! *And, hey, the ebook's free!*
+<br>
+It's [opensource GitHub repo is here.](https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2)
 
 <br>
 
@@ -651,7 +653,10 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 - [Official kernel doc: Reference counting (interfaces/APIs)](https://docs.kernel.org/driver-api/basics.html#reference-counting)
 - Reference Counting API: [kernsec: a summary](https://kernsec.org/wiki/index.php/Kernel_Protections/refcount_t)
 
-- False Sharing
+- CPU Caches, coherency and False Sharing
+    - [Cache coherency protocol examples, Wikipedia](https://en.wikipedia.org/wiki/Cache_coherency_protocols_(examples)#Coherency_protocols)
+    - [Cache Coherence Problem & Cache Coherency Protocols, Neso, YouTube video](https://www.youtube.com/watch?v=r_ZE1XVT8Ao)
+    - [MOESI protocol; used on AMD64 processors](https://en.wikipedia.org/wiki/MOESI_protocol)
     - ['Avoiding and Identifying False Sharing Among Threads', Intel, Nov 2011](https://software.intel.com/en-us/articles/avoiding-and-identifying-false-sharing-among-threads)
     - Blog article: ['Understanding False Sharing', Mar 2017](https://parallelcomputing2017.wordpress.com/2017/03/17/understanding-false-sharing/)
 
@@ -690,25 +695,23 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - ['Make any algorithm lock-free with this one crazy trick', May 2016](https://www.the-paper-trail.org/post/2016-05-25-make-any-algorithm-lock-free-with-this-one-crazy-trick/)
     - ['The lockless page cache', LWN, Jon Corbet, July 2008](https://lwn.net/Articles/291826/) (an interesting article)
 
-
-- kdump and crash:
-    - Kernel documentation for kdump: [The kexec-based Crash Dumping Solution](https://www.kernel.org/doc/ocumentation/kdump/kdump.txt)
-    - [Oops! Debugging Kernel Panics, Linux Journal, August 2019](https://www.linuxjournal.com/content/oopsdebugging-kernel-panics-0)
-    - Excellent resource for learning and using the crash app: [White paper: Red Hat Crash Utility, David Anderson](https://crash-utility.github.io/crash_whitepaper.html)
-    - [Analyzing Linux kernel crash dumps with crash - The one tutorial that has it all, Dedoimedo, June 2010]( http://www.dedoimedo.com/computers/crash-analyze.html)
+- Lockdep
+    - ['Runtime locking correctness validator', kernel documentation](https://www.kernel.org/doc/Documentation/locking/lockdep-design.txt)
+    - ['The kernel lock validator', LWN, J Corbet, May 2006](https://lwn.net/Articles/185666/)
+    - ['Lockdep: how to read it's cryptic output', Steve Rostedt, Linux Plumbers Conf 2011](https://blog.linuxplumbersconf.org/2011/ocw/sessions/153)
+    - ['LOCKDEP, AN INSIDE OUT PERSPECTIVE', Nahim El Atmani, Nov 2016](https://www.lse.epita.fr/data/lt/2016-11-08/lt-2016-11-08-Nahim_El_Atmani-lockdep-an-inside-out-perspective.pdf)
+    - [Lockdep False Positives, some stories about, David Airlie, Aug 2020](https://blog.ffwll.ch/2020/08/lockdep-false-positives.html)
 
 - Memory barriers:
     - PDF: ['Memory Barriers: a Hardware View for Software Hackers',
 Paul E. McKenney, IBM LTC, June 2010](http://www.rdrop.com/~paulmck/scalability/paper/whymb.2010.06.07c.pdf)
     - [Memory Barriers Are Like Source Control Operations, Preshing on Programming blog, July 2012](https://preshing.com/20120710/memory-barriers-are-like-source-control-operations/)
 
-- Lockdep
-        - ['Runtime locking correctness validator', kernel documentation](https://www.kernel.org/doc/Documentation/locking/lockdep-design.txt)
-        - ['The kernel lock validator', LWN, J Corbet, May 2006](https://lwn.net/Articles/185666/)
-        - ['Lockdep: how to read it's cryptic output', Steve Rostedt, Linux Plumbers Conf 2011](https://blog.linuxplumbersconf.org/2011/ocw/sessions/153)
-        - ['LOCKDEP, AN INSIDE OUT PERSPECTIVE', Nahim El Atmani, Nov 2016](https://www.lse.epita.fr/data/lt/2016-11-08/lt-2016-11-08-Nahim_El_Atmani-lockdep-an-inside-out-perspective.pdf)
-        - (until it gets merged :-) : ['[PATCH 16/28] locking/lockdep: Add explanation to lock usage rules in lockdep design doc', Yuyang Du](https://lkml.org/lkml/2019/4/24/333), Apr 2019
-
+- kdump and crash:
+    - Kernel documentation for kdump: [The kexec-based Crash Dumping Solution](https://www.kernel.org/doc/ocumentation/kdump/kdump.txt)
+    - [Oops! Debugging Kernel Panics, Linux Journal, August 2019](https://www.linuxjournal.com/content/oopsdebugging-kernel-panics-0)
+    - Excellent resource for learning and using the crash app: [White paper: Red Hat Crash Utility, David Anderson](https://crash-utility.github.io/crash_whitepaper.html)
+    - [Analyzing Linux kernel crash dumps with crash - The one tutorial that has it all, Dedoimedo, June 2010]( http://www.dedoimedo.com/computers/crash-analyze.html)
 
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
