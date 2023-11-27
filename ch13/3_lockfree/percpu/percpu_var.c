@@ -1,5 +1,5 @@
 /*
- * ch13/2_percpu/percpu_var.c
+ * ch13/percpu/percpu_var.c
  ***************************************************************
  * This program is part of the source code released for the book
  *  "Linux Kernel Programming" 2E
@@ -48,7 +48,7 @@
 #include <linux/delay.h>
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
-MODULE_DESCRIPTION("LKP 2E book:ch13/2_percpu: demo of using percpu variables");
+MODULE_DESCRIPTION("LKP 2E book:ch13/percpu/: demo of using percpu variables");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.2");
 
