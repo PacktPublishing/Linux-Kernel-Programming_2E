@@ -20,10 +20,10 @@ in single-user mode (and then change the root password).
 
 4. (A bit advanced, for when you're feeling adventurous!) Refer ahead
 to Chapter 5, Writing Your First Kernel Module – LKMs Part 2, in
-the Configuring a debug kernel section. It details the kernel config options to
-be minimally set up for a very useful thing indeed – a debug kernel!
+the 'Configuring a debug kernel' section. It details the kernel config options
+to be minimally set up for a very useful thing indeed – a debug kernel!
 
 Running your code on a debug kernel can help you uncover hard-to-spot
-bugs and issues. Your job here is to configure another kernel with these
-debug options, then build and run it.
+bugs and issues. Your job here is to configure another 'debug kernel' with
+these debug config options, then build and boot from it.
 

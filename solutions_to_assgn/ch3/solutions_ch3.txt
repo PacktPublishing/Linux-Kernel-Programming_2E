@@ -38,5 +38,7 @@ tree ${TMPD}
 then change the root password).
 A.
 --- Left as an exercise to the reader ---
+(Tip: described in some detail in Ch 3 / Experimenting with the GRUB prompt).
 
-(Described in some detail in Ch 3 / Doing a bit more on the GRUB prompt).
+4. <Qs 4 is also ...>
+--- Left as an exercise to the reader ---
