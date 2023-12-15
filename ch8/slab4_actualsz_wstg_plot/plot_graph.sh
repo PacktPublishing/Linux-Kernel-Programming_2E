@@ -82,11 +82,11 @@ hash gnuplot || {
 	exit 1
 }
 pgrep Xorg >/dev/null || {
-	echo "${name}: WARNING: are you sure you're running in a GUI? (no Xorg detected)"
+    pgrep Xwayland >/dev/null || {
+	echo "${name}: WARNING: are you sure you're running in a GUI? (no Xorg or Xwayland process detected)"
 	GUI_ENV=0
+    }
 }
-
 prep_datafile
 plotit
-
 exit 0
