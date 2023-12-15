@@ -21,6 +21,9 @@ name=$(basename $0)
 TMPF=/tmp/t.$$
 IFS=$'\n\t'
 cmd="grep -r -H -w waste /sys/kernel/debug/slab/kmalloc-[1-9]*/alloc_traces"
+n=0
+
+echo "${name}: gathering data, please be patient ..."
 for rec in $(eval ${cmd})
 do
  #echo "rec = ${rec}"
@@ -28,6 +31,7 @@ do
  # /sys/kernel/debug/slab/kmalloc-8/alloc_traces:     58 strndup_user+0x4a/0x70 waste=406/7 age=831078/831403/831933 pid=1-801 cpus=0-5 406
  # -----kmalloc-<foo> slab----------------------: num-times-requested func+start/len waste=num_wasted_total/num_wasted_eachtime pid=<...> cpus=<...> 
 
+ # Get the absolute wastage:
  # Kernel modules contain an extra field, the module name [foo]
  # So get the field# of the column having the string 'waste=' ...
  waste_fieldnum=$(echo "${rec}" | awk '{for(i=1;i<=NF;i++) {if ($i ~ /waste=/) print i}}')
@@ -35,21 +39,32 @@ do
  # (of the form: waste=406/7, i.e., waste=num_wasted_total/num_wasted_eachtime)
  wastage_abs=$(echo "${rec}" | awk -v fld=${waste_fieldnum} '{print $fld}'|cut -d= -f2|cut -d/ -f1)
  echo "${rec} ${wastage_abs}" >> ${TMPF}
+ let n=n+1
+ [[ $((n % 100)) -eq 0 ]] && echo -n "."
 done
+echo
 
 # separate out kernel internal kmalloc-* slabs from kernel modules slabs
-grep -v "\[.*\]" ${TMPF} > /tmp/kint.waste
-grep "\[.*\]" ${TMPF} > /tmp/kmods.waste
+grep -v "\[.*\]" ${TMPF} > kint.waste || true
+grep "\[.*\]" ${TMPF} > kmods.waste || true
 
 echo "======== Wastage (highest-to-lowest with duplicate lines eliminated) ========"
-echo "--------------- kernel internal ----------------"
+echo "--------------- kernel internal ----------------
+   Top 10 wasters (in desc order). (To see all, lookup the full report here: kint.waste)"
+[[ -s kint.waste ]] && {
 # kernel internal - the 8th fields is the number of 'waste' bytes
 # (As the abs number of wasted bytes is already there in the output, we use awk
 #  to eliminate the last col, the number of wasted bytes)
 # Also, use uniq(1) to eliminate duplicate lines (?)
-sort -k8nr /tmp/kint.waste | awk 'NF{NF--};1' | uniq
-echo "--------------- kernel modules ----------------"
+sort -k8nr kint.waste | awk 'NF{NF--};1' | uniq | head
+} || echo "-none-"
+
+echo "
+--------------- kernel modules ----------------
+   Top 10 wasters (in desc order). (To see all, lookup the full report here: kmods.waste)"
 # kernel modules - the 9th fields is the number of 'waste' bytes
-sort -k9nr /tmp/kmods.waste | awk 'NF{NF--};1' | uniq
+[[ -s kmods.waste ]] && {
+sort -k9nr kmods.waste | awk 'NF{NF--};1' | uniq | head
+} || echo "-none-"
 
 exit 0
