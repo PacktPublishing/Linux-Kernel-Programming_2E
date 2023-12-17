@@ -16,7 +16,7 @@ sudo dmesg -C
 2. Now build the module and insmod it (it will fail at some point, that's fine)
 ../../lkm slab4_actualsz_wstg_plot
 
-3. Run the helper script plot_graph.sh; f.e.:
+3. Run the helper script plot_graph.sh:
 
 (Recommended: Before running the script, pl check the data file; it should ONLY
 have data of the form:
