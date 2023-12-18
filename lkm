@@ -50,7 +50,8 @@ runcmd "sudo dmesg -C" || true
 runcmd "make || exit 1" || true
 
 [[ ! -f "$1".ko ]] && {
-  echo "[!] ${name}: $1.ko has not been built, aborting..."
+  echo "[!] ${name}: \"$1.ko\" has not been built, aborting...
+(Note though, that this can happen when the module's named differently)."
   exit 1
 }
 
