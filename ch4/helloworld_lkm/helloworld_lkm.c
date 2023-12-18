@@ -32,7 +32,7 @@ static int __init helloworld_lkm_init(void)
 }
 static void __exit helloworld_lkm_exit(void)
 {
-	printk(KERN_INFO "Goodbye, world\n");
+	printk(KERN_INFO "Goodbye, world! Climate change has done us in...\n");
 }
 module_init(helloworld_lkm_init);
 module_exit(helloworld_lkm_exit);
