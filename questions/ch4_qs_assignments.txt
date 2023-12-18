@@ -15,7 +15,8 @@ into the kernel itself, and why?
 4. Can a kernel module be used to create a new CPU scheduler on Linux?
 
 5. (a) Spot the error in the following line of code:
-       printk(KERN_CRIT, "Goodbye, world, am burning up...\n");
+       printk(KERN_CRIT, "Goodbye, world, climate change's a bummer...\n");
+       (Hint: it's not 'climate change'; that's real and we need to fix it!).
    (b) What's the fix?
 
 6. How does the kernel build system know the location of the kernel headers?
