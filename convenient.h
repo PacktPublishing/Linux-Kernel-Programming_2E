@@ -336,4 +336,31 @@ void delay_sec(long val)
 } while (0)
 #endif   /* #ifdef __KERNEL__ */
 
+/*
+ * Simple wrapper over the snprintf() - a bit more security-aware
+ */
+int snprintf_lkp(char *buf, size_t maxsize, const char *fmt, ...)
+{
+	va_list args;
+	int n;
+
+#ifndef __KERNEL__
+#include <stdarg.h>
+#endif
+	va_start(args, fmt);
+	n = vsnprintf(buf, maxsize, fmt, args);
+	va_end(args);
+	if (n >= maxsize) {
+#ifdef __KERNEL__
+		pr_warn("snprintf(): possible overflow! (maxsize=%lu, ret=%d)\n",
+			maxsize, n);
+		dump_stack();
+#else
+		fprintf(stderr, "snprintf(): possible overflow! (maxsize=%lu, ret=%d)\n",
+			maxsize, n);
+#endif
+	}
+	return n;
+}
+
 #endif   /* #ifndef __LKP_CONVENIENT_H__ */
