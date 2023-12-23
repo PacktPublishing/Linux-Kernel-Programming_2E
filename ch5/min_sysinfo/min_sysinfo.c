@@ -22,6 +22,7 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/limits.h>
+#include "../../convenient.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("LKP2E book:ch5/min_sysinfo: print some minimal system info");
@@ -54,7 +55,7 @@ void llkd_sysinfo2(void)
 	char msg[MSGLEN];
 
 	memset(msg, 0, MSGLEN);
-	snprintf(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
+	snprintf_lkp(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
 	/* Strictly speaking, all this #if... is considered ugly and should be
 	 * isolated as far as is possible
@@ -126,7 +127,7 @@ void llkd_sysinfo(void)
 	char msg[128];
 
 	memset(msg, 0, 128);
-	snprintf(msg, 47, "%s(): minimal Platform Info:\nCPU: ", __func__);
+	snprintf_lkp(msg, 47, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
 	/* Strictly speaking, all this #if... is considered ugly and should be
 	 * isolated as far as is possible
