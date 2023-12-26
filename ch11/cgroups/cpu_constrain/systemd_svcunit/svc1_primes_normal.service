@@ -19,7 +19,7 @@ ExecStart=/usr/local/bin/systemd_svcunit_demo/run_primegen
 # Optional: Apply 'better' cpu sched settings for this process
 CPUSchedulingPolicy=fifo
 CPUSchedulingPriority=83
-# So that the child process - primegen - runs with these sched settings!
+# (Below) So that the child process - primegen - runs with these sched settings!
 # (well it's anyway the default)
 CPUSchedulingResetOnFork=false
 # Nice value applies for only the default 'other/normal' cpu sched policy
