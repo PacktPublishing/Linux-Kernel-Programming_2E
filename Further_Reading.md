@@ -238,9 +238,11 @@ Miscellaneous:
 - [Official Kernel Documentation : kernel parameters](https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html)
 - ['How to get printk format specifiers right', Linux kernel doc](https://www.kernel.org/doc/html/latest/core-api/printk-formats.html?highlight=dma)
 - ['What are the __init* and __exit* macros ?', kernelnewbies](https://kernelnewbies.org/FAQ/InitExitMacros)
-- Systemd
+- **Systemd**
 	-   Article: ['Systemd Essentials: Working with Services, Units, and the Journal', DigitalOcean](https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal)
-	- Article: ['Understanding Systemd Units and Unit Files', DigitalOcean](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files) 
+	- Article: ['Understanding Systemd Units and Unit Files', DigitalOcean](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files)
+	- [How to create a systemd service in Linux, Patel, Sept 2022](https://linuxhandbook.com/create-systemd-services/)
+	- [Understanding and administering systemd, Christopher Engelhard, Kamil Páral, Caleb McKee, Fedora docs, Aug 2020](https://docs.fedoraproject.org/en-US/quick-docs/systemd-understanding-and-administering/)
 	- [Systemd Documentation](http://0pointer.de/blog/projects/systemd-docs.html)
 	- [Systemd FAQs](https://www.freedesktop.org/wiki/Software/systemd/FrequentlyAskedQuestions/)
 
@@ -293,12 +295,14 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
         - [Choose an open source license](https://choosealicense.com/)
             - [Appendix; a convenient comparison table of OSS licenses](https://choosealicense.com/appendix/)
 
+
 - Blog article: ["LINUX KERNEL DEVELOPMENT – KERNEL MODULE PARAMETERS", Liran B.H.](http://devarea.com/linux-kernel-development-kernel-module-parameters/)
 - Useful Arch Linux Wiki on kernel module - gathering info, auto-loading, aliasing, blacklisting, etc: ["Kernel module"](https://wiki.archlinux.org/index.php/Kernel_module)
 - StackOverflow Q&A: ["Where does modprobe load a driver that udev requests?"](https://unix.stackexchange.com/questions/330186/where-does-modprobe-load-a-driver-that-udev-requests)
 - DKMS: Dynamic Kernel Module Support
 	- AskUbuntu: ["What does DKMS do? How do I use it?"](https://askubuntu.com/questions/408605/what-does-dkms-do-how-do-i-use-it)
 	- dkms(8) man page](https://linux.die.net/man/8/dkms)
+
 
 - A few Linux *FastBoot!*  resources
     - [Fast boot with Raspberry Pi, Himesh’s blog, Aug 2018](http://himeshp.blogspot.com/2018/08/fast-boot-with-raspberry-pi.html)
@@ -310,7 +314,6 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
     - [Blog article Reducing Boot Time with systemd, Murray, Feb 2022](https://www.thegoodpenguin.co.uk/blog/reducing-boot-time-with-systemd/)
     - [Good stackoverflow question on using systemd to figure boot time...](https://superuser.com/questions/852610/how-to-tell-which-services-run-at-startup-on-raspberry-pi-raspbian)
     - [A Challenge called boot time, witekio blog](https://witekio.com/blog/a-challenge-called-boot-time-3/)
-
 
 
 - [Linux Kernel Security](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#kernel_sec)
@@ -549,6 +552,9 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - [Video tutorial: talk recorded for the Linux Foundation’s OSSNA (Open Source Summit, North America), June 2023: 'Leveraging the OS CPU Scheduler to Write Real-Time MT Apps', Kaiwan Billimoria, kaiwanTECH](https://www.youtube.com/watch?v=h9psonTquHU&t=63s)
 
+- Ftrace
+    - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
+
 - [Linux kernel preemption and the latency-throughput tradeoff, Dec 2019](https://www.codeblueprint.co.uk/2019/12/23/linuxpreemption-latency-throughput.html)
 - An excellent detailed code-level article on how, specifically, the context switching switch_to() code path has evolved on the x86[_64] arch: [Evolution of the x86 context switch in Linux, Maizure, September 2018](https://www.maizure.org/projects/evolution_x86_context_switch_linux/)
 
@@ -560,8 +566,6 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - [Using the kernel's cgroups v2 cpusets: kernel doc](https://docs.kernel.org/admin-guide/cgroup-v2.html#cpuset)
 
-- Ftrace
-    - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
 
 - Control Groups (cgroups)
     - [The must-read: official Linux kernel doc: Control Group v2](https://docs.kernel.org/admin-guide/cgroup-v2.html)
@@ -581,6 +585,11 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - FB: Includes an interesting case study on how Facebook uses Linux's cgroups2 to perform equitable resource distribution on (some of) it's servers: ['Maximizing Resource Utilization with cgroup2'](https://facebookmicrosites.github.io/cgroup2/docs/overview.html)
         - ['Creating and organizing cgroups'](https://facebookmicrosites.github.io/cgroup2/docs/create-cgroups.html)
     - Blog article, examples of using cgroups v1 for CPU and memory bandwidth control: ['Linux Virtualization : Resource throttling using cgroups'](https://www.geeksforgeeks.org/linux-virtualization-resource-throttling-using-cgroups/)
+
+- Kernel namespaces
+    - [The 7 most used Linux namespaces, Oens, Red Hat, Jan 2021](https://www.redhat.com/sysadmin/7-linux-namespaces)
+    - [A Practical Introduction to Container Terminology, Feb 2018, McCarty, Red Hat Developer](https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction)
+    - [namespaces(7) — Linux manual page](https://man7.org/linux/man-pages/man7/namespaces.7.html)
 
 - Hard Real-Time and Linux as an RTOS
     - ['Inside Real-Time Linux', Feb 2017](https://www.linux.com/news/event/elce/2017/2/inside-real-time-linux)
