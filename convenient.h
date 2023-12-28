@@ -337,7 +337,8 @@ void delay_sec(long val)
 #endif   /* #ifdef __KERNEL__ */
 
 /*
- * Simple wrapper over the snprintf() - a bit more security-aware
+ * Simple wrapper over the snprintf() - a bit more security-aware.
+ * Checks for and warns on overflow
  */
 int snprintf_lkp(char *buf, size_t maxsize, const char *fmt, ...)
 {
