@@ -34,6 +34,7 @@
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 10, 0)
 #include <linux/sched/signal.h>
 #endif
+#include "../../../convenient.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("LKP 2E book: ch13/3_lockfree/thrdshowall_rcu/:"
@@ -84,18 +85,18 @@ static int showthrds_rcu(void)
 
 		get_task_struct(t_rcu);	/* take a reference to the task struct */
 
-		snprintf(buf, BUFMAX-1, "%6d %6d ", g_rcu->tgid, t_rcu->pid);
+		snprintf_lkp(buf, BUFMAX-1, "%6d %6d ", g_rcu->tgid, t_rcu->pid);
 		/* task_struct addr and kernel-mode stack addr */
-		snprintf(tmp, TMPMAX-1, "  0x%px", t_rcu);
+		snprintf_lkp(tmp, TMPMAX-1, "  0x%px", t_rcu);
 		strncat(buf, tmp, TMPMAX);
-		snprintf(tmp, TMPMAX-1, "  0x%px", t_rcu->stack);
+		snprintf_lkp(tmp, TMPMAX-1, "  0x%px", t_rcu->stack);
 		strncat(buf, tmp, TMPMAX);
 		get_task_comm(tasknm, t_rcu);
 
 		if (!g_rcu->mm)	// kernel thread
-			snprintf(tmp, sizeof(tasknm)+3, " [%16s]", tasknm);
+			snprintf_lkp(tmp, sizeof(tasknm)+4, " [%16s]", tasknm);
 		else
-			snprintf(tmp, sizeof(tasknm)+3, "  %16s ", tasknm);
+			snprintf_lkp(tmp, sizeof(tasknm)+4, "  %16s ", tasknm);
 		strncat(buf, tmp, TMPMAX);
 
 		/* Is this the "main" thread of a multithreaded process?
@@ -107,11 +108,11 @@ static int showthrds_rcu(void)
 		 */
 		nr_thrds = get_nr_threads(g_rcu);
 		if (g_rcu->mm && (g_rcu->tgid == t_rcu->pid) && (nr_thrds > 1)) {
-			snprintf(tmp, TMPMAX-1, " %3d", nr_thrds);
+			snprintf_lkp(tmp, TMPMAX-1, " %3d", nr_thrds);
 			strncat(buf, tmp, TMPMAX);
 		}
 
-		snprintf(tmp, 2, "\n");
+		snprintf_lkp(tmp, 2, "\n");
 		strncat(buf, tmp, 2);
 		pr_info("%s", buf);
 

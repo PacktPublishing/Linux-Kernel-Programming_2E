@@ -23,6 +23,7 @@
 #include <linux/slab.h>
 #include <linux/version.h>
 #include <linux/sched.h>	/* current */
+#include "../../convenient.h"
 
 #define OURCACHENAME "our_ctx"
 
@@ -93,7 +94,7 @@ static void our_ctor(void *new)
 	/* As a demo, we init the 'config' field of our structure to some
 	 * (arbitrary) 'accounting' values from our task_struct
 	 */
-	snprintf(ctx->config, 6 * sizeof(u64) + 5, "%d.%d,%ld.%ld,%ld,%ld",
+	snprintf_lkp(ctx->config, 6 * sizeof(u64) + 5, "%d.%d,%ld.%ld,%ld,%ld",
 		 p->tgid, p->pid, p->nvcsw, p->nivcsw, p->min_flt, p->maj_flt);
 }
 

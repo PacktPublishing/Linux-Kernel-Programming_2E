@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sched.h>
+#include "../../convenient.h"
 
 static unsigned int numcores;
 
@@ -53,7 +54,7 @@ static void disp_cpumask(pid_t pid, cpu_set_t *cpumask, unsigned int ncores)
 	char tmpbuf[128];
 
 	printf("CPU affinity mask for PID %d:\n", pid);
-	snprintf(tmpbuf, 127, "ps -A |awk '$1 == %d {print $0}'", pid);
+	snprintf_lkp(tmpbuf, 127, "ps -A |awk '$1 == %d {print $0}'", pid);
 	if (system(tmpbuf) == -1)
 		fprintf(stderr, "Warning: %s():system(3) (to show ps output)"
 			" failed\n", __func__);

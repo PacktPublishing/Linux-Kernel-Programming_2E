@@ -27,6 +27,7 @@
 
 #include <linux/init.h>
 #include <linux/module.h>
+#include "../../../convenient.h"
 
 #define THE_ONE   0xfedface
 MODULE_LICENSE("Dual MIT/GPL");
@@ -48,7 +49,7 @@ void llkd_sysinfo2(void)
 	char msg[MSGLEN];
 
 	memset(msg, 0, MSGLEN);
-	snprintf(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
+	snprintf_lkp(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
 	/* Strictly speaking, all this #if... is considered ugly and should be
 	 * isolated as far as is possible

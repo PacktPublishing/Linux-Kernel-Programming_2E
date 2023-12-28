@@ -22,6 +22,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <asm/io.h>		/* virt_to_phys(), phys_to_virt(), ... */
+#include "convenient.h"		/* snprintf_lkp() wrapper */
 
 void minsysinfo(void);
 u64 powerof(int base, int exponent);

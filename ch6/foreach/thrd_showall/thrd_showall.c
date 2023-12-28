@@ -27,6 +27,7 @@
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 10, 0)
 #include <linux/sched/signal.h>
 #endif
+#include "../../../convenient.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION
@@ -94,7 +95,7 @@ static int showthrds(void)
 		/* Grab the following fields from the task struct:
 		 * tgid, pid, task_struct addr, kernel-mode stack addr
 		 */
-		snprintf(tmp1, TMPMAX - 1, "%8d %8d  0x%px 0x%px",
+		snprintf_lkp(tmp1, TMPMAX - 1, "%8d %8d  0x%px 0x%px",
 			 p->tgid, t->pid, t, t->stack);
 
 		/* One might question why we don't use the get_task_comm() to obtain
@@ -103,9 +104,9 @@ static int showthrds(void)
 		 * Kernel Synchronization, Part 2. For now, we just do it the simple way.
 		 */
 		if (!p->mm)	// kernel thread?
-			snprintf(tmp2, TMPMAX - 1, " [%16s]", t->comm);
+			snprintf_lkp(tmp2, TMPMAX - 1, " [%16s]", t->comm);
 		else
-			snprintf(tmp2, TMPMAX - 1, "  %16s ", t->comm);
+			snprintf_lkp(tmp2, TMPMAX - 1, "  %16s ", t->comm);
 
 		/* Is this the "main" thread of a multithreaded process?
 		 * We check by seeing if
@@ -117,7 +118,7 @@ static int showthrds(void)
 		 */
 		nr_thrds = get_nr_threads(p);
 		if (p->mm && (p->tgid == t->pid) && (nr_thrds > 1))
-			snprintf(tmp3, TMPMAX - 1, " %3d", nr_thrds);
+			snprintf_lkp(tmp3, TMPMAX - 1, " %3d", nr_thrds);
 
 		pr_info("%s%s%s\n", tmp1, tmp2, tmp3);
 

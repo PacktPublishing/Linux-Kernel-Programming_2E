@@ -43,6 +43,7 @@
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/version.h>
+#include "../../../convenient.h"
 
 #define OURMODNAME   "slab_custom_mult"
 #define OURCACHENAME "our_slab"
@@ -101,7 +102,7 @@ static int create_cust_llkd_cache(int idx, size_t sz)
 	 slab_flags_t flags, void (*ctor)(void *));
 	 */
 	memset(nm, 0, 128);
-	snprintf(nm, 127, "%s-%d", OURCACHENAME, idx);
+	snprintf_lkp(nm, 127, "%s-%d", OURCACHENAME, idx);
 	our_llkd_cachep[idx] = kmem_cache_create(nm, sz, 0,
 						 SLAB_POISON | SLAB_RED_ZONE |
 						 SLAB_HWCACHE_ALIGN, NULL);
