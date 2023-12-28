@@ -11,12 +11,13 @@
 # Brief Description:
 #
 # Explore the system's Cgroups v2 hierarchy.
-# This script's written looking at the official kernel doc on Cgroups v2:
+# This script's written looking at the official kernel doc on cgroups v2:
 # https://docs.kernel.org/admin-guide/cgroup-v2.html
 # Please refer to it!
 #
 # TODO
 #  [ ] Controller interface files - display
+#  [ ] Have it work with lightweight 'busybox'-type 'ps' as well...
 #  [ ] color / bold
 #
 # For details, pl refer to the book Ch 11.
@@ -46,7 +47,7 @@ eval "$@"
 
 # Src: ChatGPT 3.5 ! (slightly modified)
 # Function to convert memory size to human-readable format
-memory_size_to_readable() {
+memory_size_to_human_readable() {
   # is $1 a number?
   [[ $# -eq 1 ]] && [[ $1 =~ ^[+-]?[0-9]+(\.[0-9]+)?$ ]] || return
 
@@ -73,10 +74,10 @@ memory_size_to_readable() {
   echo "$converted_size $unit"
 }
 # Usage example:
-#memory_size_to_readable 2147483648   # Output: "2.00 GB"
-#memory_size_to_readable 5000000      # Output: "4.77 MB"
-#memory_size_to_readable 123456789    # Output: "117.74 MB"
-#You can use the `memory_size_to_readable` function by passing the memory size in bytes as an argument, and it will print the size in the appropriate units (KB, MB, GB, or TB).
+#memory_size_to_human_readable 2147483648   # Output: "2.00 GB"
+#memory_size_to_human_readable 5000000      # Output: "4.77 MB"
+#memory_size_to_human_readable 123456789    # Output: "117.74 MB"
+#You can use the `memory_size_to_human_readable` function by passing the memory size in bytes as an argument, and it will print the size in the appropriate units (KB, MB, GB, or TB).
 #----------------------------------------------------------------------
 
 LINE="---------------------------------------------------------"
@@ -140,6 +141,9 @@ core_cg_files_show()
   [[ ${num_descendants} -ge 1 ]] && printf "(Has %d descendants)" ${num_descendants}
   echo
 
+  ## TODO
+  # Have it work with lightweight 'busybox'-type 'ps' as well...
+  ##
   # Show process name(s)
   [[ ${SHOW_PROCESS_NAMES} -eq 1 ]] && [[ ! -z "${procs}" ]] && {
     procs=${procs::-1} # get rid of trailing space char
@@ -216,15 +220,15 @@ mem_ctrl_show()
 
     printf "    %-41s\n" "MEMORY           [5]"
     local numthrds="$(cat ${cg}/cgroup.threads | tr '\n' ' ' | wc -w)"
-    local mem_current_human=$(memory_size_to_readable ${mem_current})
+    local mem_current_human=$(memory_size_to_human_readable ${mem_current})
     printf "      %-39s   : %s (%s)\n" "mem.current" "${mem_current}" "${mem_current_human}"
     # "If a memory cgroup is not populated with processes, its memory.min is ignored."
     [[ ! -z "${mem_min}" ]] && [[ ${numthrds} -ge 1 ]] && printf "      %-39s   : %s\n" "mem.min" "${mem_min}"
 
-    local mem_low_human=$(memory_size_to_readable ${mem_low})
+    local mem_low_human=$(memory_size_to_human_readable ${mem_low})
     printf "      %-39s   : %s (%s)\n" "mem.low" "${mem_low}" "${mem_low_human}"
 
-    local mem_high_human=$(memory_size_to_readable ${mem_high})
+    local mem_high_human=$(memory_size_to_human_readable ${mem_high})
     [[ -z "${mem_high_human}" ]] && \
 		printf "      %-39s   : %s\n" "mem.high" "${mem_high}" \
 		|| \
@@ -260,14 +264,13 @@ show_cg_dtl()
   core_cg_files_show ${cg}
   cpu_ctrl_show ${cg}
   mem_ctrl_show ${cg}
-
+  ## TODO
+  # Display the cg io, irq, pids interface files...
+  ##
 
   # Descendant cgroups?
   printf "    %-41s   : %s\n" "cg stat" "$(cat ${cg}/cgroup.stat | tr '\n' ' ')"
   echo "${LINE}----------------------------------->>"
-#<<---------------  /sys/fs/cgroup/system.slice                   -------------------------
-#------------------------------------------------------------------------------------->>
-
 
   return 0
 }
@@ -288,22 +291,20 @@ runcmd "cat ${CGROUP_MOUNT}/cgroup.subtree_control"
 
 usage()
 {
- echo "Usage: ${name} [-v -p -t] [-d depth] [CGROUP]
+ echo "Usage: ${name} [-v] [-p] [-t] [-d depth] [CGROUP]
 This script recursively shows the cgroups metadata from the specified
 CGROUP (the last parameter), down through it's hierarchy (tree).
 If no particular CGROUP's specified, it shows the entire system CGROUP
-hierarchy (typically the content of /sys/fs/cgroup). It assumes we're
+hierarchy (typically the content of /sys/fs/cgroup). We assume we're
 running on a Cgroups v2 supported system.
 
 All parameters are optional, and can be used in any combination (except
-for CGROUP; it must be the last one).
+for CGROUP; it must be the last one. Also, the -v, -p, -t are Off by default).
 
 -v : run in verbose mode
       Note! It's _very_ verbose, showing verbatim the content of all interface files for
             the various controllers. On the plus side, it's nice colorful output! (provided
 	    your terminal supports it).
-      Off by default.
-
 -p : show the name(s) of the processes belonging to the cgroup
      Note that this option can increase processing time.
 -t : show the name(s) of the *threads* belonging to the cgroup
@@ -326,7 +327,6 @@ CGROUP : Path to any cgroup; for example: /sys/fs/cgroup/system.slice/wpa_suppli
  This Must be the last parameter."
 }
 
-#memory_size_to_readable 115292150460684697
 
 #--- 'main'
 CGROUP_MOUNT=
@@ -466,7 +466,7 @@ fi
 [[ -z "${ALL_CGROUPS}" ]] && die "Didn't find any cgroups starting from ${start_cg}, aborting..."
 #echo "ALL_CGROUPS = ${ALL_CGROUPS}"
 
-printf "${name}: settings: depth=${depth_str}, verbose=${VERBOSE}, show-processes=${SHOW_PROCESS_NAMES}, show-threads=${SHOW_THREAD_NAMES}\n"
+printf "${name}: settings: [-d]depth=${depth_str}, [-v]verbose=${VERBOSE}, [-p]show-processes=${SHOW_PROCESS_NAMES}, [-t]show-threads=${SHOW_THREAD_NAMES}\n"
 [[ ${VERBOSE} -eq 1 ]] && show_common
 
 printf "\n==================== cgroups v2 hierarchy ====================\n"

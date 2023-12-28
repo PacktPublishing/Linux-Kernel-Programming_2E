@@ -8,27 +8,36 @@ Here, we present, in a chapter-wise format, additional online as well as book re
 
 For your convenience, below are chapter-wise links to the *Further Reading* notes:
 
-- [**Generic online and book resources : miscellaneous, very useful**](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#generic-online-and-book-resources--miscellaneous-very-useful)
+- [**Generic online and book resources: miscellaneous, very useful**](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#generic-online-and-book-resources--miscellaneous-very-useful)
+
+*Section 1: The Basics*
 
  - [Chapter 1, Kernel workspace setup](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-1-kernel-development-workspace-setup---further-reading)
- - [Chapter 2, Building the Kernel From Source, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source-part-1---further-reading)
- - [Chapter 3, Building the 5.0 Linux kernel from Source, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-3-building-the-linux-kernel-from-source-part-2---further-reading)
- - [Chapter 4, Writing your first Kernel Module - the LKM Framework, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-4-writing-your-first-kernel-module-lkms-part-1---further-reading)
- - [Chapter 5, Writing your first Kernel Module - the LKM Framework, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-5-writing-your-first-kernel-module-lkms-part-2---further-reading)
+ - [Chapter 2, Building the 6.x Linux kernel from source - Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-2-building-the-linux-kernel-from-source-part-1---further-reading)
+ - [Chapter 3, Building the 6.x Linux kernel from source - Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-3-building-the-linux-kernel-from-source-part-2---further-reading)
+ - [Chapter 4, Writing your first kernel module - Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-4-writing-your-first-kernel-module-lkms-part-1---further-reading)
+ - [Chapter 5, Writing your first kernel module - Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-5-writing-your-first-kernel-module-lkms-part-2---further-reading)
+
+*Section 2: Understanding and Working with the Kernel*
+
  - [Chapter 6, Kernel Internals Essentials - Processes and Threads](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-6-kernel-internals-essentials---processes-and-threads---further-reading)
  - [Chapter 7, Memory Management Internals Essentials](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-7-memory-management-internals-essentials---further-reading)
- - [Chapter 8, Kernel Memory Allocation for Module Authors, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-8-kernel-memory-allocation-for-module-authors-part-1---further-reading)
- - [Chapter 9, Kernel Memory Allocation for Module Authors, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-9-kernel-memory-allocation-for-module-authors-part-2---further-reading)
+ - [Chapter 8, Kernel Memory Allocation for Module Authors - Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-8-kernel-memory-allocation-for-module-authors-part-1---further-reading)
+ - [Chapter 9, Kernel Memory Allocation for Module Authors - Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-9-kernel-memory-allocation-for-module-authors-part-2---further-reading)
  - [Chapter 10, The CPU Scheduler, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-10-the-cpu-scheduler-part-1---further-reading)
  - [Chapter 11, The CPU Scheduler, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-11-the-cpu-scheduler-part-2---further-reading)
- - [Chapter 12, Kernel Synchronization, Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-12-kernel-synchronization-part-1---further-reading)
- - [Chapter 13, Kernel Synchronization, Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-13-kernel-synchronization-part-2---further-reading)
+
+*Section 3: Delving Deeper*
+
+ - [Chapter 12, Kernel Synchronization - Part 1](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-12-kernel-synchronization-part-1---further-reading)
+ - [Chapter 13, Kernel Synchronization - Part 2](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#chapter-13-kernel-synchronization-part-2---further-reading)
 
 
 **Friendly Reminder !** <br>
-This book's companion volume *'Linux Kernel Programming (Part 2): Writing character device drivers: Learn to work with user-kernel interfaces, handle peripheral I/O & hardware interrupts'* is available as well! *And, hey, the ebook's free!*
+This book's companion volume *'Linux Kernel Programming (Part 2): Writing character device drivers: Learn to work with user-kernel interfaces, handle peripheral I/O & hardware interrupts'* is available as well. <br>
+*And, hey, the ebook's free!*
 <br>
-It's [opensource GitHub repo is here.](https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2)
+The [LKP-Part2 book's GitHub repo is here.](https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2)
 
 <br>
 
@@ -78,6 +87,7 @@ A few excellent books that come to mind (specific books on the Linux kernel and 
 - *Tip (reprodcued from Chapter 5)*:
 "Is there a really practical hands-on tip, an almost guaranteed way to become a kernel hacker? Of course, keep reading this book! Ha ha, yes, besides, do partake in the [simply awesome Eudyptula Challenge](http://www.eudyptula-challenge.org/). Hang on, it's - very unfortuantely, and as of this writing - closed down.
 Fear not, [here's a site with all the challenges](https://github.com/agelastic/eudyptula) posted (and the solutions, don't cheat!); do check it out and try the challenges."
+- [Create Your Own Operating System: Build, deploy, and test your very own operating systems for the Internet of Things and other devices, Lucus Darnell, Aug 2016; Kindle:](https://www.amazon.in/Create-Your-Own-Operating-System-ebook/dp/B01KU8N6FC/)
 
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
@@ -237,9 +247,11 @@ Miscellaneous:
 - [Official Kernel Documentation : kernel parameters](https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html)
 - ['How to get printk format specifiers right', Linux kernel doc](https://www.kernel.org/doc/html/latest/core-api/printk-formats.html?highlight=dma)
 - ['What are the __init* and __exit* macros ?', kernelnewbies](https://kernelnewbies.org/FAQ/InitExitMacros)
-- Systemd
+- **Systemd**
 	-   Article: ['Systemd Essentials: Working with Services, Units, and the Journal', DigitalOcean](https://www.digitalocean.com/community/tutorials/systemd-essentials-working-with-services-units-and-the-journal)
-	- Article: ['Understanding Systemd Units and Unit Files', DigitalOcean](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files) 
+	- Article: ['Understanding Systemd Units and Unit Files', DigitalOcean](https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files)
+	- [How to create a systemd service in Linux, Patel, Sept 2022](https://linuxhandbook.com/create-systemd-services/)
+	- [Understanding and administering systemd, Christopher Engelhard, Kamil Páral, Caleb McKee, Fedora docs, Aug 2020](https://docs.fedoraproject.org/en-US/quick-docs/systemd-understanding-and-administering/)
 	- [Systemd Documentation](http://0pointer.de/blog/projects/systemd-docs.html)
 	- [Systemd FAQs](https://www.freedesktop.org/wiki/Software/systemd/FrequentlyAskedQuestions/)
 
@@ -247,6 +259,11 @@ Miscellaneous:
 - [Debugging by printing, eLinux](https://elinux.org/Debugging_by_printing)
 - [LWN kernel index on 'Kernel messages' (printk)](https://lwn.net/Kernel/Index/#Kernel_messages)
 - [printk() indexing, Jon Corbet, LWN, May 2021](https://lwn.net/Articles/857148/)
+
+- Makefiles : introductory stuff
+    - [A Simple Makefile Tutorial](https://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/)
+    - [Practical Makefiles, by example](http://nuclear.mutantstargoat.com/articles/make/)
+    - [Learn Makefiles; With the tastiest examples](https://makefiletutorial.com/)
 
 - [The Linux Kernel Module Programming Guide, by Peter Jay Salzman, Michael Burian, Ori Pomerantz, Bob Mottram, Jim Huang, 
 July 5, 2023](https://sysprog21.github.io/lkmpg/)
@@ -262,6 +279,21 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
 
 - Blog article: [WORKING ON THE CONSOLE WITH THE RASPBERRY PI, kaiwanTECH](https://kaiwantech.wordpress.com/2018/12/16/working-on-the-console-with-the-raspberry-pi/)
 - [Cross compiling a kernel module, embear](https://embear.ch/blog/compiling-a-kernel-module)
+- Clang, a modern alternative to GCC
+    - [Cross compiling made easy, using Clang and LLVM, Feb 2021](https://mcilloni.ovh/2021/02/09/cxx-cross-clang/)
+    - Official Clang docs: [Cross-compilation using Clang](https://clang.llvm.org/docs/CrossCompilation.html)
+
+
+- StackOverflow Q&A: ["How to prevent “error: 'symbol' undeclared here” despite EXPORT_SYMBOL in a Linux kernel module?"](https://stackoverflow.com/questions/6670589/how-to-prevent-error-symbol-undeclared-here-despite-export-symbol-in-a-linu?noredirect=1&lq=1)
+- Article: ['Improving EXPORT_SYMBOL()', Jon Corbet, Feb 2016, LWN](https://lwn.net/Articles/674303/)
+
+- Linux kernel static analysis
+	- Blog article: ["Static analysis on the Linux kernel"](http://smackerelofopinion.blogspot.com/2017/09/static-analysis-on-linux-kernel.html)
+	- PDF: ["Static code checking In the Linux kernel", Arnd Bergmann, Linaro](https://elinux.org/images/d/d3/Bargmann.pdf)
+	- Thesis paper: ["Automatic Bug-finding Techniques for Large Software Projects", Jiri Slaby](https://www.fi.muni.cz/~xslaby/sklad/dis.pdf)
+    - A book on static analysis with the opensource SonarQube tool: ['SonarQube in Action', G. Ann Campbell and Patroklos P. Papapetrou, Oct 2013] https://www.manning.com/books/sonarqube-in-action#toc
+
+
 - Licensing
     - [Being honest with MODULE_LICENSE, Jon Corbet, LWN, Apr 2004](https://lwn.net/Articles/82305/)
     - [Multi-licensing](https://en.wikipedia.org/wiki/Multi-licensing)
@@ -272,18 +304,6 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
         - [Choose an open source license](https://choosealicense.com/)
             - [Appendix; a convenient comparison table of OSS licenses](https://choosealicense.com/appendix/)
 
-- Arithmetic Overflow
-    - An excellent must-read whitepaper: ['Understanding Integer Overflow in C/C++', Dietz, et al, June 2012](http://www.cs.utah.edu/~regehr/papers/overflow12.pdf)
-    - ['Catch and compute overflow during multiplication of two large integers', StackOverflow](https://stackoverflow.com/questions/1815367/catch-and-compute-overflow-during-multiplication-of-two-large-integers)
-    - An example of checking for arithmetic overflow in 'real-world' code can be found [in the git codebase](https://github.com/git/git); see the [wrapper.c code](https://github.com/git/git/blob/master/wrapper.c) for usage examples
-- Article: ['Improving EXPORT_SYMBOL()', Jon Corbet, Feb 2016, LWN](https://lwn.net/Articles/674303/)
-
-- StackOverflow Q&A: ["How to prevent “error: 'symbol' undeclared here” despite EXPORT_SYMBOL in a Linux kernel module?"](https://stackoverflow.com/questions/6670589/how-to-prevent-error-symbol-undeclared-here-despite-export-symbol-in-a-linu?noredirect=1&lq=1)
-- Linux kernel static analysis
-	- Blog article: ["Static analysis on the Linux kernel"](http://smackerelofopinion.blogspot.com/2017/09/static-analysis-on-linux-kernel.html)
-	- PDF: ["Static code checking In the Linux kernel", Arnd Bergmann, Linaro](https://elinux.org/images/d/d3/Bargmann.pdf)
-	- Thesis paper: ["Automatic Bug-finding Techniques for Large Software Projects", Jiri Slaby](https://www.fi.muni.cz/~xslaby/sklad/dis.pdf)
-- A book on static analysis with the opensource SonarQube tool: ['SonarQube in Action', G. Ann Campbell and Patroklos P. Papapetrou, Oct 2013] https://www.manning.com/books/sonarqube-in-action#toc
 
 - Blog article: ["LINUX KERNEL DEVELOPMENT – KERNEL MODULE PARAMETERS", Liran B.H.](http://devarea.com/linux-kernel-development-kernel-module-parameters/)
 - Useful Arch Linux Wiki on kernel module - gathering info, auto-loading, aliasing, blacklisting, etc: ["Kernel module"](https://wiki.archlinux.org/index.php/Kernel_module)
@@ -291,6 +311,19 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
 - DKMS: Dynamic Kernel Module Support
 	- AskUbuntu: ["What does DKMS do? How do I use it?"](https://askubuntu.com/questions/408605/what-does-dkms-do-how-do-i-use-it)
 	- dkms(8) man page](https://linux.die.net/man/8/dkms)
+
+
+- A few Linux *FastBoot!*  resources
+    - [Fast boot with Raspberry Pi, Himesh’s blog, Aug 2018](http://himeshp.blogspot.com/2018/08/fast-boot-with-raspberry-pi.html)
+    - Presentation by Jan Altenberg on booting linux in less than 1 second
+        - [Powerpoint here](https://elinux.org/images/9/97/Boot_one_second_altenberg.pdf)
+        - [Youtube link](https://www.youtube.com/watch?v=KTRA1PRJWH8)
+    - [powerpoint on boot time optimization using a beaglebone as a prototype](https://elinux.org/images/6/64/Chris-simmonds-boot-time-elce-2017_0.pdf)
+    - [powerpoint on speeding up raspberry pi boot time here](https://www.slideshare.net/righiandr/linux-boottime-23817352)
+    - [Blog article Reducing Boot Time with systemd, Murray, Feb 2022](https://www.thegoodpenguin.co.uk/blog/reducing-boot-time-with-systemd/)
+    - [Good stackoverflow question on using systemd to figure boot time...](https://superuser.com/questions/852610/how-to-tell-which-services-run-at-startup-on-raspberry-pi-raspbian)
+    - [A Challenge called boot time, witekio blog](https://witekio.com/blog/a-challenge-called-boot-time-3/)
+
 
 - [Linux Kernel Security](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/master/Further_Reading.md#kernel_sec)
 	- The [Kernel Self Protection Project](https://kernsec.org/wiki/index.php/Kernel_Self_Protection_Project)  (KSPP, Kees Cook)
@@ -308,6 +341,13 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
         - [Linux Kernel Finally Gets Its Lockdown, Oct 2019](https://thenewstack.io/linux-kernel-finally-gets-its-lockdown/)
         - [kernel_lockdown(7) — Linux manual page](https://man7.org/linux/man-pages/man7/kernel_lockdown.7.html)
         - [Securing the Linux kernel with lockdown mode, 2020](https://www.linux-magazine.com/Issues/2020/239/Lockdown-Mode/(offset)/3)
+
+
+- Arithmetic Overflow
+    - An excellent must-read whitepaper: ['Understanding Integer Overflow in C/C++', Dietz, et al, June 2012](http://www.cs.utah.edu/~regehr/papers/overflow12.pdf)
+    - ['Catch and compute overflow during multiplication of two large integers', StackOverflow](https://stackoverflow.com/questions/1815367/catch-and-compute-overflow-during-multiplication-of-two-large-integers)
+    - An example of checking for arithmetic overflow in 'real-world' code can be found [in the git codebase](https://github.com/git/git); see the [wrapper.c code](https://github.com/git/git/blob/master/wrapper.c) for usage examples
+
 
 - [The Eudyptula Challenge](http://eudyptula-challenge.org/): "The Eudyptula Challenge was a series of programming exercises for the Linux kernel, that started from a very basic "Hello world" kernel module, moving on up in complexity to getting patches accepted into the main Linux kernel source tree." It's really cool but NOT active as of this writing though.
 
@@ -495,6 +535,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - User space OOM killer systemd-oomd
         - [Man page on systemd-oomd.service(8)](https://www.freedesktop.org/software/systemd/man/systemd-oomd.service.html)
         - Older - March 2014: [User-space out-of-memory handling, David Rientjes, LWN](https://lwn.net/Articles/590960/)
+    - [How to diagnose OOM errors on Linux systems, Paul Gottschling, Datadog, Dec 2023](https://linuxblog.io/how-to-diagnose-oom-errors-on-linux-systems/)
 
 - [StackOverflow: How to mmap a Linux kernel buffer to userspace?](https://stackoverflow.com/a/10770582/779269)
 
@@ -520,6 +561,9 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - [Video tutorial: talk recorded for the Linux Foundation’s OSSNA (Open Source Summit, North America), June 2023: 'Leveraging the OS CPU Scheduler to Write Real-Time MT Apps', Kaiwan Billimoria, kaiwanTECH](https://www.youtube.com/watch?v=h9psonTquHU&t=63s)
 
+- Ftrace
+    - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
+
 - [Linux kernel preemption and the latency-throughput tradeoff, Dec 2019](https://www.codeblueprint.co.uk/2019/12/23/linuxpreemption-latency-throughput.html)
 - An excellent detailed code-level article on how, specifically, the context switching switch_to() code path has evolved on the x86[_64] arch: [Evolution of the x86 context switch in Linux, Maizure, September 2018](https://www.maizure.org/projects/evolution_x86_context_switch_linux/)
 
@@ -531,10 +575,8 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - [Using the kernel's cgroups v2 cpusets: kernel doc](https://docs.kernel.org/admin-guide/cgroup-v2.html#cpuset)
 
-- Ftrace
-    - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
 
-- Control Groups (cgroups)
+- **Control Groups (cgroups)**
     - [The must-read: official Linux kernel doc: Control Group v2](https://docs.kernel.org/admin-guide/cgroup-v2.html)
     - Four-part series on cgroups and systemd, Red Hat, Steve Ovens
         - [A Linux sysadmin's introduction to cgroups, Steve Ovens, Sept 2020](https://www.redhat.com/sysadmin/cgroups-part-one)
@@ -553,7 +595,13 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
         - ['Creating and organizing cgroups'](https://facebookmicrosites.github.io/cgroup2/docs/create-cgroups.html)
     - Blog article, examples of using cgroups v1 for CPU and memory bandwidth control: ['Linux Virtualization : Resource throttling using cgroups'](https://www.geeksforgeeks.org/linux-virtualization-resource-throttling-using-cgroups/)
 
-- Hard Real-Time and Linux as an RTOS
+- Kernel namespaces
+    - [The 7 most used Linux namespaces, Oens, Red Hat, Jan 2021](https://www.redhat.com/sysadmin/7-linux-namespaces)
+    - [A Practical Introduction to Container Terminology, Feb 2018, McCarty, Red Hat Developer](https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction)
+    - [namespaces(7) — Linux manual page](https://man7.org/linux/man-pages/man7/namespaces.7.html)
+
+
+- **Hard Real-Time and Linux as an RTOS**
     - ['Inside Real-Time Linux', Feb 2017](https://www.linux.com/news/event/elce/2017/2/inside-real-time-linux)
     - ['The Road to Real Time Linux', Steven Rostedt, Mar 2017](https://blogs.vmware.com/opensource/2017/03/16/road-real-time-linux/)
     - [VDC Survey on real-time response : The Embedded Muse, 341, 03 Jan 2018, Jack Ganssle](http://www.ganssle.com/tem/tem341.html#article3)
@@ -576,6 +624,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - [Quotes](https://en.wikiquote.org/wiki/Fred_Brooks)
 
 - New(er) articles on LWN regarding scheduling-related topics:
+    - 6.6: the new EEVDF (Earliest Eligible Virtual Deadline First) task scheduler: [An EEVDF CPU scheduler for Linux, Jon Corbet, Mar 2023](https://lwn.net/Articles/925371/)
     - [Fixing a corner case in asymmetric CPU packing (January 7, 2022)](https://lwn.net/Articles/880367/)
     - [Hybrid scheduling gets more complicated (September 30, 2022)](https://lwn.net/Articles/909611/)
     - [Core scheduling lands in 5.14 (July 1, 2021)](https://lwn.net/Articles/861251/)

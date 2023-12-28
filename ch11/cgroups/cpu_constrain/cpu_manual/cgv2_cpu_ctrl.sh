@@ -49,6 +49,10 @@ MAX_PRIMES=1000000
 MAX_TIME=5
 
 pkill ${PRGNAME}  # any stale instance...
+[[ ! -f ${PRG} ]] && {
+  remove_our_cgroup
+  die "Pl build the \"${PRGNAME}\" program and rerun"
+}
 
 # run it!
 local cmd="${PRG} ${MAX_PRIMES} ${MAX_TIME} &"

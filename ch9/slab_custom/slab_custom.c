@@ -30,7 +30,7 @@
 static int use_ctor = 1;
 module_param(use_ctor, uint, 0);
 MODULE_PARM_DESC(use_ctor, "If set to 1 (default), our custom ctor routine"
-		 " will initialize slabmem; when 0, no custom constructor will run");
+	 " will initialize slabmem; when 0, no custom constructor will run");
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("LKP 2E book:ch9/slab_custom: simple demo of creating a custom slab cache");

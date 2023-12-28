@@ -29,14 +29,11 @@ MemoryHigh=512M
 # enabled - to kill off all processes within the cgroup!
 #
 # Of course, the OOM killer (or systemd-oomd) getting invoked depends on your
-# system config, on how much RAM you have. If systemd-oomd is running,
+# system config, on how much RAM and swap you have. If systemd-oomd is running,
 # *it* handles the OOM situation and reports it in the log.
-<<<<<<< HEAD
-#ExecStart=/usr/bin/stress-ng --malloc-bytes 128T --malloc 50 --timeout 100
-#ExecStart=/usr/bin/stress-ng --malloc-bytes 100G --malloc-touch --malloc 10
-ExecStart=stress-ng --oomable --pathological --vm 1 --vm-bytes 100% --vm-populate -t 5m
-=======
-#ExecStart=/usr/bin/stress-ng --malloc-bytes 100G --malloc-touch --malloc 10
+##ExecStart=/usr/bin/stress-ng --malloc-bytes 100G --malloc-touch --malloc 10
+#ExecStart=stress-ng --oomable --pathological --vm 1 --vm-bytes 100% --vm-populate -t 5m
+##ExecStart=/usr/bin/stress-ng --malloc-bytes 100G --malloc-touch --malloc 10
 #  stress-ng : --malloc-touch        touch pages force pages to be populated
 #   Force the allocation of RAM this way and get it to splat faster!
 
@@ -44,10 +41,11 @@ ExecStart=stress-ng --oomable --pathological --vm 1 --vm-bytes 100% --vm-populat
 # the systemd-oomd daemon)! Pl run this on a test VM.
 #  --oomable : Do  not  respawn a stressor if it gets killed by the Out-of-Memory (OOM) killer
 #  --pathological : enable stressors that are known to hang systems.
-# NOTE: In order to invoke the OOM killer quicker (which is what we want here),
+# **NOTE**: In order to invoke the OOM killer quicker (which is what we want here),
 # it's advisable to disable swap with
 #  sudo swapoff -a
 # and then test.
+sudo swapoff -a
 ExecStart=/usr/bin/stress-ng --oomable --pathological --vm 1 --vm-bytes 100% --vm-populate --malloc-bytes 100G --malloc-touch --malloc 12
 
 # For security; also see systemd.exec(5) section 'SANDBOXING'

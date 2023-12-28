@@ -47,10 +47,3 @@ Foundation project.
   b. True, RTL (Real-Time Linux)
   c. False, <it’s not possible>
   d. True, HardLinux
-
-7. Build the realtime Linux (RTL) kernel (as explained in the section
-'Converting mainline Linux into an RTOS'); boot from it and test using:
-  a. the cyclictest app
-  b. some of the [e]BPF frontends (as explained in the section 'Measuring
-     scheduler latency via modern BPF tools').
-
