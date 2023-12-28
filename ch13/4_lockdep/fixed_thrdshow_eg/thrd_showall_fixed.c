@@ -32,6 +32,7 @@
 #if LINUX_VERSION_CODE > KERNEL_VERSION(4, 10, 0)
 #include <linux/sched/signal.h>
 #endif
+#include "../../../convenient.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("LKP 2E book: ch13/4_lockdep/fixed_thrdshow_eg/:"
@@ -56,11 +57,11 @@ static int showthrds_buggy(void)
 		get_task_struct(t);	/* take a reference to the task struct */
 		task_lock(t);  /*** task lock taken here! ***/
 
-		snprintf(buf, BUFMAX-1, "%6d %6d ", g->tgid, t->pid);
+		snprintf_lkp(buf, BUFMAX-1, "%6d %6d ", g->tgid, t->pid);
 		/* task_struct addr and kernel-mode stack addr */
-		snprintf(tmp, TMPMAX-1, "  0x%px", t);
+		snprintf_lkp(tmp, TMPMAX-1, "  0x%px", t);
 		strncat(buf, tmp, TMPMAX);
-		snprintf(tmp, TMPMAX-1, "  0x%px", t->stack);
+		snprintf_lkp(tmp, TMPMAX-1, "  0x%px", t->stack);
 		strncat(buf, tmp, TMPMAX);
 
         /* In the 'buggy' ver of this code, LOCKDEP did catch a deadlock here !!
@@ -75,9 +76,9 @@ static int showthrds_buggy(void)
                 task_lock(t);
 
 		if (!g->mm)	// kernel thread
-			snprintf(tmp, sizeof(tasknm)+3, " [%16s]", tasknm);
+			snprintf_lkp(tmp, sizeof(tasknm)+4, " [%16s]", tasknm);
 		else
-			snprintf(tmp, sizeof(tasknm)+3, "  %16s ", tasknm);
+			snprintf_lkp(tmp, sizeof(tasknm)+4, "  %16s ", tasknm);
 		strncat(buf, tmp, TMPMAX);
 
 		/* Is this the "main" thread of a multithreaded process?
@@ -89,11 +90,11 @@ static int showthrds_buggy(void)
 		 */
 		nr_thrds = get_nr_threads(g);
 		if (g->mm && (g->tgid == t->pid) && (nr_thrds > 1)) {
-			snprintf(tmp, TMPMAX-1, " %3d", nr_thrds);
+			snprintf_lkp(tmp, TMPMAX-1, " %3d", nr_thrds);
 			strncat(buf, tmp, TMPMAX);
 		}
 
-		snprintf(tmp, 2, "\n");
+		snprintf_lkp(tmp, 2, "\n");
 		strncat(buf, tmp, 2);
 		pr_info("%s", buf);
 

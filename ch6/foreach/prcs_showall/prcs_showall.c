@@ -30,6 +30,7 @@
 #include <linux/slab.h>
 #include <linux/uaccess.h>	/* copy_to_user() */
 #include <linux/kallsyms.h>
+#include "../../../convenient.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("LKP 2E:ch6/foreach/prcs_showall: Show all processes by iterating over the task list");
@@ -69,7 +70,7 @@ static int show_prcs_in_tasklist(void)
 
 		memset(tmp, 0, 128);
 		get_task_struct(p);	// take a reference to the task struct
-		n = snprintf(tmp, 128, "%-16s|%8d|%8d|%7u|%7u\n", p->comm, p->tgid, p->pid,
+		n = snprintf_lkp(tmp, 128, "%-16s|%8d|%8d|%7u|%7u\n", p->comm, p->tgid, p->pid,
 			     /* (old way to display credentials): p->uid, p->euid -or-
 			      * current_uid().val, current_euid().val
 			      * Better way is using the kernel accessor __kuid_val():

@@ -36,7 +36,7 @@ void minsysinfo(void)
         char msg[MSGLEN];
 
         memset(msg, 0, MSGLEN);
-        snprintf(msg, 48, "%s(): minimal platform info:\nCPU: ", __func__);
+        snprintf_lkp(msg, 48, "%s(): minimal platform info:\nCPU: ", __func__);
 
         /* Strictly speaking, all this #if... is considered ugly and should be
            isolated as far as is possible */
