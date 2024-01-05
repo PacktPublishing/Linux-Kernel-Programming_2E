@@ -15,18 +15,18 @@
  * https://github.com/PacktPublishing/Linux-Kernel-Programming-Part-2/tree/main/ch1/miscdrv_rdwr
  *
  * This code is 'Case 1: No locks, no protection' of a three case demo, showing
- * the some ways to use locking/sync constructs in a read-mostly scenario.
+ * some ways to use locking/sync constructs in a read-mostly scenario.
  * (It's like this:
- *      Case 1                 Case 2                  Case 3
- * No locks; just wrong    Use the read-writer     Use RCU sync!
+ *      Case 1                 Case 2                   Case 3
+ * No locks; just wrong    Use the reader-writer     Use RCU sync!
  *                          spinlock                  Best.
  * ^^^^^^^^^^^^^^^^^^^^
  *   <this code demo>
- *
+ * ).
  * The demo has reader and writer threads running, concurrently reading
- * and writing a global data structure, IOW, shared state.
- * This of course is simply wrong; we'll end up with data races, data
- * corruption.
+ * and writing a global data structure, IOW, shared state. This Case 1
+ * demo has no protection of any kind; this of course is simply wrong;
+ * we'll end up with data races, data corruption.
  *
  * For details, please refer both books, LKP 2E Ch 13 and LKP-Part 2, Ch 1.
  */

@@ -18,15 +18,16 @@
  * showing some ways to use locking/sync constructs in a read-mostly scenario.
  * (It's like this:
  *      Case 1                 Case 2                  Case 3
- * No locks; just wrong    Use the read-writer     Use RCU sync!
- *                          spinlock                  Best.
+ * No locks; just wrong    Use the read-writer      Use RCU sync!
+ *                          spinlock                   Best.
  *                         ^^^^^^^^^^^^^^^^^^^^
  *                            <this code demo>
+ * ).
  *
  * The demo has reader and writer threads running, concurrently reading
  * and writing a global data structure, IOW, shared state.
- * This of course is simply wrong; we'll end up with data races, data
- * corruption.
+ * This of course constitutes a critical section(s); if we leave it be,
+ * we'll end up with data races, data corruption.
  * So, here, we protect the critical sections using a reader-writer spinlock.
  *
  * For details, please refer both books, LKP 2E Ch 13 and LKP-Part 2, Ch 1.
@@ -53,7 +54,7 @@
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION(
-"LKP2E book:ch13/rdwr_concurrent/miscdrv_rdwr_nolocks: simple misc char driver demo: concurrent reads/writes protected via a reader-writer spinlock");
+"LKP2E book:ch13/rdwr_concurrent/miscdrv_rdwr_rwlock: simple misc char driver demo: concurrent reads/writes protected via a reader-writer spinlock");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.1");
 
