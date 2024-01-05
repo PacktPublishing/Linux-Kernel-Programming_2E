@@ -24,10 +24,10 @@ writer()
 
 
 #--- 'main'
-[[ $# -ne 1 ]] && {
-  echo "Usage: ${name} number-of-readers-to-concurrently-run"
-  exit 
-}
+MIN_R=2
+MAX_R=100
+[[ $# -ne 1 ]] && die "Usage: ${name} number-of-readers-to-concurrently-run"
+[[ $1 -lt ${MIN_R} || $1 -gt ${MAX_R} ]] && die "invalid input for number-of-readers-to-concurrently-run (range is $MIN_R to $MAX_R)"
 MAX=$1
 
 sudo rmmod ${KMOD} 2>/dev/null
@@ -40,7 +40,6 @@ lsmod |grep ${KMOD} >/dev/null || {
 
 # The I/O
 sudo dmesg -C
-#MAX=100
 for i in $(seq 1 ${MAX})
 do
 	reader &

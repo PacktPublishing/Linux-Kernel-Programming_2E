@@ -25,8 +25,8 @@
  *
  * The demo has reader and writer threads running, concurrently reading
  * and writing a global data structure, IOW, shared state.
- * This of course is simply wrong; we'll end up with data races, data
- * corruption.
+ * This of course constitutes a critical section(s); if we leave it be,
+ * we'll end up with data races, data corruption.
  * So, here, we protect via RCU as follows:
  * - Protect the RCU read-side critical section via RCU 'locking'
  * - Protect the write-side critical section via a simple spinlock.
@@ -104,7 +104,7 @@ static int reader(void)
 	rcu_read_lock();         // ---t1
 
 	p = rcu_dereference(gdata); /* safely fetch an RCU protected pointer which
-				  * can then be dereferenced (and used) */
+			 	     * can then be dereferenced (and used) */
 	stat = p->issue_in_l6;
 	if (p->gps_lock) {
 		x = p->lat;
@@ -123,7 +123,7 @@ static int writer(void)
 	// The write-side critical section spans from t1 to t2; writes run exclusively
 	spin_lock(&gdata_lock);	//--- t1
 	gd = rcu_dereference(gdata); /* safely fetch an RCU protected pointer which
-				  * can then be dereferenced (and used) */
+				      * can then be dereferenced (and used) */
 
 	/* The writer creates a copy of the original data object so that it can
 	 * work on it while pre-existing RCU readers work on the original
