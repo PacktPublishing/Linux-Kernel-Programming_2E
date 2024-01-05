@@ -42,7 +42,7 @@
 #include <linux/kallsyms.h>
 #include <linux/cred.h>
 #include <linux/delay.h>
-#include "../../convenient.h"
+#include "../../../convenient.h"
 
 #include <linux/vmalloc.h>
 #include <linux/delay.h>
@@ -170,10 +170,12 @@ static int thrd_work(void *arg)
 			/* Operate on our per-cpu integer */
 			val = ++ get_cpu_var(pcpa);
 			pr_info("  thrd_0/cpu0: pcpa = %+d\n", val);
+			//PRINT_CTX();
 			put_cpu_var(pcpa);
 
 			/* Operate on our per-cpu structure */
 			ctx = get_cpu_ptr(pcp_ctx);
+			//PRINT_CTX();
 			ctx->tx += 100;
 			pr_info("  thrd_0/cpu0: pcp ctx: tx = %5d, rx = %5d\n",
 				ctx->tx, ctx->rx);
@@ -184,6 +186,7 @@ static int thrd_work(void *arg)
 			/* Operate on our per-cpu integer */
 			val = -- get_cpu_var(pcpa);
 			pr_info("  thrd_1/cpu1: pcpa = %+d\n", val);
+			//PRINT_CTX();
 			put_cpu_var(pcpa);
 
 			/* Operate on our per-cpu structure */
@@ -200,6 +203,7 @@ static int thrd_work(void *arg)
 			ctx->rx += 200;
 			pr_info("  thrd_1/cpu1: pcp ctx: tx = %5d, rx = %5d\n",
 				ctx->tx, ctx->rx);
+			//PRINT_CTX();
 			put_cpu_ptr(pcp_ctx);
 		}
 	}
