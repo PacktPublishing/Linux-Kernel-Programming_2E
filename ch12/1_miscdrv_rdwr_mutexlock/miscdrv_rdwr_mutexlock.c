@@ -282,7 +282,7 @@ static int __init miscdrv_init_mutexlock(void)
 		pr_notice("misc device registration failed, aborting\n");
 		return ret;
 	}
-	pr_info("LLKD misc driver (major # 10) registered, minor# = %d,"
+	pr_info("LKP2E misc driver (major # 10) registered, minor# = %d,"
 		" dev node is /dev/%s", llkd_miscdev.minor, llkd_miscdev.name);
 
 	/*
@@ -319,7 +319,7 @@ static void __exit miscdrv_exit_mutexlock(void)
 	mutex_destroy(&lock1);
 	mutex_destroy(&ctx->lock);
 	misc_deregister(&llkd_miscdev);
-	pr_info("LLKD misc driver %s deregistered, bye\n", llkd_miscdev.name);
+	pr_info("LKP2E misc driver %s deregistered, bye\n", llkd_miscdev.name);
 }
 
 module_init(miscdrv_init_mutexlock);
