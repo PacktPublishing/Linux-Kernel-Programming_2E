@@ -41,14 +41,17 @@ KCONFIGS_ARR=(CONFIG_PREEMPT CONFIG_DEBUG_PREEMPT CONFIG_DEBUG_SLAB \
  CONFIG_DEBUG_WW_MUTEX_SLOWPATH CONFIG_DEBUG_LOCK_ALLOC CONFIG_PREEMPT_COUNT \
  CONFIG_TRACE_IRQFLAGS CONFIG_LOCK_STAT CONFIG_PROVE_RCU_LIST)
 
-for KCONF in ${KCONFIGS_ARR[@]} ; do
-    EXIST=1 ; YES=0 ; MOD=0 ; NO=0
+for KCONF in "${KCONFIGS_ARR[@]}" ; do
+    YES=0 ; MOD=0 ; NO=0
     printf "checking for %-30s" ${KCONF}
 
     grep -w "${KCONF}" ${KCONFIG} >/dev/null 2>&1
     [[ $? -ne 0 ]] && {
-	EXIST=0
 	printf "   [not found]\n"
+	if [[ "${KCONF}" = "CONFIG_PROVE_RCU" || "${KCONF}" = "CONFIG_PROVE_RCU_LIST" ]] ; then
+	   printf " To enable, set CONFIG_PROVE_LOCKING=y and CONFIG_RCU_EXPERT=y
+ (in 'Kernel Hacking / Lock debugging ... / Lock debugging: prove locking correctness' and 'General Setup / RCU Subsystem' resp)\n"
+	fi
 	continue
     }
     grep "^${KCONF}=y$" ${KCONFIG} >/dev/null 2>&1
@@ -60,6 +63,11 @@ for KCONF in ${KCONFIGS_ARR[@]} ; do
 
     [[ ${YES} -eq 1 ]] && printf "   Y\n"
     [[ ${MOD} -eq 1 ]] && printf "   M\n"
-    [[ ${NO} -eq 1 ]]  && printf "   N\n"
+    [[ ${NO} -eq 1 ]]  && {
+	printf "   N\n"
+	if [[ "${KCONF}" = "CONFIG_PROVE_LOCKING" ]] ; then
+	   printf " To enable, turn On 'Kernel Hacking / Lock debugging ... / Lock debugging: prove locking correctness'\n"
+        fi
+    }
 done
 exit 0
