@@ -184,6 +184,9 @@ Miscellaneous:
 	- [Linux kernel licensing rules](https://www.kernel.org/doc/html/latest/process/license-rules.html#linux-kernel-licensing-rules)
 	- To circumvent the EXPORT_SYMBOL_GPL(), people have been known to use a GPL "shim" kernel module whose routines are invoked from a proprietary module; [Greg K Hartman 'Re: EXPORT_SYMBOL_GPL recursive for shim and/or wrapper](http://linux-kernel.2935.n7.nabble.com/EXPORT-SYMBOL-GPL-recursive-for-shim-and-or-wrappers-tp474689p474690.html)
 	- [MIT vs. BSD vs. Dual License](https://softwareengineering.stackexchange.com/questions/121998/mit-vs-bsd-vs-dual-license)
+	- Recent, off-beat
+        - [What comes after open source? Bruce Perens is working on it, The Register, Dec 2023](https://www.theregister.com/2023/12/27/bruce_perens_post_open/)
+        - [The eternal struggle between open source and proprietary software, TechCrunch, Dec 2023](https://techcrunch.com/2023/12/26/the-eternal-struggle-between-open-source-and-proprietary-software/)
 
 - io_uring
     - [What is io_uring?, unixism.net, 2020](https://unixism.net/loti/what_is_io_uring.html)
@@ -676,6 +679,16 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 -  ['Mutexes and Semaphores Demystified', Micheal Barr, May 2016](https://barrgroup.com/Embedded-Systems/How-To/RTOS-Mutex-Semaphore)
 
+- Mutex internal implementation
+    - [Official kernel doc: Implementation](https://docs.kernel.org/locking/mutex-design.html#implementation)
+    - [Mutex - Linux inside - 0xax](https://0xax.gitbooks.io/linux-insides/content/SyncPrim/linux-sync-4.html)
+
+ - Spinlock internal implementation
+    - ['Peeking Under the Hood', John Sloan, Chip Overclock blog, May 2012](https://coverclock.blogspot.com/2012/05/peeking-under-hood.html)
+    - ['spin_lock implementation in ARM linux', linuxforthenew blog, Apr 2013](http://linuxforthenew.blogspot.com/2013/04/spinlock-implementation-in-arm-linux.html)
+    - [Synchronization primitives in the Linux kernel. Part 1, linux-insides online book](https://0xax.gitbooks.io/linux-insides/content/SyncPrim/linux-sync-1.html)
+
+
 - The Mars Pathfinder mission and Priority Inversion
 	- ['What really happened on Mars ?' Glenn Reeves](https://cs.unc.edu/~anderson/teach/comp790/papers/mars_pathfinder_long_version.html)
 	- A must-read (PDF): [*What the Media Couldn't Tell You About Mars Pathfinder*](http://people.cs.ksu.edu/~hatcliff/842/Docs/Course-Overview/pathfinder-robotmag.pdf)
@@ -683,10 +696,6 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 	- More recently (May 2015), with respect to the NASA Curiosity Rover: [*13 engineering truths proved by NASA's Curiosity Rover*, EDN](https://www.edn.com/electronics-blogs/now-hear-this/4439386/13-engineering-truths-proved-by-NASA-s-CuriosityRover?mc=NL_EDN_EDT_EDN_funfriday_20150508&cid=NL_EDN_EDT_EDN_funfriday_20150508&elq=75871e4437784010b51f12e4c3be00a2&elqCampaignId=22919&elqaid=25798&elqat=1&elqTrackId=8e848e14bf3e41b58e660c804b335b07)
 
  - OSFY magazine: ['How to Avoid Priority Inversion and Enable Priority Inheritance in Linux Kernel Programming', Thangaraju & Warade, Apr 2019](https://opensourceforu.com/2019/04/how-to-avoid-priority-inversion-and-enable-priority-inheritance-in-Linux-Kernel-Programming/)
- - Spinlock internal implementation
-    - ['Peeking Under the Hood', John Sloan, Chip Overclock blog, May 2012](https://coverclock.blogspot.com/2012/05/peeking-under-hood.html)
-    - ['spin_lock implementation in ARM linux', linuxforthenew blog, Apr 2013](http://linuxforthenew.blogspot.com/2013/04/spinlock-implementation-in-arm-linux.html)
-    - [Synchronization primitives in the Linux kernel. Part 1, linux-insides online book](https://0xax.gitbooks.io/linux-insides/content/SyncPrim/linux-sync-1.html)
 
 - The w/w - wait/wound - mutex:
     - [ww-mutex-design.txt, Jon Corbet, LWN, April 2013](https://lwn.net/Articles/548921/)
