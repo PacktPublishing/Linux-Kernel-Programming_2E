@@ -13,10 +13,11 @@
  * Brief Description:
  * This kernel module is based upon our earlier kernel module here:
  *  ch13/4_lockdep/fixed_thrdshow_eg/
- * We had "fixed it" by using the task_{un}lock() pair of APIs to provide
- * synchronization. However, this wasn't an ideal solution as it introduced
- * the possibility of a race, plus, the task_{un}lock() routines employ a
- * spinlock that’s effective for only some of the task structure members.
+ * We had "fixed it" - refactored it, really - by using the task_{un}lock()
+ * pair of APIs to provide synchronization. However, this wasn't an ideal
+ * solution as it introduced the possibility of a race, plus, the
+ * task_{un}lock() routines employ a spinlock that’s effective for only some
+ * of the task structure members.
  *
  * So, here, we do a proper fix by employing lockfree RCU! It's as-is very
  * efficient for read-mostly situations, which this certainly qualifies as.
@@ -121,8 +122,7 @@ static int showthrds_rcu(void)
 		memset(tmp, 0, sizeof(tmp));
 		put_task_struct(t_rcu);	/* release reference to the task struct */
 	} while_each_thread(g, t);
-	rcu_read_unlock();
-
+	rcu_read_unlock();		/* This ends the RCU read-side critical section */
 	return total;
 }
 
