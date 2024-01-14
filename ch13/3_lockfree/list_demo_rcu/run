@@ -21,7 +21,9 @@ DEV=/dev/lkp_miscdrv_list_rcu
 # The I/O
 #sudo dmesg -C
 echo "Write to the device; this will have some nodes inserted to the tail of the list"
-echo "RCU" > ${DEV}
+echo "OOH" > ${DEV}
+# Actualy, this is bs; the letters written ('RCU') to the list are hard-coded
+# in the misc driver's write method... :-)
 
 echo "Read from the device; this will have the nodes on the list displayed"
 dd if=${DEV} bs=1k count=1
