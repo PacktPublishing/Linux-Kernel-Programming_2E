@@ -1,5 +1,5 @@
---- ../../4_lockdep/fixed_thrdshow_eg/thrd_showall_fixed.c	2023-11-20 10:07:37.541117473 +0530
-+++ thrd_showall_rcu.c	2023-11-21 13:45:27.616738425 +0530
+--- ../../4_lockdep/fixed_thrdshow_eg/thrd_showall_fixed.c	2023-12-28 12:35:22.964512265 +0530
++++ thrd_showall_rcu.c	2024-01-07 16:36:03.291955860 +0530
 @@ -1,5 +1,5 @@
  /*
 - * ch13/3_lockdep/buggy_thrdshow_eg/thrd_showall_buggy.c
@@ -7,7 +7,7 @@
   ***************************************************************
   * This program is part of the source code released for the book
   *  "Linux Kernel Programming" 2E
-@@ -11,15 +11,17 @@
+@@ -11,15 +11,18 @@
   * From: Ch 13 : Kernel Synchronization, Part 2
   ****************************************************************
   * Brief Description:
@@ -18,10 +18,11 @@
 - * The bug turns out to be a recursive locking issue, *detected by lockdep*.
 + * This kernel module is based upon our earlier kernel module here:
 + *  ch13/4_lockdep/fixed_thrdshow_eg/
-+ * We had "fixed it" by using the task_{un}lock() pair of APIs to provide
-+ * synchronization. However, this wasn't an ideal solution as it introduced
-+ * the possibility of a race, plus, the task_{un}lock() routines employ a
-+ * spinlock that’s effective for only some of the task structure members.
++ * We had "fixed it" - refactored it, really - by using the task_{un}lock()
++ * pair of APIs to provide synchronization. However, this wasn't an ideal
++ * solution as it introduced the possibility of a race, plus, the
++ * task_{un}lock() routines employ a spinlock that’s effective for only some
++ * of the task structure members.
   *
 - * So now let's fix it.
 - * Here, we fix the deadlock by first unlocking the relevant lock (struct
@@ -33,8 +34,8 @@
   *
   * For details, please refer the book, Ch 13.
   */
-@@ -34,12 +36,12 @@
- #endif
+@@ -35,12 +38,12 @@
+ #include "../../../convenient.h"
  
  MODULE_AUTHOR("Kaiwan N Billimoria");
 -MODULE_DESCRIPTION("LKP 2E book: ch13/4_lockdep/fixed_thrdshow_eg/:"
@@ -49,7 +50,7 @@
  {
  	struct task_struct *g, *t;  /* 'g' : process ptr; 't': thread ptr */
  	int nr_thrds = 1, total = 0;
-@@ -50,31 +52,47 @@
+@@ -51,31 +54,47 @@
  "--------------------------------------------------------------------------------\n"
  "    TGID   PID         current        stack-start      Thread Name   MT? # thrds\n"
  "--------------------------------------------------------------------------------\n";
@@ -87,14 +88,14 @@
 +
 +		get_task_struct(t_rcu);	/* take a reference to the task struct */
  
--		snprintf(buf, BUFMAX-1, "%6d %6d ", g->tgid, t->pid);
-+		snprintf(buf, BUFMAX-1, "%6d %6d ", g_rcu->tgid, t_rcu->pid);
+-		snprintf_lkp(buf, BUFMAX-1, "%6d %6d ", g->tgid, t->pid);
++		snprintf_lkp(buf, BUFMAX-1, "%6d %6d ", g_rcu->tgid, t_rcu->pid);
  		/* task_struct addr and kernel-mode stack addr */
--		snprintf(tmp, TMPMAX-1, "  0x%px", t);
-+		snprintf(tmp, TMPMAX-1, "  0x%px", t_rcu);
+-		snprintf_lkp(tmp, TMPMAX-1, "  0x%px", t);
++		snprintf_lkp(tmp, TMPMAX-1, "  0x%px", t_rcu);
  		strncat(buf, tmp, TMPMAX);
--		snprintf(tmp, TMPMAX-1, "  0x%px", t->stack);
-+		snprintf(tmp, TMPMAX-1, "  0x%px", t_rcu->stack);
+-		snprintf_lkp(tmp, TMPMAX-1, "  0x%px", t->stack);
++		snprintf_lkp(tmp, TMPMAX-1, "  0x%px", t_rcu->stack);
  		strncat(buf, tmp, TMPMAX);
 +		get_task_comm(tasknm, t_rcu);
  
@@ -111,10 +112,10 @@
 -
 -		if (!g->mm)	// kernel thread
 +		if (!g_rcu->mm)	// kernel thread
- 			snprintf(tmp, sizeof(tasknm)+3, " [%16s]", tasknm);
+ 			snprintf_lkp(tmp, sizeof(tasknm)+4, " [%16s]", tasknm);
  		else
- 			snprintf(tmp, sizeof(tasknm)+3, "  %16s ", tasknm);
-@@ -87,8 +105,8 @@
+ 			snprintf_lkp(tmp, sizeof(tasknm)+4, "  %16s ", tasknm);
+@@ -88,8 +107,8 @@
  		 * If so, display the number of threads in the overall process
  		 * to the right..
  		 */
@@ -122,10 +123,10 @@
 -		if (g->mm && (g->tgid == t->pid) && (nr_thrds > 1)) {
 +		nr_thrds = get_nr_threads(g_rcu);
 +		if (g_rcu->mm && (g_rcu->tgid == t_rcu->pid) && (nr_thrds > 1)) {
- 			snprintf(tmp, TMPMAX-1, " %3d", nr_thrds);
+ 			snprintf_lkp(tmp, TMPMAX-1, " %3d", nr_thrds);
  			strncat(buf, tmp, TMPMAX);
  		}
-@@ -100,28 +118,27 @@
+@@ -101,28 +120,26 @@
  		total++;
  		memset(buf, 0, sizeof(buf));
  		memset(tmp, 0, sizeof(tmp));
@@ -133,8 +134,8 @@
 -		put_task_struct(t);	/* release reference to the task struct */
 +		put_task_struct(t_rcu);	/* release reference to the task struct */
  	} while_each_thread(g, t);
-+	rcu_read_unlock();
- 
+-
++	rcu_read_unlock();		/* This ends the RCU read-side critical section */
  	return total;
  }
  
