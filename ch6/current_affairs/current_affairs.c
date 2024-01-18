@@ -48,14 +48,16 @@ static inline void show_ctx(void)
 			" state       : %c\n"
 			" current (ptr to our process context's task_struct) :\n"
 			"               0x%pK (0x%px)\n"
-			" stack start : 0x%pK (0x%px)\n", current->comm,
+			" stack start : 0x%pK (0x%px)\n",
+			current->comm,
 			/* always better to use the helper methods provided */
 			task_pid_nr(current), task_tgid_nr(current),
 			/* ... rather than using direct lookups:
 			 * current->pid, current->tgid,
 			 */
 			uid, euid,
-			(euid == 0 ? "have" : "don't have"), task_state_to_char(current),
+			(euid == 0 ? "have" : "don't have"),
+			task_state_to_char(current),
 			/* Printing addresses twice- via %pK and %px
 			 * Here, by default, the values will typically be the same as
 			 * kptr_restrict == 1 and we've got root.
