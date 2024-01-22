@@ -49,7 +49,14 @@ void llkd_sysinfo2(void)
 	char msg[MSGLEN];
 
 	memset(msg, 0, MSGLEN);
-	snprintf_lkp(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
+	/* We don't use our snprintf_lkp() wrapper here as that will require
+	 * linking into the klib.c file... here, we're demo-ing the module
+	 * stacking approach, as opposed to the 'library' link approach, so
+	 * we pedantically avoid it. Don't have any such qualms in production;
+	 * simply use it and link approproately.
+	 */
+	snprintf(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
+	//snprintf_lkp(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
 	/* Strictly speaking, all this #if... is considered ugly and should be
 	 * isolated as far as is possible
