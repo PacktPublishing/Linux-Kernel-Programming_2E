@@ -24,6 +24,7 @@
 #include <linux/version.h>
 #include <linux/sched.h>	/* current */
 #include "../../convenient.h"
+#include "../../klib.h"
 
 #define OURCACHENAME "our_ctx"
 

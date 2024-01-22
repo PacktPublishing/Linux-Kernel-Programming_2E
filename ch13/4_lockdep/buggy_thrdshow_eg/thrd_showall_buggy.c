@@ -34,6 +34,7 @@
 #include <linux/sched/signal.h>
 #endif
 #include "../../../convenient.h"
+#include "../../../klib.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("LKP 2E book: ch13/4_lockdep/buggy_thrdshow_eg/:"

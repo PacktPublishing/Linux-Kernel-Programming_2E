@@ -44,6 +44,7 @@
 #include <linux/slab.h>
 #include <linux/version.h>
 #include "../../../convenient.h"
+#include "../../../klib.h"
 
 #define OURMODNAME   "slab_custom_mult"
 #define OURCACHENAME "our_slab"

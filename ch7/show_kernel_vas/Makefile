@@ -78,7 +78,7 @@ CC     := $(CROSS_COMPILE)gcc
 STRIP := ${CROSS_COMPILE}strip
 
 PWD            := $(shell pwd)
-obj-m          +=show_${FNAME_C}.o
+obj-m          += show_${FNAME_C}.o
 show_kernel_vas-objs  += ${FNAME_C}.o ../../klib.o
 
 #--- Debug or production mode?

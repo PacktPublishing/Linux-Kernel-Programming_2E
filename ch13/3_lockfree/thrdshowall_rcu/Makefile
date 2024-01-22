@@ -78,7 +78,8 @@ CC     := $(CROSS_COMPILE)gcc
 STRIP := ${CROSS_COMPILE}strip
 
 PWD            := $(shell pwd)
-obj-m          += ${FNAME_C}.o
+obj-m          += lkm_${FNAME_C}.o
+lkm_thrd_showall_rcu-objs += ${FNAME_C}.o ../../../klib.o
 
 #--- Debug or production mode?
 # Set the MYDEBUG variable accordingly to y/n resp. We keep it off (n) by default.

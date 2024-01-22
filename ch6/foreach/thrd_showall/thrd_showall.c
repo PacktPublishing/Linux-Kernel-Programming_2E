@@ -28,6 +28,7 @@
 #include <linux/sched/signal.h>
 #endif
 #include "../../../convenient.h"
+#include "../../../klib.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION

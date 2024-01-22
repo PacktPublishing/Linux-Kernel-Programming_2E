@@ -31,6 +31,7 @@
 #include <linux/uaccess.h>	/* copy_to_user() */
 #include <linux/kallsyms.h>
 #include "../../../convenient.h"
+#include "../../../klib.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION("LKP 2E:ch6/foreach/prcs_showall: Show all processes by iterating over the task list");
