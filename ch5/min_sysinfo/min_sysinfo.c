@@ -30,6 +30,38 @@ MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.2");
 
 /*
+ * Simple wrapper over the snprintf() - a bit more security-aware.
+ * Checks for and warns on overflow.
+ * (Normally, you'd imagine a 'library' routine like this would be defined in
+ * some sort of 'library' source; we do exactly, when we reach that point in
+ * the book! So, pedantically, here we simply define it with a 'my_' prefix
+ * within this file itself...
+ */
+int my_snprintf_lkp(char *buf, size_t maxsize, const char *fmt, ...)
+{
+	va_list args;
+	int n;
+
+#ifndef __KERNEL__
+#include <stdarg.h>
+#endif
+	va_start(args, fmt);
+	n = vsnprintf(buf, maxsize, fmt, args);
+	va_end(args);
+	if (n >= maxsize) {
+#ifdef __KERNEL__
+		pr_warn("snprintf(): possible overflow! (maxsize=%lu, ret=%d)\n",
+			maxsize, n);
+		dump_stack();
+#else
+		fprintf(stderr, "snprintf(): possible overflow! (maxsize=%lu, ret=%d)\n",
+			maxsize, n);
+#endif
+	}
+	return n;
+}
+
+/*
  * show_sizeof()
  * Simply displays the sizeof data types on the platform.
  */
@@ -55,7 +87,7 @@ void llkd_sysinfo2(void)
 	char msg[MSGLEN];
 
 	memset(msg, 0, MSGLEN);
-	snprintf_lkp(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
+	my_snprintf_lkp(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
 	/* Strictly speaking, all this #if... is considered ugly and should be
 	 * isolated as far as is possible
@@ -127,7 +159,7 @@ void llkd_sysinfo(void)
 	char msg[128];
 
 	memset(msg, 0, 128);
-	snprintf_lkp(msg, 47, "%s(): minimal Platform Info:\nCPU: ", __func__);
+	my_snprintf_lkp(msg, 47, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
 	/* Strictly speaking, all this #if... is considered ugly and should be
 	 * isolated as far as is possible
