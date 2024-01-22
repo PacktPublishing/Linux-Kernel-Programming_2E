@@ -280,32 +280,6 @@ static inline void beep(int what)
 /*------------------------------------------------------------------------*/
 
 #ifdef __KERNEL__
-void delay_sec(long);
-/*------------ delay_sec --------------------------------------------------
- * Delays execution for @val seconds.
- * The fact is, it's unnecessary (just a demo): the kernel already has the
- * ssleep() inline function (a simple wrapper over the msleep()).
- *
- * Parameters:
- * @val : number of seconds to sleep for; if -1, sleep forever
- * MUST be called from process context.
- * (We deliberately do not inline this function; this way, we can see it's
- * entry within a kernel stack call trace).
- */
-void delay_sec(long val)
-{
-	asm ("");    // force the compiler to not inline it!
-	if (in_task()) {
-		set_current_state(TASK_INTERRUPTIBLE);
-		if (val == -1)
-			schedule_timeout(MAX_SCHEDULE_TIMEOUT);
-		else
-			schedule_timeout(val * HZ);
-	}
-}
-#endif   /* #ifdef __KERNEL__ */
-
-#ifdef __KERNEL__
 /*------------------------ SHOW_DELTA() macro -------------------------
  * Show the difference between the timestamps passed
  * Parameters:
@@ -335,33 +309,4 @@ void delay_sec(long val)
         pr_warn("SHOW_DELTA(): *invalid* earlier > later? (check order of params)\n");  \
 } while (0)
 #endif   /* #ifdef __KERNEL__ */
-
-/*
- * Simple wrapper over the snprintf() - a bit more security-aware.
- * Checks for and warns on overflow
- */
-int snprintf_lkp(char *buf, size_t maxsize, const char *fmt, ...)
-{
-	va_list args;
-	int n;
-
-#ifndef __KERNEL__
-#include <stdarg.h>
-#endif
-	va_start(args, fmt);
-	n = vsnprintf(buf, maxsize, fmt, args);
-	va_end(args);
-	if (n >= maxsize) {
-#ifdef __KERNEL__
-		pr_warn("snprintf(): possible overflow! (maxsize=%lu, ret=%d)\n",
-			maxsize, n);
-		dump_stack();
-#else
-		fprintf(stderr, "snprintf(): possible overflow! (maxsize=%lu, ret=%d)\n",
-			maxsize, n);
-#endif
-	}
-	return n;
-}
-
 #endif   /* #ifndef __LKP_CONVENIENT_H__ */

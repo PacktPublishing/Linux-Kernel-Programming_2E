@@ -22,11 +22,12 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <asm/io.h>		/* virt_to_phys(), phys_to_virt(), ... */
-#include "convenient.h"		/* snprintf_lkp() wrapper */
 
+int snprintf_lkp(char *buf, size_t maxsize, const char *fmt, ...);
 void minsysinfo(void);
 u64 powerof(int base, int exponent);
 void show_phy_pages(void *kaddr, size_t len, bool contiguity_check);
 void show_sizeof(void);
+void delay_sec(long);
 
 #endif
