@@ -80,7 +80,13 @@ static int showthrds_rcu(void)
 	 * the _rcu list-mutation primitives such as list_add_rcu() as long as it's
 	 * guarded by rcu_read_lock(). ...'
 	 */
+
+	/* Commit # 5ffd2c37cb7a53d520 ... */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 0)
 	do_each_thread(g, t) {     /* 'g' : process ptr; 't': thread ptr */
+#else
+	for_each_process_thread(g, t) {   /* 'g' : process ptr; 't': thread ptr */
+#endif
 		g_rcu = rcu_dereference(g);
 		t_rcu = rcu_dereference(t);
 
@@ -121,7 +127,11 @@ static int showthrds_rcu(void)
 		memset(buf, 0, sizeof(buf));
 		memset(tmp, 0, sizeof(tmp));
 		put_task_struct(t_rcu);	/* release reference to the task struct */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 0)
 	} while_each_thread(g, t);
+#else
+	}
+#endif
 	rcu_read_unlock();		/* This ends the RCU read-side critical section */
 	return total;
 }

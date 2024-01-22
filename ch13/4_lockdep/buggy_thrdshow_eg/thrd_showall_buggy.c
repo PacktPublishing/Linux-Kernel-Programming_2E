@@ -66,7 +66,12 @@ static int showthrds_buggy(void)
 	rcu_read_lock(); /* This triggers off an RCU read-side critical section; ensure
 			  * you are non-blocking within it! */
 #endif
+	/* Commit # 5ffd2c37cb7a53d520 ... */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 0)
 	do_each_thread(g, t) {     /* 'g' : process ptr; 't': thread ptr */
+#else
+	for_each_process_thread(g, t) {   /* 'g' : process ptr; 't': thread ptr */
+#endif
 		get_task_struct(t);	/* take a reference to the task struct */
 		task_lock(t);
 
@@ -107,7 +112,11 @@ static int showthrds_buggy(void)
 		memset(tmp, 0, sizeof(tmp));
 		task_unlock(t);
 		put_task_struct(t);	/* release reference to the task struct */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 0)
 	} while_each_thread(g, t);
+#else
+	}
+#endif
 #if 0
 	/* <same as above, reg the RCU synchronization for the task list> */
 	rcu_read_unlock();

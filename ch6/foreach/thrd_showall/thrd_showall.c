@@ -88,7 +88,18 @@ static int showthrds(void)
 	 * Worry not, you'll learn several approaches to kernel synchronization in
 	 * the book's last two chapters.
 	 */
-	do_each_thread(p, t) {	/* 'p' : process ptr; 't': thread ptr */
+
+	/*
+	 * FYI, from 6.6, the do_ach_thread()/while_each_thread() style macros have been
+	 * removed in favor of the simpler and more readable for_each_process_thread()
+	 * macro.
+	 * Commit # 5ffd2c37cb7a53d520...
+	 */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 0)
+	do_each_thread(p, t) {     /* 'p' : process ptr; 't': thread ptr */
+#else
+	for_each_process_thread(p, t) {   /* 'p' : process ptr; 't': thread ptr */
+#endif
 		get_task_struct(t);	/* take a reference to the task struct */
 		task_lock(t);
 
@@ -129,7 +140,11 @@ static int showthrds(void)
 
 		task_unlock(t);
 		put_task_struct(t);	/* release reference to the task struct */
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 0)
 	} while_each_thread(p, t);
+#else
+	}
+#endif
 
 	return total;
 }
