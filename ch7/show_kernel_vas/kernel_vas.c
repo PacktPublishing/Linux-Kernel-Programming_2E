@@ -1,5 +1,5 @@
 /*
- * ch7/kernel_seg/kernel_seg.c
+ * ch7/show_kernel_vas/kernel_vas.c
  ***************************************************************
  * This program is part of the source code released for the book
  *  "Linux Kernel Programming" 2E
@@ -12,10 +12,10 @@
  ****************************************************************
  * Brief Description:
  * A kernel module to show us some relevant details wrt the layout of the
- * kernel segment, IOW, the kernel VAS (Virtual Address Space). In effect,
- * this shows a simple memory map of the kernel. Works on both 32 and 64-bit
- * systems of differing architectures (note: only lightly tested on Aarch32,
- * Aarch64, x86-32 and x86_64 systems).
+ * kernel VAS (Virtual Address Space). In effect, this shows a simple memory
+ * map of the kernel. Works on both 32 and 64-bit systems of differing
+ * architectures (note: only lightly tested on AArch32, AArch64, x86-32 and
+ * x86_64 systems).
  * Optional: displays key info of the user VAS if the module parameter
  * show_uservas is set to 1.
  *
@@ -40,7 +40,7 @@
 #include "../../convenient.h"
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
-MODULE_DESCRIPTION("LKP book 2E:ch7/kernel_seg: display some kernel segment details");
+MODULE_DESCRIPTION("LKP book 2E:ch7/show_kernel_vas: display some kernel VAS details");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.2");
 
@@ -54,7 +54,7 @@ MODULE_PARM_DESC(show_uservas, "Show some user space VAS details; 0 = no (defaul
 extern void minsysinfo(void);	// it's in our klib 'library'
 
 /*
- * show_userspace_info
+ * show_userspace_info()
  * Display some arch-independent details of the usermode VAS.
  * Format (for most of the details):
  *  |<name of region>:   start_addr - end_addr        | [ size in KB/MB/GB]
@@ -123,7 +123,7 @@ static void show_userspace_info(void)
 }
 
 /*
- * show_kernelseg_info
+ * show_kernelseg_info()
  * Display kernel segment details as applicable to the architecture we're
  * currently running upon.
  * Format (for most of the details):
@@ -135,7 +135,7 @@ static void show_userspace_info(void)
  * We try to order it by descending address (here, kva's) but this doesn't
  * always work out as ordering of regions differs by arch.
  */
-static void show_kernelseg_info(void)
+static void show_kernelvas_info(void)
 {
 	unsigned long ram_size;
 
@@ -275,7 +275,7 @@ static void show_kernelseg_info(void)
 	pr_info(ELLPS);
 }
 
-static int __init kernel_seg_init(void)
+static int __init kernel_vas_init(void)
 {
 	pr_info("%s: inserted\n", KBUILD_MODNAME);
 
@@ -285,7 +285,7 @@ static int __init kernel_seg_init(void)
 	 * Hence, we must arrange to link it in (see the Makefile)
 	 */
 	minsysinfo();
-	show_kernelseg_info();
+	show_kernelvas_info();
 
 	if (show_uservas)
 		show_userspace_info();
@@ -296,9 +296,9 @@ static int __init kernel_seg_init(void)
 
 	return 0;		/* success */
 }
-static void __exit kernel_seg_exit(void)
+static void __exit kernel_vas_exit(void)
 {
 	pr_info("%s: removed\n", KBUILD_MODNAME);
 }
-module_init(kernel_seg_init);
-module_exit(kernel_seg_exit);
+module_init(kernel_vas_init);
+module_exit(kernel_vas_exit);
