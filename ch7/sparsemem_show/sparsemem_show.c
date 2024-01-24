@@ -23,7 +23,7 @@
 
 MODULE_AUTHOR("Kaiwan N Billimoria");
 MODULE_DESCRIPTION
-    ("LKP2E:ch7/sparsemem_show: display minimal info reg the kernel physical memory model");
+("LKP2E:ch7/sparsemem_show: display minimal info reg the kernel physical memory model");
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.1");
 
@@ -31,6 +31,12 @@ static int __init sparsemem_show_init(void)
 {
 	pr_info("inserted\n");
 #ifdef CONFIG_SPARSEMEM_VMEMMAP
+	/*
+	 * Note: (1UL << n) is a concise way to perform 2^n.
+	 * Next, bit-shifting the result to the right by a given number of bits
+	 * then has the effect of division (to express them in convenient GB/TB
+	 * units).
+	 */ 
 	pr_info("VMEMMAP_START = 0x%016lx\n"
 		"SECTION_SIZE_BITS = %u, so size of each section=2^%u = %u bytes = %u MB\n"
 		"max # of sections=%lu\n"

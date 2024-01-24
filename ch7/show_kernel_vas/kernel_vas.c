@@ -123,7 +123,7 @@ static void show_userspace_info(void)
 }
 
 /*
- * show_kernelseg_info()
+ * show_kernelvas_info()
  * Display kernel segment details as applicable to the architecture we're
  * currently running upon.
  * Format (for most of the details):
