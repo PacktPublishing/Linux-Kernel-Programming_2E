@@ -33,8 +33,8 @@ MODULE_VERSION("0.2");
  * Simple wrapper over the snprintf() - a bit more security-aware.
  * Checks for and warns on overflow.
  * (Normally, you'd imagine a 'library' routine like this would be defined in
- * some sort of 'library' source; we do exactly, when we reach that point in
- * the book! So, pedantically, here we simply define it with a 'my_' prefix
+ * some sort of 'library' source; we do exactly this, when we reach that point
+ * in the book! So, pedantically, here we simply define it with a 'my_' prefix
  * within this file itself...
  */
 int my_snprintf_lkp(char *buf, size_t maxsize, const char *fmt, ...)

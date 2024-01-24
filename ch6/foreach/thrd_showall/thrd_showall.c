@@ -91,10 +91,10 @@ static int showthrds(void)
 	 */
 
 	/*
-	 * FYI, from 6.6, the do_ach_thread()/while_each_thread() style macros have been
-	 * removed in favor of the simpler and more readable for_each_process_thread()
-	 * macro.
-	 * Commit # 5ffd2c37cb7a53d520...
+	 * FYI, from 6.6, the do_each_thread()/while_each_thread() style macros
+	 * have been removed in favor of the simpler and more readable
+	 * for_each_process_thread() macro.
+	 * See commit # 5ffd2c37cb7a53d520...
 	 */
 #if LINUX_VERSION_CODE < KERNEL_VERSION(6, 6, 0)
 	do_each_thread(p, t) {     /* 'p' : process ptr; 't': thread ptr */

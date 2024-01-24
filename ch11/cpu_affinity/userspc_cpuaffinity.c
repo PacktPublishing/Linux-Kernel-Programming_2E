@@ -55,10 +55,9 @@ static void disp_cpumask(pid_t pid, cpu_set_t *cpumask, unsigned int ncores)
 
 	printf("CPU affinity mask for PID %d:\n", pid);
 	/* We don't use our snprintf_lkp() wrapper here as that will require
-	 * linking into the klib.c file... here, we're demo-ing the module
-	 * stacking approach, as opposed to the 'library' link approach, so
+	 * linking into the klib.c file... here, as this is a userspace app,
 	 * we pedantically avoid it. Don't have any such qualms in production;
-	 * simply use it and link approproately.
+	 * simply use it and link appropriately.
 	 */
 	snprintf(tmpbuf, 127, "ps -A |awk '$1 == %d {print $0}'", pid);
 	//snprintf_lkp(tmpbuf, 127, "ps -A |awk '$1 == %d {print $0}'", pid);
