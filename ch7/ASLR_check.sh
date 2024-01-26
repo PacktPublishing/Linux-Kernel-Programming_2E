@@ -28,6 +28,25 @@ source ${PFX}/color.sh || {
 }
 SEP="+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
+# Attempt to gain access to the kernel config; first via /proc/config.gz
+# and, if unavailable, via the /boot/config-<kver> file
+# On success, the filename's placed in the var KCONF; on failure, the
+# KCONF variable is null (caller must check).
+get_kconfig_file()
+{
+KCONF=""
+sudo modprobe configs 2>/dev/null || true
+if [ -f /proc/config.gz ] ; then
+    gunzip -c /proc/config.gz > /tmp/kconfig
+    KCONF=/tmp/kconfig
+elif [ -f /boot/config-"$(uname -r)" ] ; then
+    KCONF=/boot/config-$(uname -r)
+else
+    echo "${name}: FATAL: whoops, cannot gain access to kernel config, aborting..."
+    exit 1
+fi
+}
+
 test_ASLR_abit()
 {
 tput bold; fg_purple
@@ -121,25 +140,11 @@ grep -q -w "nokaslr" /proc/cmdline && {
   return
 }
 
-# Attempt to gain access to the kernel config; first via /proc/config.gz
-# and, if unavailable, via the /boot/config-<kver> file
-sudo modprobe configs 2>/dev/null || true
-if [ -f /proc/config.gz ] ; then
-    gunzip -c /proc/config.gz > /tmp/kconfig
-    KCONF=/tmp/kconfig
-elif [ -f /boot/config-"$(uname -r)" ] ; then
-    KCONF=/boot/config-$(uname -r)
-else
-	tput bold ; fg_red
-    echo "${name}: FATAL: whoops, cannot gain access to kernel config, aborting..."
-	color_reset
-    exit 1
-fi
-
+get_kconfig_file
 if [ ! -s "${KCONF}" ]; then
-	tput bold ; fg_red
-    echo "${name}: FATAL: whoops, invalid kernel config file (${KCONF})? Aborting..."
-	color_reset
+    tput bold ; fg_red
+    echo "${name}: FATAL: whoops, cannot gain access to kernel config, aborting..."
+    color_reset
     exit 1
 fi
 
