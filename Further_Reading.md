@@ -362,6 +362,7 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
 - Book: [Hands-On System Programming with Linux", Kaiwan N Billimoria, Packt](https://www.packtpub.com/networking-and-servers/hands-system-programming-linux). Prerequisites to this chapter (essential reading, really):
 	- Ch 1 : Linux System Architecture
 	- Ch 2 : Virtual Memory
+- [Process Virtual address space (VAS) on Wikipedia](https://en.wikipedia.org/wiki/Virtual_address_space)
 - CPU ABI, a blog article : [APPLICATION BINARY INTERFACE (ABI) DOCS AND THEIR MEANING](https://kaiwantech.wordpress.com/2018/05/07/application-binary-interface-abi-docs-and-their-meaning/)
 
 - [LWN kernel index on kernel stacks](https://lwn.net/Kernel/Index/#Kernel_stack)
@@ -627,7 +628,11 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
     - [Quotes](https://en.wikiquote.org/wiki/Fred_Brooks)
 
 - New(er) articles on LWN regarding scheduling-related topics:
-    - 6.6: the new EEVDF (Earliest Eligible Virtual Deadline First) task scheduler: [An EEVDF CPU scheduler for Linux, Jon Corbet, Mar 2023](https://lwn.net/Articles/925371/)
+    - The new 6.6 EEVDF (Earliest Eligible Virtual Deadline First) CPU/task scheduler:
+        - [An EEVDF CPU scheduler for Linux, Jon Corbet, Mar 2023](https://lwn.net/Articles/925371/)
+        - [EEVDF Scheduler Merged For Linux 6.6, Intel Hybrid Cluster Scheduling Re-Introduced, M Larabel, Aug 2023](https://www.phoronix.com/news/Linux-6.6-EEVDF-Merged)
+        - [KernelNewbies: Linux 6.6](https://kernelnewbies.org/Linux_6.6#New_task_scheduler:_EEVDF)
+
     - [Fixing a corner case in asymmetric CPU packing (January 7, 2022)](https://lwn.net/Articles/880367/)
     - [Hybrid scheduling gets more complicated (September 30, 2022)](https://lwn.net/Articles/909611/)
     - [Core scheduling lands in 5.14 (July 1, 2021)](https://lwn.net/Articles/861251/)
