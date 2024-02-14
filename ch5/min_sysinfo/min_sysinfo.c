@@ -89,7 +89,7 @@ void llkd_sysinfo2(void)
 	memset(msg, 0, MSGLEN);
 	my_snprintf_lkp(msg, 48, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
-	/* Strictly speaking, all this #if... is considered ugly and should be
+	/* Strictly speaking, all this #if...#endif is considered ugly and should be
 	 * isolated as far as is possible
 	 */
 #ifdef CONFIG_X86
@@ -161,7 +161,7 @@ void llkd_sysinfo(void)
 	memset(msg, 0, 128);
 	my_snprintf_lkp(msg, 47, "%s(): minimal Platform Info:\nCPU: ", __func__);
 
-	/* Strictly speaking, all this #if... is considered ugly and should be
+	/* Strictly speaking, all this #if...#endif is considered ugly and should be
 	 * isolated as far as is possible
 	 */
 #ifdef CONFIG_X86
