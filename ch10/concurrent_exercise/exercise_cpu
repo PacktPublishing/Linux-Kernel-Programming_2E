@@ -11,4 +11,8 @@ which taskset >/dev/null || {
   echo "Pl first install the taskset utility"
   exit 1
 }
+which yes >/dev/null || {
+  echo "Pl first install the 'yes' utility"
+  exit 1
+}
 taskset -c $1 yes > /dev/null
