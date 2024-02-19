@@ -270,7 +270,8 @@ static int __init init_percpu_var(void)
 	schedsa_ptr = (unsigned long (*)(pid_t pid, const struct cpumask *in_mask))func_ptr;
 
 	/* Dynamically allocate the percpu structures; one structure instance
-	 * will be allocated per CPU core!
+	 * will be allocated per CPU core! (If you want to specify the GFP flags,
+  	 * then use the alloc_percpu_gfp(type, gfp) macro instead)
 	 */
 	ret = -ENOMEM;
 	pcp_ctx = (struct drv_ctx __percpu *) alloc_percpu(struct drv_ctx);
