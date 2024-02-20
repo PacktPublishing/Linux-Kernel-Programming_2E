@@ -81,7 +81,7 @@ static int reader(struct global_data *gd)
 
 static void writer(struct global_data *gd)
 {
-	long x = 177564, y = 773540, z = 920;
+	long x = 129780, y = 775952, z = 920;
 
 	gd->lat = x;
 	gd->longit = y;
