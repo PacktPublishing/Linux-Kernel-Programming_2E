@@ -118,7 +118,7 @@ static int reader(void)
 static int writer(void)
 {
 	struct global_data *gd, *gd_new;
-	long x = 177564, y = 773540, z = 920;
+	long x = 129780, y = 775952, z = 920;
 
 	// The write-side critical section spans from t1 to t2; writes run exclusively
 	spin_lock(&gdata_lock);	//--- t1
