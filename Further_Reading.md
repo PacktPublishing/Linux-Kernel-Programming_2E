@@ -551,19 +551,24 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 - Detailed PDF: ['A complete guide to Linux process scheduling', Nikita Ishkov, Feb 2015](https://trepo.tuni.fi/bitstream/handle/10024/96864/GRADU-1428493916.pdf)
 
+- (CFS) Autogroups
+    - [Why nice levels are a placebo and have been for a very long time, and no one seems to have noticed, Reddit, 2020](https://www.reddit.com/r/linux/comments/d7hx2c/why_nice_levels_are_a_placebo_and_have_been_for_a/)
+    - [RFC: documentation of the autogroup feature [v2], Nov 2016](https://www.uwsg.indiana.edu/hypermail/linux/kernel/1611.3/00766.html)
+    - [man 7 sched](https://man7.org/linux/man-pages/man7/sched.7.html)
+
 - Scheduler tuning:
     - A short and useful PDF doc: [Completely Fair Scheduler and its tuning, Jacek Kobus and Rafał Szklarski, 2009](http://fizyka.umk.pl/~jkob/_downloads/cfs-tuning.pdf)
     - [Tuning the Task Scheduler, SuSe documentation](https://documentation.suse.com/sles/12-SP4/html/SLES-all/cha-tuning-taskscheduler.html)
     - [A real-world, useful case: Reducing latency spikes by tuning the CPU scheduler, T Gabriec, June 2016, Scylla]( https://www.scylladb.com/2016/06/10/read-latency-and-scylla-jmx-process/)
 
-- perf:
-   - [Linux perf examples, Brendan Gregg](http://www.brendangregg.com/perf.html)
-   - [The perf wiki page](https://perf.wiki.kernel.org/index.php/Main_Page)
-   - [perf tutorial](https://perf.wiki.kernel.org/index.php/)
-   - Tutorial: [Playing around with perf](https://www.bernardi.cloud/2012/08/07/playing-around-with-perf/)
-   - [Memory Access Patterns Are Important](https://mechanical-sympathy.blogspot.com/2012/08/memoryaccess-patterns-are-important.html)
+- perf
+    - [Linux perf examples, Brendan Gregg](http://www.brendangregg.com/perf.html)
+    - [The perf wiki page](https://perf.wiki.kernel.org/index.php/Main_Page)
+    - [perf tutorial](https://perf.wiki.kernel.org/index.php/)
+    - Tutorial: [Playing around with perf](https://www.bernardi.cloud/2012/08/07/playing-around-with-perf/)
+    - [Memory Access Patterns Are Important](https://mechanical-sympathy.blogspot.com/2012/08/memoryaccess-patterns-are-important.html)
 
-- [Video tutorial: talk recorded for the Linux Foundation’s OSSNA (Open Source Summit, North America), June 2023: 'Leveraging the OS CPU Scheduler to Write Real-Time MT Apps', Kaiwan Billimoria, kaiwanTECH](https://www.youtube.com/watch?v=h9psonTquHU&t=63s)
+- [Video tutorial: talk recorded for the Linux Foundation’s OSSNA (Open Source Summit, North America), June 2023: 'Leveraging the OS CPU Scheduler to Write Real-Time MT Apps', Kaiwan N Billimoria, kaiwanTECH](https://www.youtube.com/watch?v=h9psonTquHU&t=63s)
 
 - Ftrace
     - ['ftrace: trace your kernel functions!', Julia Evans, Mar 2017](https://jvns.ca/blog/2017/03/19/getting-started-with-ftrace/)
@@ -645,7 +650,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
         - [A "kill" button for control groups (May 3, 2021)](https://lwn.net/Articles/855049/)
         - [Cleaning up dying control groups, 2022 edition (May 19, 2022)](https://lwn.net/Articles/895431/)
 
-- ghOSt
+- Google's research project: ghOSt OS
     - 'ghOSt: Fast & Flexible User-Space Delegation of Linux Scheduling', J T Humphries et al, ACM Digital Library, Oct 2021
         - [Paper](https://dl.acm.org/doi/10.1145/3477132.3483542)
         - [Video talk](https://www.youtube.com/watch?v=j4ABe4dsbIY)
