@@ -58,7 +58,7 @@ ifeq ($(ARCH),arm)
   # *UPDATE* 'KDIR' below to point to the ARM Linux kernel source tree on your box
   KDIR ?= ~/arm_prj/kernel/linux
 else ifeq ($(ARCH),arm64)
-  # *UPDATE* 'KDIR' below to point to the ARM64 (Aarch64) Linux kernel source
+  # *UPDATE* 'KDIR' below to point to the ARM64 (AArch64) Linux kernel source
   # tree on your box
   KDIR ?= ~/arm64_prj/kernel/linux
 else ifeq ($(ARCH),powerpc)

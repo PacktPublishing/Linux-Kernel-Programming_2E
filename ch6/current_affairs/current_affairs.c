@@ -75,6 +75,7 @@ static int __init current_affairs_init(void)
 {
 	pr_info("inserted\n");
 	pr_info("sizeof(struct task_struct)=%zd\n", sizeof(struct task_struct));
+	//pr_info("sizeof(struct thread_info)=%zd\n", sizeof(struct thread_info));
 	show_ctx();
 	return 0;		/* success */
 }
