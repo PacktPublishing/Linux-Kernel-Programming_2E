@@ -55,6 +55,11 @@ These are the software packages (and relevant version numbers) used:
 - x86_64 Fedora 38 (and 39) on a native (laptop) system
 - ARM Raspberry Pi 4 Model B (64-bit, running both its “distro” kernel as well as our custom 6.1 kernel); lightly tested
 
+## Known Errata
+
+- page 9:
+    - The phrase 'the 6.1 kernel is a Long-Term Stable (LTS) version', should be
+    'the 6.1 kernel is a Long-Term *Support* (LTS) version'.
 
 ## Know more on the Discord server <img alt="Coding" height="25" width="32"  src="https://cliply.co/wp-content/uploads/2021/08/372108630_DISCORD_LOGO_400.gif">
 You can get more engaged on the discord server for more latest updates and discussions in the community at [Discord](https://packt.link/SecNet)
