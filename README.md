@@ -49,10 +49,12 @@ With the following software and hardware list you can run all code files present
 
 ## Software and hardware list
 
-These are the software packages (and relevant version numbers) used:
-- x86_64 Ubuntu 22.04 LTS and guest OS (running on Oracle VirtualBox 7.0)
-- x86_64 Ubuntu 23.04 LTS guest OS (running on Oracle VirtualBox 7.0)
-- x86_64 Fedora 38 (and 39) on a native (laptop) system
+These are the Linux platforms upon which the book's codebase has been developed and tested:
+
+- x86_64 Ubuntu 22.04 LTS native and guest OS
+- x86_64 Ubuntu 23.04 LTS native and guest OS
+- x86_64 Fedora 38 (and 39) on a native and guest OS 
+    - All guest OS's have been run upon the host Oracle VirtualBox 7.0 hypervisor
 - ARM Raspberry Pi 4 Model B (64-bit, running both its “distro” kernel as well as our custom 6.1 kernel); lightly tested
 
 ## Known Errata
@@ -72,7 +74,7 @@ _If you have already purchased a print or Kindle version of this book, you can g
 We also provide a PDF file that has color images of the screenshots/diagrams used in this book at [GraphicBundle]( https://packt.link/gbp/9781803232225) <img alt="Coding" height="15" width="35"  src="https://media.tenor.com/ex_HDD_k5P8AAAAi/habbo-habbohotel.gif">
 
 
-## Get to know the Authors
+## Get to know the Author
 _Kaiwan N. Billimoria_ taught himself BASIC programming on his dad's IBM PC back in 1983. He was programming in C and Assembly on DOS until he discovered the joys of Unix, and by around 1997, Linux!
 Kaiwan has worked on many aspects of the Linux system programming stack, including Bash scripting, system programming in C, kernel internals, device drivers, and embedded Linux work. He has actively worked on several commercial/FOSS projects. His contributions include drivers to the mainline Linux OS and many smaller projects hosted on GitHub. His Linux passion feeds well into his passion for teaching these topics to engineers, which he has done for well over two decades now. He's also the author of Hands-On System Programming with Linux, Linux Kernel Programming (and its Part 2 book) and Linux Kernel Debugging. It doesn't hurt that he is a recreational ultrarunner too.
 
