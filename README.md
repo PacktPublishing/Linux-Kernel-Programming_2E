@@ -24,8 +24,8 @@ By the end of this book, you’ll have a much better understanding of the fundam
 
 ## Outline and Chapter Summary
 
-This book covers everything from setting up ASP.NET Core 8 and modern Angular to deploying robust web applications in Windows, Linux, and Azure. Learn advanced techniques in data handling, API usage, UI design, and security
-
+This book, LKP 2E, is an ideal guide to Linux kernel development for programmers new to it, as well as for experienced developers. It incorporates a judicious mix of theory and practice, with more focus on practical aspects. It deliberately moves away from bland and generic 'OS theory' topics and instead covers them where required from the clear and distilled viewpoint of implementation details in a real, live OS - Linux.
+The book's chapters are as follows:
 
 1. Linux Kernel Programming – A Quick Introduction
 2. Building the 6.x Linux Kernel from Source – Part 1
