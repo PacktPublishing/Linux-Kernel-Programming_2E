@@ -62,6 +62,18 @@ These are the Linux platforms upon which the book's codebase has been developed 
 - page 9:
     - The phrase 'the 6.1 kernel is a Long-Term Stable (LTS) version', should be
     'the 6.1 kernel is a Long-Term *Support* (LTS) version'.
+- Ch 13, *Figure 13.14* - the circled numbers mentioned in the book are missing. The reason: I eventually removed the circled numbers from *Figure 13.14* as it was already a bit too crowded, but inadvertently missed updating the text; apologies, my mistake! So, **please ignore **the following:
+    - page 716:
+        - The sentences " (See *Figure 13.14* and the (red) circle with 2 in it.)", "(See *Figure 13.14* and the (red) circle with 3 in it.)" and " (See *Figure 13.14* and the (red) circle with 3 in it.)".
+    - page 718:
+        - The sentence " (See *Figure 13.14*, with the (red) circles with 4 and 5 in them, respectively.".
+    - page 720:
+        - The phrases "(see *Figure 13.14* and the (red) circle with 1 in it)".
+    - page 721:
+        - The phrase " (see *Figure 13.14* and the (red) circle with 2 in it)" and "(see *Figure 13.14*
+and the (red) circle with 3 in it)".
+    - page 722:
+        - The phrase "(see *Figure 13.14* and the (red) circles with 4 and 5 in them, respectively)".
 
 ## Know more on the Discord server <img alt="Coding" height="25" width="32"  src="https://cliply.co/wp-content/uploads/2021/08/372108630_DISCORD_LOGO_400.gif">
 You can get more engaged on the discord server for more latest updates and discussions in the community at [Discord](https://packt.link/SecNet)
