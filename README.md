@@ -62,7 +62,7 @@ These are the Linux platforms upon which the book's codebase has been developed 
 - page 9:
     - The phrase 'the 6.1 kernel is a Long-Term Stable (LTS) version', should be
     'the 6.1 kernel is a Long-Term *Support* (LTS) version'.
-- Ch 13, *Figure 13.14* - the circled numbers mentioned in the book are missing. The reason: I eventually removed the circled numbers from *Figure 13.14* as it was already a bit too crowded, but inadvertently missed updating the text; apologies, my mistake! So, **please ignore **the following:
+- Ch 13, *Figure 13.14* - the circled numbers mentioned in the book are missing. The reason: I eventually removed the circled numbers from *Figure 13.14* as it was already a bit too crowded, but inadvertently missed updating the text; apologies, my mistake! So, **please ignore** the following:
     - page 716:
         - The sentences " (See *Figure 13.14* and the (red) circle with 2 in it.)", "(See *Figure 13.14* and the (red) circle with 3 in it.)" and " (See *Figure 13.14* and the (red) circle with 3 in it.)".
     - page 718:
