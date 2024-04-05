@@ -28,6 +28,7 @@ This book, LKP 2E, is an ideal guide to Linux kernel development for programmers
 The book's chapters are as follows:
 
 1. Linux Kernel Programming – A Quick Introduction
+    - [Online chapter (PDF)](http://www.packtpub.com/sites/default/files/downloads/9781803232225_Online_Chapter.pdf)
 2. Building the 6.x Linux Kernel from Source – Part 1
 3. Building the 6.x Linux Kernel from Source – Part 2
 4. Writing Your First Kernel Module – Part 1
