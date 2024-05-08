@@ -61,6 +61,7 @@ These are the Linux platforms upon which the book's codebase has been developed 
 ## Known Errata
 
 - page 9:
+    - The bullet point "4.0 to 4.19 (20 minor releases)" should be "4.0 to 4.20 (21 minor releases)"; it turns out it's an exception to the rule of '20 minor releases per major rel' (hey, every good rule has one!). (Similarly for *Figure 2.1* as well.)
     - The phrase 'the 6.1 kernel is a Long-Term Stable (LTS) version', should be
     'the 6.1 kernel is a Long-Term *Support* (LTS) version'.
  - page 264:
