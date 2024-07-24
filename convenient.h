@@ -29,7 +29,7 @@
  *** PLEASE READ this first ***
  *  1. The advent of the kernel's powerful *Dynamic Debug* functionality
  *     (CONFIG_DYNAMIC_DEBUG=y), renders our the MSG*() (and DBGPRINT()) macros defined
- *     here superfluous; they're not really required.
+ *     here SUPERFLUOUS; they're not really required.
  *     Do use the kernel dynamic debug facility instead:
  *      https://www.kernel.org/doc/html/v6.1/admin-guide/dynamic-debug-howto.html#dynamic-debug
  *     (You might still find the QP*() macros useful, and the MSG*() ones useful
@@ -186,7 +186,7 @@
 	}                                                                         \
 	else                                                                      \
 		intr = '.';                                                           \
-										                                      \
+										      \
 	if (PRINTCTX_SHOWHDR == 1)                                                \
 		pr_debug("CPU)  task_name:PID  | irqs,need-resched,hard/softirq,preempt-depth  /* func_name() */\n"); \
 	pr_debug(                                                                    \
@@ -292,21 +292,39 @@ static inline void beep(int what)
  *	[ ... code whose time u want to measure ... ]
  *	t2 = ktime_get_real_ns();
  *	SHOW_DELTA(t2, t1);
+ *
+ * Hang on!
+ * On ARM-32 (experienced this for the Beaglebone Black, arm-linux-gnueabi-gcc
+ * (GCC) 10.5.0), the ktime_sub() and ktime_get_real_ns() routines causes the
+ * compiler to throw this error:
+...
+ MODPOST <...>ds3231_i2c_drv/try/Module.symvers
+ERROR: modpost: "__aeabi_uldivmod" [...ds3231_i2c_drv/try/ds3231t2.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:123: ...ds3231_i2c_drv/try/Module.symvers] Error 1
+...
+ * Apparently, kernel routines like the ktime_sub(), ktime_get*(), etc are fine
+ * on 64-bit but not on 32-bit!
  */
+#if (BITS_PER_LONG == 64)
 #include <linux/jiffies.h>
 #include <linux/ktime.h>
 #define SHOW_DELTA(later, earlier)  do {    \
     if (time_after((unsigned long)later, (unsigned long)earlier)) { \
-	    s64 delta_ns = ktime_to_ns(ktime_sub(later, earlier));      \
+	s64 delta_ns = ktime_to_ns(ktime_sub(later, earlier));      \
         pr_info("delta: %lld ns", delta_ns);       \
-		if (delta_ns/1000 >= 1)                    \
-			pr_cont(" (~ %lld us", delta_ns/1000);   \
-		if (delta_ns/1000000 >= 1)                 \
-			pr_cont(" ~ %lld ms", delta_ns/1000000); \
-		if (delta_ns/1000 >= 1)                    \
-			pr_cont(")\n");                         \
+        if (delta_ns/1000 >= 1)                    \
+            pr_cont(" (~ %lld us", delta_ns/1000);   \
+        if (delta_ns/1000000 >= 1)                 \
+            pr_cont(" ~ %lld ms", delta_ns/1000000); \
+        if (delta_ns/1000 >= 1)                    \
+            pr_cont(")\n");                    \
     } else  \
         pr_warn("SHOW_DELTA(): *invalid* earlier > later? (check order of params)\n");  \
 } while (0)
+#else   // 32-bit
+	/* ktime_sub() not supported on 32-bit */
+#define SHOW_DELTA(later, earlier)  \
+	pr_warn("SHOW_DELTA(): ktime_sub() not supported on 32-bit\n");
+#endif
 #endif   /* #ifdef __KERNEL__ */
 #endif   /* #ifndef __LKP_CONVENIENT_H__ */
