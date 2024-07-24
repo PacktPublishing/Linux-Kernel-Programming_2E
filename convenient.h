@@ -62,7 +62,7 @@
 
 #ifdef USE_FTRACE_BUFFER
 #define DBGPRINT(string, args...)                                       \
-	trace_printk(string, ##args);
+	trace_printk(string, ##args)
 #else
 #define DBGPRINT(string, args...) do {                                  \
 	int USE_RATELIMITING = 1;                                           \
@@ -78,23 +78,15 @@
 /*------------------------ MSG, QP ------------------------------------*/
 #ifdef DEBUG
 #ifdef __KERNEL__
-#define MSG(string, args...) do {                                       \
-	DBGPRINT("%s:%d : " string, __func__, __LINE__, ##args);            \
-} while (0)
+#define MSG(string, args...) DBGPRINT("%s:%d : " string, __func__, __LINE__, ##args)
 #else
-#define MSG(string, args...) do {                                       \
-	fprintf(stderr, "%s:%d : " string, __func__, __LINE__, ##args);     \
-} while (0)
+#define MSG(string, args...) fprintf(stderr, "%s:%d : " string, __func__, __LINE__, ##args)
 #endif
 
 #ifdef __KERNEL__
-#define MSG_SHORT(string, args...) do {                                 \
-	DBGPRINT(string, ##args);                                           \
-} while (0)
+#define MSG_SHORT(string, args...) DBGPRINT(string, ##args)
 #else
-#define MSG_SHORT(string, args...) do {                                 \
-	fprintf(stderr, string, ##args);                                    \
-} while (0)
+#define MSG_SHORT(string, args...) fprintf(stderr, string, ##args)
 #endif
 
 // QP = Quick Print
@@ -115,9 +107,8 @@
 #endif
 
 #ifdef __KERNEL__
-#define HexDump(from_addr, len) do {                                    \
-	print_hex_dump_bytes(" ", DUMP_PREFIX_ADDRESS, from_addr, len);     \
-} while (0)
+#define HexDump(from_addr, len)   \
+	print_hex_dump_bytes(" ", DUMP_PREFIX_ADDRESS, from_addr, len)
 #endif
 #else				/* #ifdef DEBUG */
 #define MSG(string, args...)
@@ -132,15 +123,15 @@
  * as required.
  * Inspired from raspberry pi kernel src: arch/arm/mm/init.c:MLM()
  */
-#define SHOW_DELTA_b(low, hi) (low), (hi), ((hi) - (low))
-#define SHOW_DELTA_K(low, hi) (low), (hi), (((hi) - (low)) >> 10)
-#define SHOW_DELTA_M(low, hi) (low), (hi), (((hi) - (low)) >> 20)
-#define SHOW_DELTA_G(low, hi) (low), (hi), (((hi) - (low)) >> 30)
-#define SHOW_DELTA_MG(low, hi) (low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30)
+#define SHOW_DELTA_b(low, hi) ((low), (hi), ((hi) - (low)))
+#define SHOW_DELTA_K(low, hi) ((low), (hi), (((hi) - (low)) >> 10))
+#define SHOW_DELTA_M(low, hi) ((low), (hi), (((hi) - (low)) >> 20))
+#define SHOW_DELTA_G(low, hi) ((low), (hi), (((hi) - (low)) >> 30))
+#define SHOW_DELTA_MG(low, hi) ((low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30))
 #if (BITS_PER_LONG == 64)
-#define SHOW_DELTA_MGT(low, hi) (low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30), (((hi) - (low)) >> 40)
+#define SHOW_DELTA_MGT(low, hi) ((low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30), (((hi) - (low)) >> 40))
 #else // 32-bit
-#define SHOW_DELTA_MGT(low, hi) (low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30)
+#define SHOW_DELTA_MGT(low, hi) ((low), (hi), (((hi) - (low)) >> 20), (((hi) - (low)) >> 30))
 #endif
 
 #ifdef __KERNEL__
@@ -270,10 +261,9 @@ static inline void beep(int what)
 	for (for_index = 0; for_index < loop_count; for_index++) {             \
 		beep((val));                                                       \
 		c++;                                                               \
-		for (inner_index = 0; inner_index < HZ; inner_index++) {           \
-			for (m = 0; m < 50; m++);                                      \
-			x = inner_index / 2;                                           \
-		}                                                                  \
+		for (inner_index = 0; inner_index < HZ; inner_index++)            \
+			for (m = 0; m < 50; m++)                                 \
+				x = inner_index / 2;                             \
 	}                                                                      \
 	/*printf("c=%d\n",c);*/                                                \
 }
@@ -288,7 +278,7 @@ static inline void beep(int what)
  *
  * Typical usage pattern:
  *	u64 t1, t2;
- * 	t1 = ktime_get_real_ns();
+ *	t1 = ktime_get_real_ns();
  *	[ ... code whose time u want to measure ... ]
  *	t2 = ktime_get_real_ns();
  *	SHOW_DELTA(t2, t1);
@@ -309,22 +299,22 @@ make[2]: *** [scripts/Makefile.modpost:123: ...ds3231_i2c_drv/try/Module.symvers
 #include <linux/jiffies.h>
 #include <linux/ktime.h>
 #define SHOW_DELTA(later, earlier)  do {    \
-    if (time_after((unsigned long)later, (unsigned long)earlier)) { \
+if (time_after((unsigned long)later, (unsigned long)earlier)) { \
 	s64 delta_ns = ktime_to_ns(ktime_sub(later, earlier));      \
-        pr_info("delta: %lld ns", delta_ns);       \
-        if (delta_ns/1000 >= 1)                    \
-            pr_cont(" (~ %lld us", delta_ns/1000);   \
-        if (delta_ns/1000000 >= 1)                 \
-            pr_cont(" ~ %lld ms", delta_ns/1000000); \
-        if (delta_ns/1000 >= 1)                    \
-            pr_cont(")\n");                    \
-    } else  \
-        pr_warn("SHOW_DELTA(): *invalid* earlier > later? (check order of params)\n");  \
+	pr_info("delta: %lld ns", delta_ns);       \
+	if (delta_ns/1000 >= 1)                    \
+		pr_cont(" (~ %lld us", delta_ns/1000);   \
+	if (delta_ns/1000000 >= 1)                 \
+		pr_cont(" ~ %lld ms", delta_ns/1000000); \
+	if (delta_ns/1000 >= 1)                    \
+		pr_cont(")\n");                    \
+} else  \
+	pr_warn("SHOW_DELTA(): *invalid* earlier > later? (check order of params)\n");  \
 } while (0)
 #else   // 32-bit
 	/* ktime_sub() not supported on 32-bit */
 #define SHOW_DELTA(later, earlier)  \
-	pr_warn("SHOW_DELTA(): ktime_sub() not supported on 32-bit\n");
+	pr_warn("SHOW_DELTA(): ktime_sub() not supported on 32-bit\n")
 #endif
 #endif   /* #ifdef __KERNEL__ */
 #endif   /* #ifndef __LKP_CONVENIENT_H__ */
