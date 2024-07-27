@@ -71,6 +71,14 @@ These are the Linux platforms upon which the book's codebase has been developed 
  - page 85, 86:
     - In the section *Locating the kernel modules within the kernel source*, it's mentioned that modules always have a .ko suffix. While usually true, a config setting can force modules to compressed (typically via ZSTD), thus making the name /lib/modules/<...>/foo.ko**.zst** and not foo.ko. This ZSTD module compression has been added [from 5.13](https://www.phoronix.com/news/Linux-5.13-Zstd-Modules), and some distros might enable it to be the default. If you prefer uncompressed modules (as the book often assumes), you can set module compression to 'none' via make menuconfig > Enable loadable module support > Module compression mode (None). (Thanks to @redbilledpanda @GitHub for pointing this out!)
 
+ - page 197:
+    - In the command-box under this line: "1.
+Attempt the build (for a second time) with the make command appropriate for cross-compilation:", the command to cross-compile is mistakenly shown for the 32-bit build (aka 1st Ed!); so, replace the command <br>
+    `$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-` <br>
+with<br>
+    `$ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-`
+
+
  - page 264:
     - Added the ch6/countem2.sh Bash script to the repo; it complements the ch6/countem.sh script, adding on a few details
 
