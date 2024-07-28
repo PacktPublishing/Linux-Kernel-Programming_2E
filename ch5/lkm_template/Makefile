@@ -35,9 +35,12 @@
 # This enables you to use this Makefile as a template; just update this variable!
 # As well, the MYDEBUG variable (see it below) can be set to 'y' or 'n' (no being
 # the default)
-FNAME_C := lkm_template
+FNAME_C ?= lkm_template
 ifeq ($(FNAME_C),)
-  $(error ERROR: you Must set the FNAME_C variable in the Makefile)
+  $(error ERROR: you Must pass the C file like this: \
+  make FNAME_C=csrc-filename-without-.c target-name)
+else ifneq ("$(origin FNAME_C)", "command line")
+  $(info FNAME_C=$(FNAME_C))
 endif
 #------------------------------------------------------------------
 
@@ -100,9 +103,8 @@ ifeq (${MYDEBUG}, y)
 else
   ccflags-y   += -UDEBUG
 endif
-# We always keep the dynamic debug facility enabled; this allows us to turn
-# dynamically turn on/off debug printk's later... To disable it simply comment
-# out the following line
+# We always keep the dynamic debug facility enabled; this allows us to dynamically
+# turn on/off debug printk's later... To disable it simply comment out the following line
 ccflags-y   += -DDYNAMIC_DEBUG_MODULE
 KMODDIR ?= /lib/modules/$(shell uname -r)
 
