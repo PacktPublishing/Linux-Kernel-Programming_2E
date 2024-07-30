@@ -199,6 +199,7 @@ cpu_ctrl_show()
   [[ ! -z "${cpu_max}" ]] &&         printf "      %-41s   : %s\n" "cpu.max" "${cpu_max}"
   [[ ! -z "${cpu_pressure}" ]] &&    printf "      %-39s   : %s\n" "cpu.pressure" "${cpu_pressure}"
  fi
+ return 0
 }
 
 # Params:
