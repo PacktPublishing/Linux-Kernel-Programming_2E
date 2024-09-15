@@ -56,7 +56,8 @@ endif
 # your box to the appropriate path to the kernel source tree for that arch.
 ifeq ($(ARCH),arm)
   # *UPDATE* 'KDIR' below to point to the ARM Linux kernel source tree on your box
-  KDIR ?= ~/arm_prj/kernel/linux
+  export KDIR := /home/kaiwan/big/kernels/bb-kernel/KERNEL
+#  KDIR ?= ~/arm_prj/kernel/linux
 else ifeq ($(ARCH),arm64)
   # *UPDATE* 'KDIR' below to point to the ARM64 (Aarch64) Linux kernel source
   # tree on your box
@@ -109,7 +110,7 @@ ccflags-y   += -DDYNAMIC_DEBUG_MODULE
 KMODDIR ?= /lib/modules/$(shell uname -r)
 
 # Gain access to kernel configs
-include $(KDIR)/.config
+-include $(KDIR)/.config
 
 # Strip the module? Note:
 # a) Only strip debug symbols else it won't load correctly
