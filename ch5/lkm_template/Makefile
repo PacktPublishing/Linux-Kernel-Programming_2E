@@ -101,15 +101,15 @@ ifeq (${MYDEBUG}, y)
   ccflags-y   += -DDEBUG -g -ggdb -gdwarf-4 -Wall -fno-omit-frame-pointer -fvar-tracking-assignments
   DBG_STRIP := n
 else
-  ccflags-y   += -UDEBUG
+  ccflags-y   += -UDEBUG -Wall
 endif
 # We always keep the dynamic debug facility enabled; this allows us to dynamically
 # turn on/off debug printk's later... To disable it simply comment out the following line
 ccflags-y   += -DDYNAMIC_DEBUG_MODULE
 KMODDIR ?= /lib/modules/$(shell uname -r)
 
-# Gain access to kernel configs
-include $(KDIR)/.config
+# Gain access to kernel configs (the '-' says 'continue on error')
+-include $(KDIR)/.config
 
 # Strip the module? Note:
 # a) Only strip debug symbols else it won't load correctly
@@ -147,6 +147,13 @@ install:
 	if [ "${DBG_STRIP}" = "y" ]; then \
            sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko ; \
 	fi
+dt:
+ifeq (,$(shell which dtc))
+	$(error ERROR: install the DTC compiler first)
+endif
+	@echo "--- compiles the Device Tree Blob (DTB) from the DTS (ARM/PPC/etc) ---"
+	dtc -@ -I dts -O dtb -o $(FNAME_C).dtb $(FNAME_C).dts
+	# DTBO - Device Tree Blob Overlay
 nsdeps:
 	@echo "--- nsdeps (namespace dependencies resolution; for possibly importing ns's) ---"
 	make -C $(KDIR) M=$(PWD) nsdeps
@@ -156,7 +163,7 @@ clean:
 	@echo
 	make -C $(KDIR) M=$(PWD) clean
 # from 'indent'; comment out if you want the backup kept
-	rm -f *~
+	rm -f *~ *.dtb
 
 # Any usermode programs to build? Insert the build target(s) below
 
@@ -267,6 +274,7 @@ help:
 	@echo 'typing "make" or "all" target : builds the kernel module object (the .ko)'
 	@echo 'install     : installs the kernel module(s) to INSTALL_MOD_PATH (default here: /lib/modules/$(shell uname -r)/).'
 	@echo '            : Takes care of performing debug-only symbols stripping iff MYDEBUG=n and not using module signature'
+	@echo 'dt          : compiles the Device Tree Blob (DTB) from the DTS file (applicable to ARM, PPC, RISC-V, etc)'
 	@echo 'nsdeps      : namespace dependencies resolution; for possibly importing namespaces'
 	@echo 'clean       : cleanup - remove all kernel objects, temp files/dirs, etc'
 
@@ -296,4 +304,10 @@ help:
 	@echo 'tarxz-pkg  : tar and compress the LKM source files as a tar.xz into the dir above; allows one to transfer and build the module on another system'
 	@echo '        TIP: When extracting, to extract into a directory with the same name as the tar file, do this:'
 	@echo '              tar -xvf ${FNAME_C}.tar.xz --one-top-level'
+	@echo '--- Tips ---'
+	@echo '  If the build fails with a (GCC compiler failure) message like'
+	@echo '   unrecognized command-line option ‘-ftrivial-auto-var-init=zero’'
+	@echo '  it's likely that you're using an older GCC. Try installing gcc-12 (or later),'
+	@echo '  change this Makefile CC variable to "gcc-12" (or whatever) and retry'
+	@echo
 	@echo 'help       : this help target'
