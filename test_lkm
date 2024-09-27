@@ -37,7 +37,8 @@ MAKEFILE_FAIL_MSG="The Makefile doesn't have targets corresponding to the 'bette
 
 failit()
 {
-echo "${FAIL_MSG}" >&2
+# highlight the failure msg in red bg white fg!
+echo -e "\e[1m\e[41m${FAIL_MSG} \e[0m" >&2
 echo "message: $*" >&2
 return 1
 }
