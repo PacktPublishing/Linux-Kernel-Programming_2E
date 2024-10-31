@@ -16,6 +16,8 @@
 # Please refer to it!
 #
 # TODO
+#  [ ] -p ^ -t; if -t specified, it subsumes -p so no need to show -p stuff
+#     [ ] -t: show thread names correctly
 #  [ ] Controller interface files - display
 #  [ ] Have it work with lightweight 'busybox'-type 'ps' as well...
 #  [ ] color / bold

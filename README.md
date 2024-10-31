@@ -82,18 +82,40 @@ with<br>
  - page 264:
     - Added the ch6/countem2.sh Bash script to the repo; it complements the ch6/countem.sh script, adding on a few details
 
-- Ch 13, *Figure 13.14* - the circled numbers mentioned in the book are missing. The reason: I eventually removed the circled numbers from *Figure 13.14* as it was already a bit too crowded, but inadvertently missed updating the text; apologies, my mistake! So, **please ignore** the following:
+- Ch 13
+    - *Sincere apologies!* I've made several (small-ish) mistakes here! (please read on...)
+    - *Figure 13.14* - the circled numbers mentioned in the book are missing. The reason: I eventually removed the circled numbers from *Figure 13.14* as it was already a bit too crowded, but inadvertently missed updating the text; apologies, my mistake! So, **please ignore** the following:
+        - page 716:
+            - The sentences " (See *Figure 13.14* and the (red) circle with 2 in it.)", "(See *Figure 13.14* and the (red) circle with 3 in it.)" and " (See *Figure 13.14* and the (red) circle with 3 in it.)".
+        - page 718:
+            - The sentence " (See *Figure 13.14*, with the (red) circles with 4 and 5 in them, respectively.".
+        - page 720:
+            - The phrases "(see *Figure 13.14* and the (red) circle with 1 in it)".
+        - page 721:
+            - The phrase " (see *Figure 13.14* and the (red) circle with 2 in it)" and "(see *Figure 13.14* and the (red) circle with 3 in it)".
+        - page 722:
+            - The phrase "(see *Figure 13.14* and the (red) circles with 4 and 5 in them, respectively)".
+
     - page 716:
-        - The sentences " (See *Figure 13.14* and the (red) circle with 2 in it.)", "(See *Figure 13.14* and the (red) circle with 3 in it.)" and " (See *Figure 13.14* and the (red) circle with 3 in it.)".
+        - "*Figure 13.12: A writer thread comes along and creates a copy of the data object (notice that it’s begun to modify its content); the vertical line – once a writer enters – separates the old
+RCU readers (1, 2, and 3) from the new one (4)*" is incorrect. It should read:   
+"*Figure 13.12: A writer thread comes along and creates a copy of the data object (notice that
+it’s begun to modify its content)*"
+        - The phrases "and any subsequent “new” reader (RCU readers 4)", "and any subsequent “new” reader (like RCU readers 4 and 5 in *Figure 13.13*)" should be:  
+         "and any subsequent “new” reader (RCU readers 5)", "and any subsequent “new” reader (like RCU reader 5 in *Figure 13.13*)"
+    - page 717:
+        - "*Figure 13.13: The pre-existing RCU readers (1 to 3) refer to the old reality; the writer and new readers (4 and 5) see the new reality*" should be:  
+"*Figure 13.13: The pre-existing RCU readers (1 to 4) refer to the old reality; the writer and
+new reader (5) see the new reality*"
     - page 718:
-        - The sentence " (See *Figure 13.14*, with the (red) circles with 4 and 5 in them, respectively.".
-    - page 720:
-        - The phrases "(see *Figure 13.14* and the (red) circle with 1 in it)".
-    - page 721:
-        - The phrase " (see *Figure 13.14* and the (red) circle with 2 in it)" and "(see *Figure 13.14*
-and the (red) circle with 3 in it)".
-    - page 722:
-        - The phrase "(see *Figure 13.14* and the (red) circles with 4 and 5 in them, respectively)".
+        - The sentence "(In this particular example, even the new RCU reader 4 has finished and context-switched; it can happen. Note though that it’s reading the new object.)" is just wrong. RCU reader 4 is an 'old' reader
+    - page 719:
+        - "The point by which all the older (pre-existing) RCU readers (here, 1 to 3) finish and context-switch off their core is shown via the thick vertical line. (In this particular example, even the new RCU reader 4 has finished and context-switched; it can happen. Note though that it’s reading the new object.)" should read:  
+"At some point all the older (pre-existing) RCU readers (here, 1 to 4) finish and context-switch off their cores."
+    - page 726:
+        - whoops, fix the memory leak!
+            - `if (!gd_new) { spin_unlock(&gdata_lock); return -ENOMEM; }`
+<br>
 
 ## Know more on the Discord server <img alt="Coding" height="25" width="32"  src="https://cliply.co/wp-content/uploads/2021/08/372108630_DISCORD_LOGO_400.gif">
 You can get more engaged on the discord server for more latest updates and discussions in the community at [Discord](https://packt.link/SecNet)

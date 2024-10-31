@@ -81,7 +81,7 @@ static spinlock_t gdata_lock; /* spinlock to protect writers.
 	* modify/update it.
 	* If the copy includes the spinlock (which it will) it won't work, as
 	* we then violate the contract, using different locks...
-	* Trying this, in fact, createsan interesting bug!
+	* Trying this, in fact, creates an interesting bug!
 	* ...
 	* pvqspinlock: lock 0xffff9e... has corrupted value 0x0!
 	* ...
@@ -120,7 +120,7 @@ static int writer(void)
 	struct global_data *gd, *gd_new;
 	long x = 129780, y = 775952, z = 920;
 
-	// The write-side critical section spans from t1 to t2; writes run exclusively
+	/* The write-side critical section spans from t1 to t2; writes run exclusively */
 	spin_lock(&gdata_lock);	//--- t1
 	gd = rcu_dereference(gdata); /* safely fetch an RCU protected pointer which
 				      * can then be dereferenced (and used) */
@@ -129,8 +129,10 @@ static int writer(void)
 	 * work on it while pre-existing RCU readers work on the original
 	 */
 	gd_new = kzalloc(sizeof(struct global_data), GFP_ATOMIC);
-	if (!gd_new)
+	if (!gd_new) {
+		spin_unlock(&gdata_lock);
 		return -ENOMEM;
+	}
 
 	*gd_new = *gd;	  // copy the content...
 	gd_new->lat = x;  // ...and update it as required
@@ -144,10 +146,11 @@ static int writer(void)
 			*/
 	spin_unlock(&gdata_lock);	//--- t2
 
-	/* Now have the writer wait, block, for an RCU grace period to elapse,
+	/* Now have the writer wait (block) for an RCU grace period to elapse,
 	 * and then free the just-alloc'ed data object. Waiting this way ensures
 	 * that no pre-existing RCU readers remain, that is, they've all finished
-	 * their reads.
+	 * their reads, and only then does the writer free the old data object
+	 * (and thus sidesteps a potential UAF bug!)
 	 */
 	synchronize_rcu();
 	kfree(gd_new);

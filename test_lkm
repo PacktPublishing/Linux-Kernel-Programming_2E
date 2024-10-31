@@ -4,7 +4,9 @@
 # NOTE:
 # - we ASSUME a file named Makefile will be present within the LKM dir
 # - currently, there's no automated way to pass module parameters
-#
+# - nice bash colo[u]r values can be found here:
+#   https://gist.github.com/acook/1199000
+
 # (c) Kaiwan NB, kaiwanTECH
 # License: MIT
 
@@ -37,7 +39,8 @@ MAKEFILE_FAIL_MSG="The Makefile doesn't have targets corresponding to the 'bette
 
 failit()
 {
-echo "${FAIL_MSG}" >&2
+# highlight the failure msg in red bg white fg!
+echo -e "\e[1m\e[41m${FAIL_MSG} \e[0m" >&2
 echo "message: $*" >&2
 return 1
 }
@@ -195,7 +198,7 @@ echo "${ECHO_PFX} make: errors=${make_err} warnings=${make_warns}" #| tee -a ${R
 }
 #echo ${LINE}
 
-grep "warning:" ${TMP_BUILD} && echo "${WARNING_BUILD_MSG}"
+grep "warning:" ${TMP_BUILD} && echo -e "\e[1m\e[1;33m${WARNING_BUILD_MSG} \e[0m"
 #cat ${TMP_BUILD}
 #rm -f ${TMP_BUILD}
   return 0
@@ -231,7 +234,8 @@ sudo rmmod ${LKM} 2>/dev/null
 [[ ${QUIET} -eq 1 ]] && sudo dmesg -C || sudo dmesg -c
 make clean >/dev/null 2>&1
 
-echo "${SUCCESS_MSG}"
+echo -e "\e[1m\e[42m${SUCCESS_MSG} \e[0m" >&2
+#echo "${SUCCESS_MSG}"
 return 0
 }
 
@@ -331,7 +335,8 @@ do
 		continue
 	fi
 	[[ $i -ne 1 ]] && echo
-	echo "====================== $i: LKM ${KDIR} ======================"
+#echo -e "\e[1m\e[41m${FAIL_MSG} \e[0m" >&2
+	echo -e "\e[1m\e[43m====================== $i: LKM ${KDIR} ====================== \e[0m"
 	cd ${TOP}
 	testlkm ${KDIR} || true
 	let i=i+1

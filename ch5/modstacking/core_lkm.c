@@ -29,6 +29,16 @@
 #define THE_ONE   0xfedface
 MODULE_LICENSE("Dual MIT/GPL");
 
+/* Declare prototypes for functions that aren't marked static,
+ * to prevent compiler warnings
+ */
+void llkd_sysinfo2(void);
+#if (BITS_PER_LONG == 32)
+u32 get_skey(int);
+#else				// 64-bit
+u64 get_skey(int);
+#endif
+
 int exp_int = 200;
 EXPORT_SYMBOL_GPL(exp_int);
 
