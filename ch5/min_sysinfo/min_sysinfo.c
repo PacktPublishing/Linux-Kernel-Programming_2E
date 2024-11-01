@@ -29,6 +29,11 @@ MODULE_DESCRIPTION("LKP2E book:ch5/min_sysinfo: print some minimal system info")
 MODULE_LICENSE("Dual MIT/GPL");
 MODULE_VERSION("0.2");
 
+int my_snprintf_lkp(char *buf, size_t maxsize, const char *fmt, ...);
+void show_sizeof(void);
+void llkd_sysinfo2(void);
+void llkd_sysinfo(void);
+
 /*
  * Simple wrapper over the snprintf() - a bit more security-aware.
  * Checks for and warns on overflow.
