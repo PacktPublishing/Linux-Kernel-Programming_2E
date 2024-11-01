@@ -263,9 +263,9 @@ show_cg_dtl()
   # A CG can also be 'frozen' via this interface file (cgroup.events)
   # Or by writing 1 to cgroup.freeze
 
-  core_cg_files_show ${cg}
-  cpu_ctrl_show ${cg}
-  mem_ctrl_show ${cg}
+  core_cg_files_show ${cg} || true
+  cpu_ctrl_show ${cg} || true
+  mem_ctrl_show ${cg} || true
   ## TODO
   # Display the cg io, irq, pids interface files...
   ##
@@ -487,7 +487,7 @@ do
     continue
   }
 
-  show_cg_dtl "${cg}"
+  show_cg_dtl "${cg}" || true
   [[ $? -eq 0 ]] && {
     echo
     set -e
