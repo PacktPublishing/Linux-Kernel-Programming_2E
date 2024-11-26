@@ -98,7 +98,7 @@ all:
 	@${CC} --version|head -n1
 	@echo
 	make -C $(KDIR) M=$(PWD) modules
-	$(shell [ "${MYDEBUG}" != "y" ] && ${STRIP} --strip-debug ./${FNAME_C}.ko)
+	$(shell [ "${MYDEBUG}" != "y" ] && ${STRIP} --strip-debug ./lkm_${FNAME_C}.ko)
 install:
 	@echo
 	@echo "--- installing ---"
@@ -109,8 +109,8 @@ install:
 	sudo make -C $(KDIR) M=$(PWD) modules_install
 	@echo " sudo depmod"
 	sudo depmod
-	@echo " [If !debug, stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
-	$(shell if [ "${MYDEBUG}" != "y" ]; then sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko; fi)
+	@echo " [If !debug, stripping debug info from ${KMODDIR}/extra/lkm_${FNAME_C}.ko]"
+	$(shell if [ "${MYDEBUG}" != "y" ]; then sudo ${STRIP} --strip-debug ${KMODDIR}/extra/lkm_${FNAME_C}.ko; fi)
 nsdeps:
 	@echo "--- nsdeps (namespace dependencies resolution; for possibly importing ns's) ---"
 	make -C $(KDIR) M=$(PWD) nsdeps

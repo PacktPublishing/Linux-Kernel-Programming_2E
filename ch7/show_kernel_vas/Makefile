@@ -131,7 +131,7 @@ all:
 	@echo
 	make -C $(KDIR) M=$(PWD) modules
 	if [ "${DBG_STRIP}" = "y" ]; then \
-	   ${STRIP} --strip-debug ${FNAME_C}.ko ; \
+	   ${STRIP} --strip-debug show_${FNAME_C}.ko ; \
 	fi
 install:
 	@echo
@@ -142,9 +142,9 @@ install:
 	@echo " [Now for the 'sudo make install' ]"
 	sudo make -C $(KDIR) M=$(PWD) modules_install
 	sudo depmod
-	@echo " [If !debug and !(module signing), stripping debug info from ${KMODDIR}/extra/${FNAME_C}.ko]"
+	@echo " [If !debug and !(module signing), stripping debug info from ${KMODDIR}/extra/show_${FNAME_C}.ko]"
 	if [ "${DBG_STRIP}" = "y" ]; then \
-           sudo ${STRIP} --strip-debug ${KMODDIR}/extra/${FNAME_C}.ko ; \
+           sudo ${STRIP} --strip-debug ${KMODDIR}/extra/show_${FNAME_C}.ko ; \
 	fi
 nsdeps:
 	@echo "--- nsdeps (namespace dependencies resolution; for possibly importing ns's) ---"
