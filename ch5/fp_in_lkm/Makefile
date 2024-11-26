@@ -107,7 +107,7 @@ ccflags-y   += -DDYNAMIC_DEBUG_MODULE
 KMODDIR ?= /lib/modules/$(shell uname -r)
 
 # Gain access to kernel configs
-include $(KDIR)/.config
+--include $(KDIR)/.config
 
 # Strip the module? Note:
 # a) Only strip debug symbols else it won't load correctly
