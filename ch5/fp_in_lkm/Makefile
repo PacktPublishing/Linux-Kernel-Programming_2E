@@ -100,6 +100,8 @@ ifeq (${MYDEBUG}, y)
 else
   ccflags-y   += -UDEBUG
 endif
+ccflags-remove-y += -mgeneral-regs-only
+
 # We always keep the dynamic debug facility enabled; this allows us to turn
 # dynamically turn on/off debug printk's later... To disable it simply comment
 # out the following line

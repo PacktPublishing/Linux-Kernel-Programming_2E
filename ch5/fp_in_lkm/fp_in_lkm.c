@@ -20,8 +20,15 @@
 
 #include <linux/init.h>
 #include <linux/module.h>
-//#include <linux/kernel.h>
+#ifdef CONFIG_X86
 #include <asm/fpu/api.h>
+#endif
+
+#ifdef CONFIG_ARM64
+#include <asm/neon.h>
+#define kernel_fpu_begin kernel_neon_begin
+#define kernel_fpu_end kernel_neon_end
+#endif
 
 MODULE_AUTHOR("<insert your name here>");
 MODULE_DESCRIPTION("LKP2E book:ch5/fp_in_lkm: no performing FP \
