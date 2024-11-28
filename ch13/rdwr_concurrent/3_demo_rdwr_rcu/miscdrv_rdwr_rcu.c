@@ -153,7 +153,7 @@ static int writer(void)
 	 * (and thus sidesteps a potential UAF bug!)
 	 */
 	synchronize_rcu();
-	kfree(gd_new);
+	kfree(gd);
 
 	return 0;
 }
@@ -265,7 +265,6 @@ static int __init miscdrv_rdwr_rcu_init(void)
 }
 static void __exit miscdrv_rdwr_rcu_exit(void)
 {
-	kfree(gdata);
 	misc_deregister(&lkp_miscdev);
 	pr_info("LKP misc driver %s for rdwr with RCU sync demo deregistered, bye\n", lkp_miscdev.name);
 }
