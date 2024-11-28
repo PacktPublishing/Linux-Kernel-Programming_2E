@@ -110,11 +110,13 @@ new reader (5) see the new reality*"
     - page 718:
         - The sentence "(In this particular example, even the new RCU reader 4 has finished and context-switched; it can happen. Note though that it’s reading the new object.)" is just wrong. RCU reader 4 is an 'old' reader
     - page 719:
-        - "The point by which all the older (pre-existing) RCU readers (here, 1 to 3) finish and context-switch off their core is shown via the thick vertical line. (In this particular example, even the new RCU reader 4 has finished and context-switched; it can happen. Note though that it’s reading the new object.)" should read:  
+        - "The point by which all the older (pre-existing) RCU readers (here, 1 to 3) finish and context-switch off their core is shown via the thick vertical line. (In this particular example, even the new RCU reader 4 has finished and context-switched; it can happen. Note though that it’s reading the new object.)" should read: 
 "At some point all the older (pre-existing) RCU readers (here, 1 to 4) finish and context-switch off their cores."
     - page 726:
         - whoops, fix the potential deadlock bug!
             - `if (!gd_new) { *spin_unlock(&gdata_lock);* return -ENOMEM; }`
+        - whoops again! `fix:writer makes copy for RCU & should free the old object only`
+            - see commit # `70dd634`
 <br>
 
 ## Know more on the Discord server <img alt="Coding" height="25" width="32"  src="https://cliply.co/wp-content/uploads/2021/08/372108630_DISCORD_LOGO_400.gif">
