@@ -117,6 +117,7 @@ new reader (5) see the new reality*"
             - `if (!gd_new) { *spin_unlock(&gdata_lock);* return -ENOMEM; }`
         - whoops again! `fix:writer makes copy for RCU & should free the old object only`
             - see commit # `70dd634`
+            - as well, in *Figure 13.16* right side bottom: replace the `kfree(gd_new);` with `kfree(gd);`
 <br>
 
 ## Know more on the Discord server <img alt="Coding" height="25" width="32"  src="https://cliply.co/wp-content/uploads/2021/08/372108630_DISCORD_LOGO_400.gif">
