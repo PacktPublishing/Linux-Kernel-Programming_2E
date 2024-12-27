@@ -35,9 +35,9 @@ total_kthrds=$(cat ${TMPT}|awk '{print $10}'|grep "^\["|wc -l)
 printf "3. Total # of kernel threads alive                   = %9d\n" ${total_kthrds}
 printf " (each kthread will have a kernel-mode stack)\n"
 total_uthrds=$((${total_thrds}-${total_kthrds}))
-printf "4. Thus, total # of user mode threads = (2) - (3)    = %9d\n" ${total_uthrds}
+printf "4. Thus, total # of user mode threads  = (2) - (3)   = %9d\n" ${total_uthrds}
 printf " (each uthread will have both a user and kernel-mode stack)\n"
-printf "5. Thus, total # of kernel-mode stacks = (3) + (4)*2 = %9d\n" $((${total_kthrds}+(${total_uthrds}*2)))
+printf "5. Thus, total # of kernel-mode stacks = (3) + (4)   = %9d\n" $((${total_kthrds}+${total_uthrds}))
 
 rm -f ${TMPP} ${TMPT}
 exit 0

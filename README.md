@@ -81,6 +81,7 @@ with<br>
 
  - page 264:
     - Added the ch6/countem2.sh Bash script to the repo; it complements the ch6/countem.sh script, adding on a few details
+    - An error in the ch6/countem2.sh script has now (27dec2024) been fixed (fix calc of # of kernel-mode stacks in memory; feeing sheepish again!)
 
 - Ch 13
     - *Sincere apologies!* I've made several (small-ish) mistakes here! (please read on...)
