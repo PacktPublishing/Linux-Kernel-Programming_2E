@@ -359,7 +359,7 @@ July 5, 2023](https://sysprog21.github.io/lkmpg/)
 [\[Top\]](https://github.com/PacktPublishing/Linux-Kernel-Programming_2E/blob/main/Further_Reading.md#further-reading)
 
 ## Chapter 6, Kernel Internals Essentials - Processes and Threads - Further Reading
-- Book: [Hands-On System Programming with Linux", Kaiwan N Billimoria, Packt](https://www.packtpub.com/networking-and-servers/hands-system-programming-linux). Prerequisites to this chapter (essential reading, really):
+- Book: [Hands-On System Programming with Linux", Kaiwan N Billimoria, Packt](https://www.packtpub.com/en-us/product/hands-on-system-programming-with-linux-9781788996747). Prerequisites to this chapter (essential reading, really):
 	- Ch 1 : Linux System Architecture
 	- Ch 2 : Virtual Memory
 - [Process Virtual address space (VAS) on Wikipedia](https://en.wikipedia.org/wiki/Virtual_address_space)
