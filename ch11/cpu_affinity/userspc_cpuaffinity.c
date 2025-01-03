@@ -24,6 +24,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <sys/sysinfo.h>
 #include <sched.h>
 #include "../../convenient.h"
 
@@ -122,8 +123,6 @@ static int set_cpu_affinity(pid_t pid, unsigned long bitmask)
 
 int main (int argc, char **argv)
 {
-	FILE *fp;
-	char s[9];
 	pid_t pid = getpid();
 	unsigned long new_cpumask = 0x0;
 
@@ -136,18 +135,7 @@ int main (int argc, char **argv)
 		exit(EXIT_SUCCESS);
 	}
 
-	fp = popen("nproc", "r");
-	if (!fp) {
-		fprintf(stderr, "%s: popen failed; can't detect number of cores, aborting...\n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
-	if (!fgets(s, sizeof(s), fp)) {
-		fprintf(stderr, "%s: fgets failed to read data; can't detect number of cores, aborting...\n", argv[0]);
-		pclose(fp);
-		exit(EXIT_FAILURE);
-	}
-	pclose(fp);
-	numcores = atoi(s);
+	numcores = get_nprocs();
 	printf("Detected %d CPU cores [for this process %s:%d]\n", numcores, argv[0], getpid());
 	/* we say 'for this process ...' as the number of cores available to processes can
 	 * change within a container
