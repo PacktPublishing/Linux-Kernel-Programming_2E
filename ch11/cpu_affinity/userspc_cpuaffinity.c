@@ -70,9 +70,9 @@ static void disp_cpumask(pid_t pid, cpu_set_t *cpumask, unsigned int ncores)
 
 	printf("core#  |");
 	for (i=ncores-1; i>=0; i--)
-		printf("%3d|", i); /* [0-999] cores; should do :-)
+		printf("%3d|", i); /* [1-999] cores; should do :-)
 		                    * If not ok, you're too high-end for us :D
-							*/
+				    */
 	printf("\n");
 	print_ruler_line(ncores);
 
@@ -136,7 +136,7 @@ int main (int argc, char **argv)
 	}
 
 	numcores = get_nprocs();
-	printf("Detected %d CPU cores [for this process %s:%d]\n", numcores, argv[0], getpid());
+	printf("Detected %d CPU cores system-wide\n", numcores);
 	/* we say 'for this process ...' as the number of cores available to processes can
 	 * change within a container
 	 */
