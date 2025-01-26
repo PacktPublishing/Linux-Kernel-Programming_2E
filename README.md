@@ -121,6 +121,7 @@ new reader (5) see the new reality*"
             - as well, in *Figure 13.16* right side bottom: replace the `kfree(gd_new);` with `kfree(gd);`
     - page 752:
         - The timeline for kthread 0 instead of "Take lockA -> perform work -> (Try and) take lockA" should be "Take lockA -> perform work -> (Try and) take lockB" and for kthread 1 instead of "Take lockB -> perform work -> (Try and) take lockB" should be "Take lockB -> perform work -> (Try and) take lockA".
+        - The second 'DEADLOCK ... >' string should appear on the right side, under the right-side '< ... spins forever :' string (it's unfortunately has wrongly wrapped around)
 <br>
 
 ## Know more on the Discord server <img alt="Coding" height="25" width="32"  src="https://cliply.co/wp-content/uploads/2021/08/372108630_DISCORD_LOGO_400.gif">
