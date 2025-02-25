@@ -47,7 +47,7 @@ int add2tail(u64 v1, u64 v2, s8 achar, spinlock_t *lock)
 	 * Should we use GFP_KERNEL or GFP_ATOMIC here?
 	 * The former if in process context, else the latter.
 	 * Yes, BUT we can be in process ctx and still have been called
-	 * from an atomic state. So, bottom lne, only the *caller* knows.
+	 * from an atomic state. So, bottom line, *only the caller knows*.
 	 * Here, let's be safe, and use GFP_ATOMIC.
 	 */
 	mynode = kzalloc(sizeof(struct node), GFP_ATOMIC);
