@@ -70,7 +70,7 @@ obj-m          += ${FNAME_C}.o
 # generation of debug symbols, if so required. Also, realize that the DEBUG
 # macro is turned on by many CONFIG_*DEBUG* options; hence, we use a different
 # macro var name, MYDEBUG).
-MYDEBUG := n
+MYDEBUG := y
 ifeq (${MYDEBUG}, y)
 
 # https://www.kernel.org/doc/html/latest/kbuild/makefiles.html#compilation-flags
