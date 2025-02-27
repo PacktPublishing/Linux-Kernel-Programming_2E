@@ -441,7 +441,7 @@ Software Developer’s Manual. Volume 3 (3A, 3B & 3C): System Programming Guide]
 
 ## Chapter 8, Kernel Memory Allocation for Module Authors, Part 1 - Further Reading
 
-- Book: ['Hands-On System Programming with Linux', Kaiwan N Billimoria, Packt](https://www.packtpub.com/networking-and-servers/hands-system-programming-linux). Prerequisites to this chapter (essential reading, really):
+- Book: ['Hands-On System Programming with Linux', Kaiwan N Billimoria, Packt](https://www.packtpub.com/en-us/product/hands-on-system-programming-with-linux-9781788996747). Prerequisites to this chapter (essential reading, really):
 	- Ch 1 : Linux System Architecture
 	- Ch 2 : Virtual Memory
 - [Linux kernel documentation on memory management](https://www.kernel.org/doc/html/latest/core-api/index.html#memory-management)
