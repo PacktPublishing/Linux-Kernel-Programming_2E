@@ -31,7 +31,14 @@ trap 'pkill yes' INT QUIT
 pkill yes
 c=0
 echo "${name}: spawning a 'yes' process on ..."
-while [[ $c -lt $1 ]]
+
+cores2use=$1
+if [[ $1 == $NUMCORES ]]; then
+	echo "Leaving 1 core free for user interaction responsiveness, when $NUMCORES cores are requested"
+	cores2use=$(($1 - 1))
+fi
+
+while [[ $c -lt $cores2use ]]
 do
    echo "... CPU core #$c now ..."
    ${PFX}/exercise_cpu $c &
