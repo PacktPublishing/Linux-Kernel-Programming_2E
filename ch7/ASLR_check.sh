@@ -218,7 +218,7 @@ kernel_ASLR_check
 
 if [ $# -eq 1 ] ; then
 	if [ $1 -ne 0 -a $1 -ne 1 -a $1 -ne 2 ] ; then
-		fg red ; echo
+		fg_red ; echo
 		echo "${name}: set ASLR: invalid value (\"$1\"), aborting ..."
 		color_reset
 		exit 1
