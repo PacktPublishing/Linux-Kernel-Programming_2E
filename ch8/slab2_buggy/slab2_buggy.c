@@ -16,7 +16,7 @@
  * case, resulting in a kernel BUG.
  *
  * For details, please refer the book, Ch 8.
- * (This code was initially missing and added later to the book GitHub repo)
+ * (This code was initially missing and added later to the book GitHub repo.)
  */
 #define pr_fmt(fmt) "%s:%s(): " fmt, KBUILD_MODNAME, __func__
 #include <linux/init.h>
@@ -31,11 +31,13 @@ MODULE_VERSION("0.2");
 static int __init slab2_buggy_init(void)
 {
 	int num = 1024, x = 3;
-	static char *kptr; // static; is initialized to NULL
+	static char *kptr; // static var, thus initialized to NULL
 
 	while (x > 0) {
 		if (!kptr) {
 			kptr = kzalloc(num, GFP_KERNEL);
+			if (!kptr)
+				return -ENOMEM;
 			// [... work on the slab memory ...]
 			memset(kptr, x, num);
 		}
