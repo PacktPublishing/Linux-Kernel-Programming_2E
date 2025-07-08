@@ -83,6 +83,9 @@ with<br>
     - Added the ch6/countem2.sh Bash script to the repo; it complements the ch6/countem.sh script, adding on a few details
     - An error in the ch6/countem2.sh script has now (27dec2024) been fixed (fix calc of # of kernel-mode stacks in memory; feeing sheepish again!)
 
+- Ch 12
+    - Figure 12.7 : circled point #4 should read: "tB now unlocks; tA and *tC* 'fight' for the lock; ..."
+
 - Ch 13
     - *Sincere apologies!* I've made several (small-ish) mistakes here! (please read on...)
     - *Figure 13.14* - the circled numbers mentioned in the book are missing. The reason: I eventually removed the circled numbers from *Figure 13.14* as it was already a bit too crowded, but inadvertently missed updating the text; apologies, my mistake! So, **please ignore** the following:
