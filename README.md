@@ -85,6 +85,8 @@ with<br>
 
 - Ch 12
     - Figure 12.7 : circled point #4 should read: "tB now unlocks; tA and *tC* 'fight' for the lock; ..."
+    - Figure 12.12 : typo: "t5: interrupt (hardirq) handler finishes" should read:
+       "t7: interrupt (hardirq) handler finishes"
 
 - Ch 13
     - *Sincere apologies!* I've made several (small-ish) mistakes here! (please read on...)
