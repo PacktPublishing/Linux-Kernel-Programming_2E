@@ -61,16 +61,16 @@
 #undef USE_FTRACE_BUFFER
 
 #ifdef USE_FTRACE_BUFFER
-#define DBGPRINT(string, args...)                                       \
+#define DBGPRINT(string, args...)                          \
 	trace_printk(string, ##args)
 #else
-#define DBGPRINT(string, args...) do {                                  \
-	int USE_RATELIMITING = 1;                                           \
-	if (USE_RATELIMITING) {                                             \
-		pr_info_ratelimited(string, ##args);                            \
-	}                                                                   \
-	else                                                                \
-		pr_info(string, ##args);                                        \
+#define DBGPRINT(string, args...) do {                     \
+	int USE_RATELIMITING = 1;                          \
+	if (USE_RATELIMITING) {                            \
+		pr_info_ratelimited(string, ##args);       \
+	}                                                  \
+	else                                               \
+		pr_info(string, ##args);                   \
 } while (0)
 #endif
 #endif				/* #ifdef __KERNEL__ */
@@ -94,14 +94,14 @@
 
 #ifdef __KERNEL__
 #ifndef USE_FTRACE_BUFFER
-#define QPDS do {                                                       \
-	MSG("\n");                                                          \
-	dump_stack();                                                       \
+#define QPDS do {                 \
+	MSG("\n");                \
+	dump_stack();             \
 } while (0)
 #else
-#define QPDS do {                                                       \
-	MSG("\n");                                                          \
-	trace_dump_stack();                                                 \
+#define QPDS do {                 \
+	MSG("\n");                \
+	trace_dump_stack();       \
 } while (0)
 #endif
 #endif
@@ -165,21 +165,34 @@
 #include <linux/sched.h>
 #include <linux/interrupt.h>
 
-#define PRINT_CTX() do {                                                      \
-	int PRINTCTX_SHOWHDR = 0;                                                 \
-	char intr = '.';                                                          \
-	if (!in_task()) {                                                         \
-		if (in_irq() && in_softirq())                                         \
-			intr = 'H'; /* hardirq occurred inside a softirq */               \
-		else if (in_irq())                                                    \
-			intr = 'h'; /* hardirq is running */                              \
-		else if (in_softirq())                                                \
-			intr = 's';                                                       \
-	}                                                                         \
-	else                                                                      \
-		intr = '.';                                                           \
-										      \
-	if (PRINTCTX_SHOWHDR == 1)                                                \
+/* 
+ * We use a compat wrapper macro such that it uses in_hardirq() on newer
+ * kernels and falls back to using in_irq() on older kernels. This avoids
+ * embedding preprocessor directives inside a continued macro body (which
+ * breaks the preprocessor)
+ */
+#include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,11,0)
+#define IN_HARDIRQ_CHECK()  in_hardirq()
+#else
+#define IN_HARDIRQ_CHECK()  in_irq()
+#endif
+
+#define PRINT_CTX() do {                                                             \
+	int PRINTCTX_SHOWHDR = 0;                                                    \
+	char intr = '.';                                                             \
+	if (!in_task()) {                                                            \
+		if (IN_HARDIRQ_CHECK() && in_serving_softirq())                      \
+			intr = 'H'; /* hardirq occurred inside a softirq  */         \
+		else if (IN_HARDIRQ_CHECK())                                         \
+			intr = 'h'; /* hardirq is running */                         \
+		else if (in_serving_softirq())                                       \
+			intr = 's';                                                  \
+	}                                                                            \
+	else                                                                         \
+		intr = '.';                                                          \
+									             \
+	if (PRINTCTX_SHOWHDR == 1)                                                   \
 		pr_debug("CPU)  task_name:PID  | irqs,need-resched,hard/softirq,preempt-depth  /* func_name() */\n"); \
 	pr_debug(                                                                    \
 	"%03d) %c%s%c:%d   |  "                                                      \
@@ -227,11 +240,11 @@ Oct 04 12:19:53 dbg-LKD kernel:  dump_stack+0xbd/0xfa
  * that the assertion failed.
  */
 #ifdef __KERNEL__
-#define assert(expr) do {                                                \
-if (!(expr)) {                                                           \
+#define assert(expr) do {                                                    \
+if (!(expr)) {                                                               \
 	pr_warn("********** Assertion [%s] failed! : %s:%s:%d **********\n", \
 	#expr, __FILE__, __func__, __LINE__);                                \
-}                                                                        \
+}                                                                            \
 } while (0)
 #endif
 
@@ -254,19 +267,20 @@ static inline void beep(int what)
  * @val        : ASCII value to print
  * @loop_count : times to loop around
  */
-#define DELAY_LOOP(val, loop_count)                                        \
-{                                                                          \
-	int c = 0, m;                                                          \
-	unsigned int for_index, inner_index, x;                                \
-																		   \
-	for (for_index = 0; for_index < loop_count; for_index++) {             \
-		beep((val));                                                       \
-		c++;                                                               \
-		for (inner_index = 0; inner_index < HZ; inner_index++)            \
-			for (m = 0; m < 50; m++)                                 \
-				x = inner_index / 2;                             \
-	}                                                                      \
-	/*printf("c=%d\n",c);*/                                                \
+#define DELAY_LOOP(val, loop_count)                                       \
+{                                                                         \
+	int c = 0, m;                                                     \
+	unsigned int for_index, inner_index, x;                           \
+									  \										\
+	for (for_index = 0; for_index < loop_count; for_index++) {        \
+		beep((val));                                              \
+		c++;                                                      \
+		for (inner_index = 0; inner_index < HZ; inner_index++) {  \
+			for (m = 0; m < 50; m++);                         \
+			x = inner_index / 2;                              \
+		}                                                         \
+	}                                                                 \
+	/*printf("c=%d\n",c);*/                                           \
 }
 /*------------------------------------------------------------------------*/
 
@@ -299,18 +313,18 @@ make[2]: *** [scripts/Makefile.modpost:123: ...ds3231_i2c_drv/try/Module.symvers
 #if (BITS_PER_LONG == 64)
 #include <linux/jiffies.h>
 #include <linux/ktime.h>
-#define SHOW_DELTA(later, earlier)  do {    \
-if (time_after((unsigned long)later, (unsigned long)earlier)) { \
-	s64 delta_ns = ktime_to_ns(ktime_sub(later, earlier));      \
-	pr_info("delta: %lld ns", delta_ns);       \
-	if (delta_ns/1000 >= 1)                    \
-		pr_cont(" (~ %lld us", delta_ns/1000);   \
-	if (delta_ns/1000000 >= 1)                 \
-		pr_cont(" ~ %lld ms", delta_ns/1000000); \
-	if (delta_ns/1000 >= 1)                    \
-		pr_cont(")\n");                    \
-} else  \
-	pr_warn("SHOW_DELTA(): *invalid* earlier > later? (check order of params)\n");  \
+#define SHOW_DELTA(later, earlier)  do {                                               \
+if (time_after((unsigned long)later, (unsigned long)earlier)) {                        \
+	s64 delta_ns = ktime_to_ns(ktime_sub(later, earlier));                         \
+	pr_info("delta: %lld ns", delta_ns);                                           \
+	if (delta_ns/1000 >= 1)                                                        \
+		pr_cont(" (~ %lld us", delta_ns/1000);                                 \
+	if (delta_ns/1000000 >= 1)                                                     \
+		pr_cont(" ~ %lld ms", delta_ns/1000000);                               \
+	if (delta_ns/1000 >= 1)                                                        \
+		pr_cont(")\n");                                                        \
+} else                                                                                 \
+	pr_warn("SHOW_DELTA(): *invalid* earlier > later? (check order of params)\n"); \
 } while (0)
 #else   // 32-bit
 	/* ktime_sub() not supported on 32-bit */
