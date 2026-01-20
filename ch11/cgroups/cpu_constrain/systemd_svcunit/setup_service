@@ -66,4 +66,7 @@ else
    echo "${name}: the primegen program is now enabled on boot..."
    #ls -l /etc/systemd/system/${DEFAULT_TGT}.wants/${UNITFILE}
 fi
+echo "
+Can view the log with a command such as:
+journalctl -b |grep -E \"svc.*primes|run_primegen\""
 exit 0
