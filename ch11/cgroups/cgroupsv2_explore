@@ -316,7 +316,6 @@ for CGROUP; it must be the last one. Also, the -v, -p, -t are Off by default).
 is shown. The 'depth' value can be:
  1       => show only a very top-level overview of the hierarchy
  2,3,... => show to 2,3,... level(s) of the cgroup v2 hierarchy, whatever's specified.
- Must immediately follow the -d (f.e. pass as '-d2' and not as '-d 2').
 
  Practically speaking, most distros (i tested on Ubuntu/Fedora) will max out at 6 or 7
  levels of depth. (On mainstream distros, systemd typically sets up the Cgroup v2 hierarchy
