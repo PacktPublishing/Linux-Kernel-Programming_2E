@@ -90,7 +90,10 @@ with<br>
 
 - Ch 13
     - *Sincere apologies!* I've made several (small-ish) mistakes here! (please read on...)
-    - *Figure 13.14* - the circled numbers mentioned in the book are missing. The reason: I eventually removed the circled numbers from *Figure 13.14* as it was already a bit too crowded, but inadvertently missed updating the text; apologies, my mistake! So, **please ignore** the following:
+    - *Figure 13.13 and 13.14* - are wrong: RCU reader 4’s dotted arrow should point to `new_ptr_x` (as it’s a ‘new’ reader, just as with RCU reader 5)
+
+    - *Figure 13.14*
+        - The circled numbers mentioned in the book are missing. The reason: I eventually removed the circled numbers from *Figure 13.14* as it was already a bit too crowded, but inadvertently missed updating the text; apologies, my mistake! So, **please ignore** the following:
         - page 716:
             - The sentences " (See *Figure 13.14* and the (red) circle with 2 in it.)", "(See *Figure 13.14* and the (red) circle with 3 in it.)" and " (See *Figure 13.14* and the (red) circle with 3 in it.)".
         - page 718:
