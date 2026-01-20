@@ -30,6 +30,7 @@ doit()
 [ $# -lt 2 ] && return
 echo "${SEP}
 ${2}
+cmd: ${1}
 ${SEP}"
 eval ${1}
 }
