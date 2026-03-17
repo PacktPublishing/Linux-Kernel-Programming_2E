@@ -45,7 +45,7 @@ runcmd sudo apt install -y \
 
 # packages typically required for kernel build
 runcmd sudo apt install -y \
-	asciidoc binutils-dev bison build-essential flex libncurses5-dev ncurses-dev \
+	asciidoc binutils-dev bison build-essential flex gawk libncurses5-dev ncurses-dev \
 	libelf-dev libssl-dev openssl pahole tar util-linux xz-utils zstd
 
 echo "-----------------------------------------------------------------------"
